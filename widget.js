@@ -205,23 +205,25 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "CHART",
         },
         cncChartTest: function() {
 
+            Chart.defaults.global.defaultFontSize = 10;
+            Chart.defaults.global.elements.line.borderWidth = 1;
+            Chart.defaults.global.elements.point.radius = 1;
             var config = {
                 type: 'line',
                 data: {
-                    labels : ["January","February","March","April","May","June","July"],
-			        datasets : [
-				    {
-				        fillColor : "rgba(151,187,205,0.5)",
-                        strokeColor : "rgba(151,187,205,1)",
-                        pointColor : "rgba(151,187,205,1)",
-                        pointStrokeColor : "#fff",
-                        data : [65,59,90,81,56,55,40]
+                    labels: ["1","2","3","4","5","6"],
+                    datasets : [{
+                        backgroundColor: "rgba(255,0,0,1)",
+				        borderColor: "rgba(255,0,0,1)",
+                        data : [65,59,88.2,81,56,55,40],
+                        fill: false,
 				    }]
                 },
                 options: {
-                    responsive: true,
+                    responsive: false,
+                    legend: false,
                     animation : false,
-                    scaleOverride : true,
+                    scaleOverride : false,
                     scaleSteps : 10,//Number - The number of steps in a hard coded scale
                     scaleStepWidth : 10,//Number - The value jump in the hard coded scale				
                     scaleStartValue : 10,//Number - The scale starting value
@@ -232,7 +234,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "CHART",
                 }
             };
             
-            var ctx = $('#object-temperature-chart').get(0).getContext("2d");
+            var ctx = $('#object-temperature-chart'); //.get(0).getContext("2d");
             var myLine = new Chart(ctx, config);
         },
         
