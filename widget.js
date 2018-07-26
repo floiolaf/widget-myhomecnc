@@ -28,7 +28,7 @@ requirejs.config({
         // Make sure you DO NOT put the .js at the end of the URL
         // SmoothieCharts: '//smoothiecharts.org/smoothie',
         //KO: '//cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min',
-        //CHART: '//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
+        CHART: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
         //SocketIO: '//cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io'
     },
     shim: {
@@ -140,7 +140,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
             this.btnSetup();
             this.forkSetup();
             
-            //this.cncChartTest();
+            this.cncChartTest();
             //var vm = new this.cncObjectTemperatureChart();
             //ko.applyBindings(vm);
             //vm.initline();
@@ -203,7 +203,6 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
             $('#' + this.id + ' .btn-helloworld2').click(this.onHelloBtnClick.bind(this));
 
         },
-        /*
         cncChartTest: function() {
 
             var config = {
@@ -235,7 +234,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
             
             var ctx = $('#object-temperature-chart').get(0).getContext("2d");
             var myLine = new Chart(ctx, config);
-        },*/
+        },
         
         /**
          * Object Temperature Chart
