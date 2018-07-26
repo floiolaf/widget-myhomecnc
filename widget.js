@@ -27,7 +27,7 @@ requirejs.config({
         // Example of how to define the key (you make up the key) and the URL
         // Make sure you DO NOT put the .js at the end of the URL
         // SmoothieCharts: '//smoothiecharts.org/smoothie',
-        KO: 'https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min',
+        ko: 'https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min',
         CHART: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
         socketio: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io'
     },
