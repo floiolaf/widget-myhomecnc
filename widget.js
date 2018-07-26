@@ -27,15 +27,13 @@ requirejs.config({
         // Example of how to define the key (you make up the key) and the URL
         // Make sure you DO NOT put the .js at the end of the URL
         // SmoothieCharts: '//smoothiecharts.org/smoothie',
-        KO: 'https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min',
-        CHART: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
-        socketio: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io'
+        Ko: 'https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min',
+        Chart: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
+        Socketio: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io'
     },
     shim: {
         // See require.js docs for how to define dependencies that
         // should be loaded before your script/widget.
-        KO: ["KO"],
-        CHART: ["CHART"]
     }
 });
 
@@ -79,7 +77,7 @@ cprequire_test(["inline:com-chilipeppr-widget-myhomecnc"], function(myWidget) {
 } /*end_test*/ );
 
 // This is the main definition of your widget. Give it a unique name.
-cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "CHART", "KO", /* other dependencies here */ ], function() {
+cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart", "Ko", /* other dependencies here */ ], function() {
     return {
         /**
          * The ID of the widget. You must define this and make it unique.
