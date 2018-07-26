@@ -72,9 +72,9 @@ requirejs.config({
         // Example of how to define the key (you make up the key) and the URL
         // Make sure you DO NOT put the .js at the end of the URL
         // SmoothieCharts: '//smoothiecharts.org/smoothie',
-        ko: 'https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js',
-        chartjs: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js',
-        io: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js'
+        ko: 'https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min',
+        Chart: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
+        io: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io'
     },
     shim: {
         // See require.js docs for how to define dependencies that
@@ -185,9 +185,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
             this.btnSetup();
             this.forkSetup();
             
-            var vm = this.cncObjectTemperatureChart();
-            ko.applyBindings(vm);
-            vm.initLine();
+            this.cncChartTest();
 
             console.log("I am done being initted.");
         },
@@ -247,6 +245,38 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
             $('#' + this.id + ' .btn-helloworld2').click(this.onHelloBtnClick.bind(this));
 
         },
+        cncChartTest: function() {
+            var config = {
+                type: 'line',
+                data: {
+                    labels : ["January","February","March","April","May","June","July"],
+			        datasets : [
+				    {
+				        fillColor : "rgba(151,187,205,0.5)",
+                        strokeColor : "rgba(151,187,205,1)",
+                        pointColor : "rgba(151,187,205,1)",
+                        pointStrokeColor : "#fff",
+                        data : [65,59,90,81,56,55,40]
+				    }]
+                },
+                options: {
+                    responsive: true,
+                    animation : false,
+                    scaleOverride : true,
+                    scaleSteps : 10,//Number - The number of steps in a hard coded scale
+                    scaleStepWidth : 10,//Number - The value jump in the hard coded scale				
+                    scaleStartValue : 10,//Number - The scale starting value
+                    scales: {
+				        xAxes: [{display: false}],
+				        yAxes: [{display: true}]
+				    }
+                }
+            };
+            
+            var ctx = $("#object-temperature-chart").getContext("2d");
+            var myline = new Chart(ctx, config);
+        },
+        
         /**
          * Object Temperature Chart
          */
@@ -510,7 +540,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
                         </span>-->
                         <div class="pull-right">
                             <span>Object T  </span>
-                            <button type="button" class="btn btn-xs btn-primary btn-cncmode btn-cnc-object-temperature-chart" data-toggle="collapse" data-target="#collapseObjectTemperatureChart" aria-expanded="false" aria-controls="collapseObjectTemperatureChart" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Dispenser">000.0</button>
+                            <button type="button" class="btn btn-xs btn-primary btn-cnc-object-temperature-chart" data-toggle="collapse" data-target="#collapseObjectTemperatureChart" aria-expanded="false" aria-controls="collapseObjectTemperatureChart" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Dispenser">000.0</button>
                             <span> degC</span>
                         </div>
                     </div>
