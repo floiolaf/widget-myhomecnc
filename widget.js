@@ -1,4 +1,4 @@
-/* global requirejs cprequire cpdefine chilipeppr THREE */
+/* global requirejs cprequire cpdefine chilipeppr THREE Chart ko */
 // Defining the globals above helps Cloud9 not show warnings for those variables
 
 // ChiliPeppr Widget/Element Javascript
@@ -32,8 +32,6 @@ requirejs.config({
         //SocketIO: '//cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io'
     },
     shim: {
-        ko: ['ko'],
-        Chart: ['Chart']
         // See require.js docs for how to define dependencies that
         // should be loaded before your script/widget.
     }
@@ -79,7 +77,7 @@ cprequire_test(["inline:com-chilipeppr-widget-myhomecnc"], function(myWidget) {
 } /*end_test*/ );
 
 // This is the main definition of your widget. Give it a unique name.
-cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart", "ko", /* other dependencies here */ ], function() {
+cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other dependencies here */ ], function() {
     return {
         /**
          * The ID of the widget. You must define this and make it unique.

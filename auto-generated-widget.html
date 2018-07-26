@@ -12,9 +12,9 @@
     <!-- Customized version of require.js for ChiliPeppr. Please see require.js docs for how
     ChiliPeppr's dependency system works as it's based on require.js. -->
     <script data-main="js/main" src="//i2dcui.appspot.com/js/require.js"></script>
-    <script data-main="js/main" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <!--<script data-main="js/main" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
     <script data-main="js/main" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
-    <!--<script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>-->
+    <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>-->
 
     <style type='text/css'>
 /* CSS for ChiliPeppr Widget */
@@ -46,7 +46,7 @@
 
     <script type='text/javascript'>
     //<![CDATA[
-/* global requirejs cprequire cpdefine chilipeppr THREE */
+/* global requirejs cprequire cpdefine chilipeppr THREE Chart ko */
 // Defining the globals above helps Cloud9 not show warnings for those variables
 
 // ChiliPeppr Widget/Element Javascript
@@ -80,8 +80,6 @@ requirejs.config({
         //SocketIO: '//cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io'
     },
     shim: {
-        ko: ['ko'],
-        Chart: ['Chart']
         // See require.js docs for how to define dependencies that
         // should be loaded before your script/widget.
     }
@@ -127,7 +125,7 @@ cprequire_test(["inline:com-chilipeppr-widget-myhomecnc"], function(myWidget) {
 } /*end_test*/ );
 
 // This is the main definition of your widget. Give it a unique name.
-cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart", "ko", /* other dependencies here */ ], function() {
+cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other dependencies here */ ], function() {
     return {
         /**
          * The ID of the widget. You must define this and make it unique.
