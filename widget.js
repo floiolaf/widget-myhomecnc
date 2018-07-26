@@ -28,7 +28,7 @@ requirejs.config({
         // Make sure you DO NOT put the .js at the end of the URL
         // SmoothieCharts: '//smoothiecharts.org/smoothie',
         ko: '//cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min',
-        CHART: '//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
+        CHART: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
         io: '//cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io'
     },
     shim: {
