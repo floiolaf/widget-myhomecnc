@@ -1,4 +1,4 @@
-/* global requirejs cprequire cpdefine chilipeppr THREE Chart ko */
+/* global requirejs cprequire cpdefine chilipeppr THREE */
 // Defining the globals above helps Cloud9 not show warnings for those variables
 
 // ChiliPeppr Widget/Element Javascript
@@ -77,7 +77,7 @@ cprequire_test(["inline:com-chilipeppr-widget-myhomecnc"], function(myWidget) {
 } /*end_test*/ );
 
 // This is the main definition of your widget. Give it a unique name.
-cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other dependencies here */ ], function() {
+cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart", "ko" /* other dependencies here */ ], function(a, Chart, ko) {
     return {
         /**
          * The ID of the widget. You must define this and make it unique.
@@ -208,7 +208,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
             Chart.defaults.global.defaultFontSize = 10;
             Chart.defaults.global.elements.line.borderWidth = 1;
             Chart.defaults.global.elements.point.radius = 1;
-            this.ObjectTemperatureChartConfig = ko.observable({
+            this.ObjectTemperatureChartConfig = this.ko.observable({
                 type: 'line',
                 data: {
                     labels: ["1","2","3","4","5","6"],
@@ -235,7 +235,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
             });
             
             var ctx = $('#object-temperature-chart'); //.get(0).getContext("2d");
-            var myLine = new Chart(ctx, this.ObjectTemperatureChartConfig);
+            var myLine = new this.Chart(ctx, this.ObjectTemperatureChartConfig);
         },
         
         /**
