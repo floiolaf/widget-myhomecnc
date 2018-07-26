@@ -27,8 +27,8 @@ requirejs.config({
         // Example of how to define the key (you make up the key) and the URL
         // Make sure you DO NOT put the .js at the end of the URL
         // SmoothieCharts: '//smoothiecharts.org/smoothie',
-        //KO: '//cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min',
-        CHART: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
+        //ko: 'https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min',
+        //Chart: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
         //SocketIO: '//cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io'
     },
     shim: {
@@ -77,7 +77,7 @@ cprequire_test(["inline:com-chilipeppr-widget-myhomecnc"], function(myWidget) {
 } /*end_test*/ );
 
 // This is the main definition of your widget. Give it a unique name.
-cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "CHART", /* other dependencies here */ ], function() {
+cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other dependencies here */ ], function() {
     return {
         /**
          * The ID of the widget. You must define this and make it unique.
@@ -208,7 +208,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "CHART",
             Chart.defaults.global.defaultFontSize = 10;
             Chart.defaults.global.elements.line.borderWidth = 1;
             Chart.defaults.global.elements.point.radius = 1;
-            var config = {
+            this.ObjectTemperatureChartConfig = ko.observable({
                 type: 'line',
                 data: {
                     labels: ["1","2","3","4","5","6"],
@@ -232,10 +232,10 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "CHART",
 				        yAxes: [{display: true}]
 				    }
                 }
-            };
+            });
             
             var ctx = $('#object-temperature-chart'); //.get(0).getContext("2d");
-            var myLine = new Chart(ctx, config);
+            var myLine = new Chart(ctx, this.ObjectTemperatureChartConfig);
         },
         
         /**
