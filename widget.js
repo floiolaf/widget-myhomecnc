@@ -27,9 +27,9 @@ requirejs.config({
         // Example of how to define the key (you make up the key) and the URL
         // Make sure you DO NOT put the .js at the end of the URL
         // SmoothieCharts: '//smoothiecharts.org/smoothie',
-        ko: 'https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min',
-        Chart: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
-        io: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io'
+        ko: '//cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min',
+        Chart: '//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
+        io: '//cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io'
     },
     shim: {
         // See require.js docs for how to define dependencies that
@@ -228,7 +228,8 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
                 }
             };
             
-            var ctx = $("#object-temperature-chart").getContext("2d");
+            var ctx = document.getElementById('object-temperature-chart').getContext("2d");
+            //var ctx = $("#object-temperature-chart").getContext("2d");
             var myline = new Chart(ctx, config);
         },
         
