@@ -74,7 +74,7 @@ requirejs.config({
         // Make sure you DO NOT put the .js at the end of the URL
         // SmoothieCharts: '//smoothiecharts.org/smoothie',
         ko: '//cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min',
-        CHART: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
+        //CHART: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
         io: '//cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io'
     },
     shim: {
@@ -548,7 +548,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "CHART" 
                     </div>
                      <div class="collapse" id="collapseObjectTemperatureChart">
                         <div class="well">
-                            <!--<canvas class="object-temperature-chart" id="object-temperature-chart" style="width: 100%; height: 100%"></canvas>-->
+                            <canvas class="object-temperature-chart" id="object-temperature-chart" style="width: 100%; height: 100%"></canvas>
                         </div>
                     </div>
                     <div class="" style="padding-top: 5px; height: 40px">
@@ -581,7 +581,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "CHART" 
                             <span>Temperature </span><span class="label label-primary cnc-label cnc-hplaser-temperature">000.0</span><span> degC</span>
                         </span>
                     </div>
-                    <canvas class="object-temperature-chart" id="object-temperature-chart" style="width: 100%; height: 100%"></canvas>
+                    <!--<canvas class="object-temperature-chart" id="object-temperature-chart" style="width: 100%; height: 100%"></canvas>-->
                 </div>
 
                 <!-- Tab 2 -->
