@@ -27,9 +27,9 @@ requirejs.config({
         // Example of how to define the key (you make up the key) and the URL
         // Make sure you DO NOT put the .js at the end of the URL
         // SmoothieCharts: '//smoothiecharts.org/smoothie',
-        ko: '//cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min',
-        CHART: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
-        io: '//cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io'
+        knokout: '//cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min',
+        chart: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
+        socketio: '//cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io'
     },
     shim: {
         // See require.js docs for how to define dependencies that
@@ -140,7 +140,8 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "CHART" 
             this.btnSetup();
             this.forkSetup();
             
-            this.cncChartTest();
+            //this.cncChartTest();
+            this.cncObjectTemperatureChart();
 
             console.log("I am done being initted.");
         },
@@ -276,7 +277,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "CHART" 
 			    };
 			
 			    var ctx = $("#object-temperature-chart").get(0).getContext("2d");
-			    var myLine = new CHART.Chart(ctx).Line( vm.lineChartData(), options );
+			    var myLine = new Chart(ctx).Line( vm.lineChartData(), options );
 		    };
         },
         /**
