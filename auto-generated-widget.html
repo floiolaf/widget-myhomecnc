@@ -16,13 +16,27 @@
     <style type='text/css'>
 /* CSS for ChiliPeppr Widget */
 
-#com-chilipeppr-widget-template {
+#com-chilipeppr-widget-myhomecnc {
    
 }
 
-#com-chilipeppr-widget-template .nav-tabs>li>a {
+#com-chilipeppr-widget-myhomecnc .nav-tabs>li>a {
     padding: 2px 6px;
 }
+
+#com-chilipeppr-widget-myhomecnc .btn-cncmode {
+    width: 65px !important;
+    top: 6px;
+}
+
+#com-chilipeppr-widget-myhomecnc .cnc-toolbar {
+    width: 150px;
+}
+
+#com-chilipeppr-widget-myhomecnc .cnc-label {
+    font-size: small;
+}
+
 
 
     </style>
@@ -58,6 +72,9 @@ requirejs.config({
         // Example of how to define the key (you make up the key) and the URL
         // Make sure you DO NOT put the .js at the end of the URL
         // SmoothieCharts: '//smoothiecharts.org/smoothie',
+        ko: 'https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js',
+        chartjs: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js',
+        io: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js'
     },
     shim: {
         // See require.js docs for how to define dependencies that
@@ -167,6 +184,10 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
             this.setupUiFromLocalStorage();
             this.btnSetup();
             this.forkSetup();
+            
+            var vm = this.cncObjectTemperatureChart();
+            ko.applyBindings(vm);
+            vm.initLine();
 
             console.log("I am done being initted.");
         },
@@ -225,6 +246,52 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
             // when the callback is called
             $('#' + this.id + ' .btn-helloworld2').click(this.onHelloBtnClick.bind(this));
 
+        },
+        /**
+         * Object Temperature Chart
+         */
+        cncObjectTemperatureChart: function(data) {
+            
+            var self = this;
+		    //var sio = io.connect('http://localhost:8070');
+		
+		    self.lineChartData = ko.observable({
+			    labels : ["January","February","March","April","May","June","July"],
+			    datasets : [
+				    {
+					    fillColor : "rgba(151,187,205,0.5)",
+					    strokeColor : "rgba(151,187,205,1)",
+					    pointColor : "rgba(151,187,205,1)",
+					    pointStrokeColor : "#fff",
+					    data : [65,59,90,81,56,55,40]
+				    }
+			    ]
+		    });
+		
+		    //sio.on('pushdata', function (data) {
+			//    self.lineChartData().datasets[0].data.shift();
+			//    self.lineChartData().datasets[0].data.push(data);
+			
+			//    self.initLine();
+		    //});
+		
+		    self.initLine = function() {
+			    var options = {
+			        responsive: true,
+				    animation : false,
+				    scaleOverride : true,
+				    scaleSteps : 10,//Number - The number of steps in a hard coded scale
+				    scaleStepWidth : 10,//Number - The value jump in the hard coded scale				
+				    scaleStartValue : 10,//Number - The scale starting value
+				    scales: {
+				        xAxes: [{display: false}],
+				        yAxes: [{display: true}]
+				    }
+			    };
+			
+			    var ctx = $("#object-temperature-chart").get(0).getContext("2d");
+			    var myLine = new Chart(ctx).Line( vm.lineChartData(), options );
+		    };
         },
         /**
          * onHelloBtnClick is an example of a button click event callback
@@ -372,7 +439,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
             var that = this;
             chilipeppr.load("http://raw.githubusercontent.com/chilipeppr/widget-pubsubviewer/master/auto-generated-widget.html", function() {
                 require(['inline:com-chilipeppr-elem-pubsubviewer'], function(pubsubviewer) {
-                    pubsubviewer.attachTo($(topCssSelector + ' .panel-heading .dropdown-menu'), that);
+                    pubsubviewer.attachTo($(topCssSelector + ' .panel-heading .dropdown-pubsub'), that);
                 });
             });
 
@@ -386,56 +453,139 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
 </head>
 
 <body>
-    <div id="com-chilipeppr-widget-template" class="panel panel-default">
-        <div class="panel-heading ">
-
-            <div class="btn-toolbar pull-right" role="toolbar">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-xs btn-default btn-sayhello" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="Say Hello" data-content="Generate a hello message">Say Hello
-                    </button>
+    <div id="com-chilipeppr-widget-myhomecnc" class="panel panel-default">
+        <div class="panel-heading">
+            <div class="btn-toolbar pull-right cnc-toolbar" role="toolbar">
+                <div class="btn-group pull-left">
+                    <button type="button" class="btn btn-xs btn-danger btn-cnc-estop" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="e-Stop">e-Stop</button>        
                 </div>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-xs btn-default hidebody"><span class="glyphicon glyphicon-chevron-up"></span>
-                    </button>
-                </div>
-                <div class="btn-group">
+                <div class="btn-group pull-right">
                     <div class="dropdown">
                         <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
+                        <ul class="dropdown-menu dropdown-menu-right dropdown-pubsub" role="menu"></ul>
                     </div>
                 </div>
-            </div> <span class="panel-title" data-toggle="popover">Template Widget</span> <span style="font-size:9px;" class="fb-build">v1</span>
-
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-xs btn-default hidebody"><span class="glyphicon glyphicon-chevron-up"></span>
+                    </button>
+                </div>
+            </div> <span class="panel-title" data-toggle="popover">myHomeCNC Widget</span> <span style="font-size:9px;" class="fb-build">v1</span>
+            <div class="btn-toolbar" role="toolbar">
+                <div class="btn-group cnc-mode-toolbar" style="height:30px; padding-top: 2px" role="group">    
+                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-mill" disabled="disabled" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Mill">Mill</button>
+                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-uvlaser" disabled="disabled" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode UV Laser">UV Laser</button>
+                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-hplaser" disabled="disabled" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode High-Power Laser">HP Laser</button>
+                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-pen" disabled="disabled" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Pen">Pen</button>
+                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-dispenser" disabled="disabled" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Dispenser">Dispenser</button>
+                </div>
+            </div>
         </div>
         <div class="panel-body">
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#com-chilipeppr-widget-template-tab1" role="tab" data-toggle="tab">Tab 1</a>
-                </li>
-                <li><a href="#com-chilipeppr-widget-template-tab2" role="tab" data-toggle="tab">Tab 2</a></li>
-                <li><a href="#com-chilipeppr-widget-template-tab3" role="tab" data-toggle="tab">Tab 3</a></li>
+                <li class="active"><a href="#com-chilipeppr-widget-myhomecnc-tab1" role="tab" data-toggle="tab">Main</a></li>
+                <li><a href="#com-chilipeppr-widget-myhomecnc-tab2" role="tab" data-toggle="tab">Light</a></li>
+                <li><a href="#com-chilipeppr-widget-myhomecnc-tab3" role="tab" data-toggle="tab">UV Box</a></li>
+                <li><a href="#com-chilipeppr-widget-myhomecnc-tab4" role="tab" data-toggle="tab">Tools</a></li>
+                <li><a href="#com-chilipeppr-widget-myhomecnc-tab5" role="tab" data-toggle="tab">Offsets</a></li>
+                <li><a href="#com-chilipeppr-widget-myhomecnc-tab6" role="tab" data-toggle="tab">Air</a></li>
+                <li><a href="#com-chilipeppr-widget-myhomecnc-tab7" role="tab" data-toggle="tab">CNC</a></li>
             </ul>
             <!-- Tab panes -->
 
             <div class="tab-content">
     
                 <!-- Tab 1 -->
-                <div class="tab-pane active" id="com-chilipeppr-widget-template-tab1">
-                    <p>This is the content of tab 1.</p>
-                    <div class="">
-                        <button type="button" class="btn btn-xs btn-default btn-helloworld2" style="margin: 4px 0;">Hello World 2</button>
+                <div class="tab-pane active" id="com-chilipeppr-widget-myhomecnc-tab1">
+                    <div style="padding-top: 10px; height: 30px; border-bottom: 1px solid grey; font-weight: bold">
+                        <span class="pull-left" style="">Spindle :</span>
+                    </div>
+                    <div style="padding-top: 10px; height: 40px">
+                        <span class="pull-left">
+                            <span>Speed  </span><span class="label label-primary cnc-label cnc-spindle-speed">00000</span><span> RPM</span>
+                        </span>
+                        <!--<span class="pull-right">
+                            <span>Object T  </span><span class="label label-primary cnc-label cnc-object-temperature">000.0</span><span> degC</span>
+                        </span>-->
+                        <div class="pull-right">
+                            <span>Object T  </span>
+                            <button type="button" class="btn btn-xs btn-primary btn-cncmode btn-cnc-object-temperature-chart" data-toggle="collapse" data-target="#collapseObjectTemperatureChart" aria-expanded="false" aria-controls="collapseObjectTemperatureChart" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Dispenser">000.0</button>
+                            <span> degC</span>
+                        </div>
+                    </div>
+                     <div class="collapse" id="collapseObjectTemperatureChart">
+                        <div class="well">
+                            <canvas class="" id="object-temperature-chart" style="width: 100%; height: 100%"></canvas>
+                        </div>
+                    </div>
+                    <div class="" style="padding-top: 5px; height: 40px">
+                        <button type="button" class="btn btn-s btn-default btn-cnc-plaser" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Activate Position Lasers">Position Lasers</button>
+                        <span class="pull-right">
+                            <span>Absolute Distance  </span><span class="label label-primary cnc-label cnc-absolute-distance">000</span><span> mm</span>
+                        </span>
+                    </div>
+                    <div style="padding-top: 10px; height: 30px; border-bottom: 1px solid grey; font-weight: bold">
+                        <span class="pull-left" style="">UV Laser :</span>
+                        <span class="pull-right label label-info cnc-label cnc-uvlaser-onfocus">on focus</span>
+                    </div>
+                    <div style="padding-top: 10px; height: 40px">
+                        <span class="pull-left">
+                            <span>Current  </span><span class="label label-primary cnc-label cnc-uvlaser-current">0.000</span><span> Amps</span>
+                        </span>
+                        <span class="pull-right">
+                            <span>Temperature </span><span class="label label-primary cnc-label cnc-uvlaser-temperature">000.0</span><span> degC</span>
+                        </span>
+                    </div>
+                    <div style="padding-top: 10px; height: 30px; border-bottom: 1px solid grey; font-weight: bold">
+                        <span class="pull-left" style="">High-Power Laser :</span>
+                        <span class="pull-right label label-info cnc-label cnc-hplaser-onfocus">on focus</span>
+                    </div>
+                    <div style="padding-top: 10px; height: 40px">
+                        <span class="pull-left">
+                            <span>Current  </span><span class="label label-primary cnc-label cnc-hplaser-current">0.000</span><span> Amps</span>
+                        </span>
+                        <span class="pull-right">
+                            <span>Temperature </span><span class="label label-primary cnc-label cnc-hplaser-temperature">000.0</span><span> degC</span>
+                        </span>
                     </div>
                 </div>
 
                 <!-- Tab 2 -->
-                <div class="tab-pane" id="com-chilipeppr-widget-template-tab2">
-                    <p>This is the content of tab 2.</p>
+                <div class="tab-pane" id="com-chilipeppr-widget-myhomecnc-tab2">
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseChart1" aria-expanded="false" aria-controls="collapseChart1">
+                      Chart
+                    </button>
+                    <div class="collapse" id="collapseChart1">
+                        <div class="well">
+                            <canvas class="" id="canvas" style="width: 100%; height: 100%"></canvas>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Tab 3 -->
-                <div class="tab-pane" id="com-chilipeppr-widget-template-tab3">
+                <div class="tab-pane" id="com-chilipeppr-widget-myhomecnc-tab3">
                     <p>This is the content of tab 3.</p>
+                </div>
+                
+                <!-- Tab 4 -->
+                <div class="tab-pane" id="com-chilipeppr-widget-myhomecnc-tab4">
+                    <p>This is the content of tab 4.</p>
+                </div>
+                
+                <!-- Tab 5 -->
+                <div class="tab-pane" id="com-chilipeppr-widget-myhomecnc-tab5">
+                    <p>This is the content of tab 5.</p>
+                </div>
+                
+                <!-- Tab 6 -->
+                <div class="tab-pane" id="com-chilipeppr-widget-myhomecnc-tab6">
+                    <p>This is the content of tab 6.</p>
+                </div>
+                
+                <!-- Tab 7 -->
+                <div class="tab-pane" id="com-chilipeppr-widget-myhomecnc-tab7">
+                    <p>This is the content of tab 7.</p>
                 </div>
 
             </div>

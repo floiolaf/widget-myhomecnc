@@ -27,6 +27,9 @@ requirejs.config({
         // Example of how to define the key (you make up the key) and the URL
         // Make sure you DO NOT put the .js at the end of the URL
         // SmoothieCharts: '//smoothiecharts.org/smoothie',
+        ko: 'https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js',
+        chartjs: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js',
+        io: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js'
     },
     shim: {
         // See require.js docs for how to define dependencies that
@@ -136,6 +139,10 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
             this.setupUiFromLocalStorage();
             this.btnSetup();
             this.forkSetup();
+            
+            var vm = this.cncObjectTemperatureChart();
+            ko.applyBindings(vm);
+            vm.initLine();
 
             console.log("I am done being initted.");
         },
@@ -194,6 +201,52 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
             // when the callback is called
             $('#' + this.id + ' .btn-helloworld2').click(this.onHelloBtnClick.bind(this));
 
+        },
+        /**
+         * Object Temperature Chart
+         */
+        cncObjectTemperatureChart: function(data) {
+            
+            var self = this;
+		    //var sio = io.connect('http://localhost:8070');
+		
+		    self.lineChartData = ko.observable({
+			    labels : ["January","February","March","April","May","June","July"],
+			    datasets : [
+				    {
+					    fillColor : "rgba(151,187,205,0.5)",
+					    strokeColor : "rgba(151,187,205,1)",
+					    pointColor : "rgba(151,187,205,1)",
+					    pointStrokeColor : "#fff",
+					    data : [65,59,90,81,56,55,40]
+				    }
+			    ]
+		    });
+		
+		    //sio.on('pushdata', function (data) {
+			//    self.lineChartData().datasets[0].data.shift();
+			//    self.lineChartData().datasets[0].data.push(data);
+			
+			//    self.initLine();
+		    //});
+		
+		    self.initLine = function() {
+			    var options = {
+			        responsive: true,
+				    animation : false,
+				    scaleOverride : true,
+				    scaleSteps : 10,//Number - The number of steps in a hard coded scale
+				    scaleStepWidth : 10,//Number - The value jump in the hard coded scale				
+				    scaleStartValue : 10,//Number - The scale starting value
+				    scales: {
+				        xAxes: [{display: false}],
+				        yAxes: [{display: true}]
+				    }
+			    };
+			
+			    var ctx = $("#object-temperature-chart").get(0).getContext("2d");
+			    var myLine = new Chart(ctx).Line( vm.lineChartData(), options );
+		    };
         },
         /**
          * onHelloBtnClick is an example of a button click event callback
@@ -341,7 +394,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
             var that = this;
             chilipeppr.load("http://raw.githubusercontent.com/chilipeppr/widget-pubsubviewer/master/auto-generated-widget.html", function() {
                 require(['inline:com-chilipeppr-elem-pubsubviewer'], function(pubsubviewer) {
-                    pubsubviewer.attachTo($(topCssSelector + ' .panel-heading .dropdown-menu'), that);
+                    pubsubviewer.attachTo($(topCssSelector + ' .panel-heading .dropdown-pubsub'), that);
                 });
             });
 

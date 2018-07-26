@@ -1,10 +1,24 @@
 /* CSS for ChiliPeppr Widget */
 
-#com-chilipeppr-widget-template {
+#com-chilipeppr-widget-myhomecnc {
    
 }
 
-#com-chilipeppr-widget-template .nav-tabs>li>a {
+#com-chilipeppr-widget-myhomecnc .nav-tabs>li>a {
     padding: 2px 6px;
 }
+
+#com-chilipeppr-widget-myhomecnc .btn-cncmode {
+    width: 65px !important;
+    top: 6px;
+}
+
+#com-chilipeppr-widget-myhomecnc .cnc-toolbar {
+    width: 150px;
+}
+
+#com-chilipeppr-widget-myhomecnc .cnc-label {
+    font-size: small;
+}
+
 
