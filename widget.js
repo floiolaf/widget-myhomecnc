@@ -34,6 +34,8 @@ requirejs.config({
     shim: {
         // See require.js docs for how to define dependencies that
         // should be loaded before your script/widget.
+        KO: ["KO"],
+        CHART: ["CHART"]
     }
 });
 
