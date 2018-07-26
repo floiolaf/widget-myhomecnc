@@ -203,6 +203,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
             $('#' + this.id + ' .btn-helloworld2').click(this.onHelloBtnClick.bind(this));
 
         },
+        /*
         cncChartTest: function() {
 
             var config = {
@@ -234,11 +235,12 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
             
             var ctx = $('#object-temperature-chart').get(0).getContext("2d");
             var myLine = new Chart(ctx, config);
-        },
+        },*/
         
         /**
          * Object Temperature Chart
          */
+        /*
         cncObjectTemperatureChart: function(data) {
             
             var self = this;
@@ -282,6 +284,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
 			    var myLine = new Chart(ctx).Line( vm.lineChartData(), options );
 		    };
         },
+        */
         /**
          * onHelloBtnClick is an example of a button click event callback
          */
