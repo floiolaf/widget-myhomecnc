@@ -73,7 +73,7 @@ requirejs.config({
         // Make sure you DO NOT put the .js at the end of the URL
         // SmoothieCharts: '//smoothiecharts.org/smoothie',
         ko: '//cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min',
-        Chart: '//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
+        CHART: '//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
         io: '//cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io'
     },
     shim: {
@@ -122,7 +122,7 @@ cprequire_test(["inline:com-chilipeppr-widget-myhomecnc"], function(myWidget) {
 } /*end_test*/ );
 
 // This is the main definition of your widget. Give it a unique name.
-cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other dependencies here */ ], function() {
+cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "CHART" /* other dependencies here */ ], function() {
     return {
         /**
          * The ID of the widget. You must define this and make it unique.
@@ -274,8 +274,8 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
                 }
             };
             
-            var ctx = $("#object-temperature-chart").get(0).getContext("2d");
-            var myLine = new Chart(ctx, config);
+            var ctx = $('#' + this.id + ' .object-temperature-chart').get(0).getContext("2d");
+            var myLine = new CHART.Chart(ctx, config);
         },
         
         /**
@@ -321,7 +321,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
 			    };
 			
 			    var ctx = $("#object-temperature-chart").get(0).getContext("2d");
-			    var myLine = new Chart(ctx).Line( vm.lineChartData(), options );
+			    var myLine = new CHART.Chart(ctx).Line( vm.lineChartData(), options );
 		    };
         },
         /**
