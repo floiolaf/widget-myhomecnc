@@ -28,7 +28,7 @@ requirejs.config({
         // Make sure you DO NOT put the .js at the end of the URL
         // SmoothieCharts: '//smoothiecharts.org/smoothie',
         ko: '//cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min',
-        Chart: '//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
+        //Chart: '//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
         io: '//cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io'
     },
     shim: {
@@ -201,6 +201,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
 
         },
         cncChartTest: function() {
+
             var config = {
                 type: 'line',
                 data: {
@@ -228,9 +229,8 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", /* other
                 }
             };
             
-            var ctx = document.getElementById('object-temperature-chart').getContext("2d");
-            //var ctx = $("#object-temperature-chart").getContext("2d");
-            var myline = new Chart(ctx, config);
+            var ctx = $("#object-temperature-chart").getContext("2d");
+            var myLine = new this.Chart(ctx, config);
         },
         
         /**
