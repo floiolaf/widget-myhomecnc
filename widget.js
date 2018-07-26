@@ -77,7 +77,7 @@ cprequire_test(["inline:com-chilipeppr-widget-myhomecnc"], function(myWidget) {
 } /*end_test*/ );
 
 // This is the main definition of your widget. Give it a unique name.
-cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "CHART" /* other dependencies here */ ], function() {
+cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "CHART", "ko" /* other dependencies here */ ], function() {
     return {
         /**
          * The ID of the widget. You must define this and make it unique.
