@@ -229,7 +229,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "CHART" 
                 }
             };
             
-            var ctx = $('#' + this.id + ' .object-temperature-chart').getContext("2d");
+            var ctx = $('#' + this.id + ' .object-temperature-chart').get(0).getContext("2d");
             var myLine = new Chart(ctx, config);
         },
         
