@@ -390,6 +390,12 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           chilipeppr.publish("/com-chilipeppr-widget-serialport/requestStatus")
           chilipeppr.publish("/com-chilipeppr-widget-serialport/getlist")
         },
+        // total_lenght includes '.' for decimals
+        formatNumber : function (num, total_lenght, decimals) {
+          var myNum = num.toFixed(decimals)
+          var zero = total_lenght - myNum.toString().length + 1;
+          return Array(+(zero > 0 && zero)).join("0") + num;
+        },
 
 
         /**
