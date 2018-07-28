@@ -205,7 +205,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
 
           this.btnSetup();
 
-          //this.cncChartTest(); // CHECK afterwards
+          this.cncChartTest(); // CHECK afterwards
 
           console.log("myHomeCNC : I am done being initted.");
         },
@@ -372,6 +372,10 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           } else {
              $('#' + this.id + '-main-panel').addClass('hidden');
              $('#' + this.id + '-connect-panel').removeClass('hidden');
+             
+             if ($('#com-chilipeppr-widget-myhomecnc-modal-settings').hasClass('in')) {
+                $('#com-chilipeppr-widget-myhomecnc-modal-settings').modal('hide');
+             }
           }
         },
         toolbarScheme: function() {
@@ -393,7 +397,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
         },
         // total_lenght includes '.' for decimals
         formatNumber : function (num, total_lenght, decimals) {
-          if (typeof num == "number") {
+          if ((typeof num) == "number") {
             var myNum = num.toFixed(decimals)
             var zero = total_lenght - myNum.toString().length + 1;
             return Array(+(zero > 0 && zero)).join("0") + num;
@@ -458,20 +462,30 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             $('#' + this.id + ' .btn-cnc-estop').dblclick(this.onEStopBtnDblClick.bind(this));
 
         },
+        // Create an array of len items filled with c char
+        arrayFill : function (c, len) {
+          var arr = [];
+          while (len--) {
+            arr[len] = c;
+          }
+          return arr;
+        },
         // Object Temperature Chart
         cncChartTest: function() {
 
-            Chart.defaults.global.defaultFontSize = 10;
+            var xxx = [65,59,88.2,81,56,55,40];
+            
+            Chart.defaults.global.defaultFontSize = 8;
             Chart.defaults.global.elements.line.borderWidth = 1;
             Chart.defaults.global.elements.point.radius = 1;
-            this.ObjectTemperatureChartConfig = {
+            this.temperatureChartConfig = {
                 type: 'line',
                 data: {
                   labels: ["1","2","3","4","5","6"],
                   datasets : [{
                     backgroundColor: "rgba(255,0,0,1)",
                     borderColor: "rgba(255,0,0,1)",
-                    data : [65,59,88.2,81,56,55,40],
+                    data : xxx,
                     fill: false
                   }]
                 },
@@ -489,8 +503,8 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                   }
                 }
             };
-            var ctx = $('#object-temperature-chart'); //.get(0).getContext("2d");
-            var myLine = new this.Chart(ctx, this.ObjectTemperatureChartConfig);
+            var ctx = $('#cnc-temperature-chart'); //.get(0).getContext("2d");
+            var myLine = new Chart(ctx, this.temperatureChartConfig);
         },
         /**
          * onHelloBtnClick is an example of a button click event callback
