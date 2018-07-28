@@ -83,7 +83,8 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
          */
         id: "com-chilipeppr-widget-myhomecnc", // Make the id the same as the cpdefine id
         name: "Widget / myHomeCNC", // The descriptive name of your widget.
-        desc: "This widget interfaces the different features and devices of myHomeCNC project. It requires a special control board, different sensors, and all connected to a Raspberry Pi with a Server code in Python.\r \n External modules used : Socket.io, Chart.js and Bootstrap Slider", // A description of what your widget does
+        desc: "This widget interfaces the different features and devices of myHomeCNC project. It requires a special control board, different sensors, and all connected to a Raspberry Pi with a Server code in Python. \
+              External modules used : Socket.io, Chart.js and Bootstrap Slider", // A description of what your widget does
         url: "(auto fill by runme.js)",       // The final URL of the working widget as a single HTML file with CSS and Javascript inlined. You can let runme.js auto fill this if you are using Cloud9.
         fiddleurl: "(auto fill by runme.js)", // The edit URL. This can be auto-filled by runme.js in Cloud9 if you'd like, or just define it on your own to help people know where they can edit/fork your widget
         githuburl: "(auto fill by runme.js)", // The backing github repo
