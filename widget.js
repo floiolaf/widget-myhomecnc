@@ -28,8 +28,8 @@ requirejs.config({
         // Make sure you DO NOT put the .js at the end of the URL
         // SmoothieCharts: '//smoothiecharts.org/smoothie',
         Chart : 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
-        SocketIO: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io',
-        Slider: 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.2.0/bootstrap-slider.min',
+        socketio: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io',
+        bootstrapSlider: 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.2.0/bootstrap-slider.min',
     },
     shim: {
         // See require.js docs for how to define dependencies that
@@ -76,7 +76,7 @@ cprequire_test(["inline:com-chilipeppr-widget-myhomecnc"], function(myWidget) {
 } /*end_test*/ );
 
 // This is the main definition of your widget. Give it a unique name.
-cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart", "SocketIO", "Slider", /* other dependencies here */ ], function() {
+cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart", "socketio", "bootstrapSlider", /* other dependencies here */ ], function(chilipeppr_ready, Chart, io, bootstrapSlider) {
     return {
         /**
          * The ID of the widget. You must define this and make it unique.
@@ -140,30 +140,46 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
 
           // setup onconnect pubsub event for foreign signal from SPJS
           chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/onconnect", this, function (msg) {
-            // payload => 'connected'
+            this.isSPJSConnected = true;
+            this.toolbarScheme();
           });
           chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/ondisconnect", this, function (msg) {
-            // payload => 'disconnected'
+            this.isSPJSConnected = false;
+            this.toolbarScheme();
           });
           chilipeppr.subscribe("/com-chilipeppr-widget-serialport/recvStatus", this, function (msg) {
-            // payload => '{"Connected":true, "Websocket": ws } or {"connected":false, "websocket":null}
+            // payload => '{"connected":true, "Websocket": ws } or {"connected":false, "websocket":null}
+            if (msg.connected) {
+              this.isSPJSConnected = true;
+            } else {
+              this.isSPJSConnected = false;
+            }
           });
           chilipeppr.subscribe("/com-chilipeppr-widget-serialport/onportopen", this, function (msg) {
-            // message OK = payload => 'disconnected'
+            // message OK = payload => 
+            this.isSerialConnected = true;
+            this.toolbarScheme();
           });
           chilipeppr.subscribe("/com-chilipeppr-widget-serialport/onportclose", this, function (msg) {
-            // message OK = payload => 'disconnected'
+            // message OK = payload =>
+            this.isSerialConnected = false;
+            this.toolbarScheme();
           });
           chilipeppr.subscribe("/com-chilipeppr-widget-serialport/list", this, function (msg) {
             // payload => '' serial ports available + connected state
+            if (msg.connected) {
+              this.isSerialConnected = true;
+            } else {
+              this.isSerialConnected = false;
+            }
           });
           chilipeppr.subscribe("/com-chilipeppr-widget-serialport/onComplete", this, function (msg) {
             // message OK = payload => '{"Id":"123"}'
           });
 
+          this.getSPJSinfo();
+          
           /* Foreign publish
-          /com-chilipeppr-widget-serialport/requestStatus => callback on /recvStatus
-          /com-chilipeppr-widget-serialport/getlist => callback on /list
           /com-chilipeppr-widget-serialport/jsonSend => {"D": "G0 X1 ", "Id":"123"} callback on /onQueue, /onWrite, /onComplete
           /com-chilipeppr-widget-serialport/send => "G1 X10 F500\n" to send Gcode to default port
           */
@@ -195,8 +211,8 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
         setupConnection: function () {
           var that = this;
 
-          $('#' + this.id + '-header').removeClass('myhomecnc-connected');
-          $('#' + this.id + '-connect-panel').removeClass('myhomecnc-connected');
+          this.connectPanelScheme();
+          this.toolbarScheme();
 
           // show last remote host, if there is one
           var lasthost = this.options.host_myhomecncserver;
@@ -257,14 +273,14 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           console.log("myHomeCNC : Connecting to " + fullurl);
           var that = this;
 
-		  var sio = SocketIO.connect(fullurl + namespace, {reconnection: false});
+		  var sio = io.connect(fullurl + namespace, {reconnection: false});
           this.sio = sio;
 
           this.sio.on('connect', function (id) {
             console.log("myHomeCNC : Connected to " + fullurl + ". socket.id : " + id);
             that.isSioConnected = true;
             that.onSioMessage(); // Update event triggers
-            that.onSioConnect(socket.id, hostname);
+            that.onSioConnect(id, hostname);
             that.options.host_myhomecncserver = hostname;
             that.saveOptionsLocalStorage();
           });
@@ -297,10 +313,11 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           }
         },
         onSioConnect: function (id, host) {
-          this.isSioConnected = true;
           chilipeppr.publish("/" + this.id + "/sio/onconnect", "connected", host, id);
-          $('#' + this.id + '-connect-panel').addClass('myhomecnc-connected');
-          $('#' + this.id + '-header').addClass('myhomecnc-connected');
+          
+          this.connectPanelScheme();
+          this.toolbarScheme();
+          
           // because we're hiding a large mess of text, we should trigger
           // a resize to make sure other widgets reflow since the scroll bar
           // or other stuff may need repositioned
@@ -347,7 +364,32 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
         onSioMessage: function () {
 
         },
-
+        connectPanelScheme: function () {
+          if (this.isSioConnected) {
+             $('#' + this.id + '-connect-panel').addClass('hidden');
+             $('#' + this.id + '-main-panel').removeClass('hidden');
+          } else {
+             $('#' + this.id + '-main-panel').addClass('hidden');
+             $('#' + this.id + '-connect-panel').removeClass('hidden');
+          }
+        },
+        toolbarScheme: function() {
+          if (this.isSPJSCOnnected && this.isSerialConnected && this.isSioConnected) {
+             $('#' + this.id + ' .cnc-mode-toolbar button').removeAttr('disabled'); // or try addClass/removeClass display-only
+             $('#' + this.id + ' .btn-cnc-estop').removeAttr('disabled');
+             $('#' + this.id + ' .btn-cnc-settings').removeAttr('disabled');
+          } else {
+             $('#' + this.id + ' .cnc-mode-toolbar button').attr('disabled', 'disabled');
+             $('#' + this.id + ' .btn-cnc-estop').attr('disabled');
+             $('#' + this.id + ' .btn-cnc-settings').attr('disabled');
+          }
+        },
+        getSPJSinfo: function() {
+          // /com-chilipeppr-widget-serialport/requestStatus => callback on /recvStatus
+          // /com-chilipeppr-widget-serialport/getlist => callback on /list
+          chilipeppr.publish("/com-chilipeppr-widget-serialport/requestStatus")
+          chilipeppr.publish("/com-chilipeppr-widget-serialport/getlist")
+        },
 
 
         /**
@@ -402,7 +444,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             // Init Hello World 2 button on Tab 1. Notice the use
             // of the slick .bind(this) technique to correctly set "this"
             // when the callback is called
-            $('#' + this.id + ' .btn-cnc-estop').click(this.onEStopBtnClick.bind(this));
+            $('#' + this.id + ' .btn-cnc-estop').dblclick(this.onEStopBtnDblClick.bind(this));
 
         },
         // Object Temperature Chart
@@ -442,15 +484,27 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
         /**
          * onHelloBtnClick is an example of a button click event callback
          */
-        onEStopBtnClick: function(evt) {
-            console.log("hey");
+        onEStopBtnDblClick: function(evt) {
             if ($('#' + this.id + '-connect-panel').hasClass('hidden')) {
                 $('#' + this.id + '-main-panel').addClass('hidden');
                 $('#' + this.id + '-connect-panel').removeClass('hidden');
             } else {
                 $('#' + this.id + '-connect-panel').addClass('hidden');
                 $('#' + this.id + '-main-panel').removeClass('hidden');
+                $('#' + this.id + ' .btn-cnc-estop').addClass('btn-danger');
             }
+            if ($('#' + this.id + ' .btn-cnc-estop').hasClass('btn-danger')) { // Activate e-Stop
+                $('#' + this.id + ' .btn-cnc-estop').removeClass('btn-danger');
+                $('#' + this.id + ' .btn-cnc-estop').addClass('btn-success');
+                $('#' + this.id + ' .btn-cnc-estop').text("Reset");
+                // Actions for e-Stop activation
+            } else {
+                $('#' + this.id + ' .btn-cnc-estop').removeClass('btn-success');
+                $('#' + this.id + ' .btn-cnc-estop').addClass('btn-danger');
+                $('#' + this.id + ' .btn-cnc-estop').text("e-Stop");
+                // Actions for Reset e-Stop
+            }    
+            
         },
         /**
          * User options are available in this property for reference by your

@@ -1,7 +1,7 @@
 /* CSS for ChiliPeppr Widget */
 
 #com-chilipeppr-widget-myhomecnc {
-   
+    height: 30%;
 }
 
 #com-chilipeppr-widget-myhomecnc .nav-tabs>li>a {
@@ -26,20 +26,31 @@
     overflow-x: hidden;
 }
 
-#com-chilipeppr-widget-myhomecnc-connect-panel {
-    display : Block;
+#com-chilipeppr-widget-myhomecnc .btn-cnc-estop {
+    width: 50px;
 }
 
-#com-chilipeppr-widget-myhomecnc-main-panel {
-    display : None;
-}
 
-#com-chilipeppr-widget-myhomecnc-connect-panel .myhomecnc-connected {
-    display : None;
-}
 
-#com-chilipeppr-widget-myhomecnc-main-panel .myhomecnc-connected {
-    display : Block;
+/* Modal */
+#com-chilipeppr-widget-myhomecnc-modal-settings .net-delarre-widget-gpio-pins-area {
+}
+#com-chilipeppr-widget-myhomecnc-modal-settings .nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
+#com-chilipeppr-widget-myhomecnc-modal-settings #editPinForm {
+    margin: 10px;
+}
+#com-chilipeppr-widget-myhomecnc-modal-settings #editPinForm .form-group {
+    margin-bottom: 3px;
+}
+#com-chilipeppr-widget-myhomecnc-modal-settings .pin-controls .control-label {
+    text-align: right;
+    line-height: 33px;
+}
+#com-chilipeppr-widget-myhomecnc-modal-settings input[type=range] {
+    padding: 6px 12px;
 }
 
 

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <!--<meta http-equiv="content-type" content="text/html; charset=UTF-8">-->
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 
     <title><!--(auto-fill by runme.js--></title>
 
@@ -11,10 +11,7 @@
 
     <!-- Customized version of require.js for ChiliPeppr. Please see require.js docs for how
     ChiliPeppr's dependency system works as it's based on require.js. -->
-    <script data-main="js/main" src="//i2dcui.appspot.com/js/require.js"></script>
-    <!--<script data-main="js/main" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
-    <script data-main="js/main" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
-    <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>-->
+    <script type="text/javascript" src="//i2dcui.appspot.com/js/require.js"></script>
 
     <!-- widget.css DON'T REMOVE -->
     <style type='text/css'>
@@ -52,14 +49,18 @@
                     <button type="button" class="btn btn-xs btn-default hidebody"><span class="glyphicon glyphicon-chevron-up"></span>
                     </button>
                 </div>
-            </div> <span class="panel-title" data-toggle="popover">myHomeCNC Widget</span> <span style="font-size:9px;" class="fb-build">v1</span>
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-xs btn-default btn-cnc-settings" data-toggle="modal" data-target="#com-chilipeppr-widget-myhomecnc-modal-settings"><span class="glyphicon glyphicon-cog"></span>
+                    </button>
+                </div>
+            </div> <span class="panel-title" data-toggle="popover">myHomeCNC </span> <span style="font-size:9px;" class="fb-build">v1</span>
             <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group cnc-mode-toolbar" style="height:30px; padding-top: 2px" role="group">    
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-mill"  data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Mill">Mill</button>
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-uvlaser" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode UV Laser">UV Laser</button>
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-hplaser" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode High-Power Laser">HP Laser</button>
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-pen" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Pen">Pen</button>
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-dispenser" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Dispenser">Dispenser</button>
+                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-mill" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Mill">Mill</button>
+                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-uvlaser" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode UV Laser">UV Laser</button>
+                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-hplaser" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode High-Power Laser">HP Laser</button>
+                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-pen" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Pen">Pen</button>
+                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-dispenser" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Dispenser">Dispenser</button>
                 </div>
             </div>
         </div>
@@ -74,6 +75,7 @@
                         <p>Typically this is installed on the RaspberryPi or BBB or similar device that has GPIO ports connected to devices you will control and part of myHomeCNC project.</p>
 
                         <p>If you already have the server downloaded, you may just need to launch it from the command line.</p>
+                        <p>Please, ensure the SPJS is also installed and running, with a serial connection established with the main controller.</p>
 
                         <a name="com-chilipeppr-widget-myhomecnc-connect"></a>
                         <p>Connect to a local or remote host here.</p>
@@ -200,6 +202,74 @@
             </div>
 
         </div>
+    </div>
+    <!-- INIT Modal -->
+    <div id="com-chilipeppr-widget-myhomecnc-modal-settings" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">myHomeCNC Settings</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12 net-delarre-widget-gpio-pins-area">
+                            <p>Add/edit pins below.</p>
+                            <form id="editPinForm" class="form-horizontal">
+                                <div class="form-group">
+                                    <div class="col-xs-12 nopadding">
+                                        <label class="sr-only" for="pinId">Pin Name</label>
+                                        <input type="text" class="form-control" id="pinName" placeholder="Pin Name" title="The Name for the pin" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-3 nopadding">
+                                        <label class="sr-only" for="pinId">Pin ID</label>
+                                        <select class="form-control" id="pinId" placeholder="Pin ID" title="The GPIO number for the pin"></select>
+                                    </div>
+                                    <div class="col-xs-3 nopadding">
+                                        <label class="sr-only" for="pinDir">Pin Direction</label>
+                                        <select class="form-control" id="pinDir">
+                                            <option value="out">Out</option>
+                                            <option value="in">In</option>
+                                            <option value="pwm">PWM</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-3 nopadding">
+                                        <label class="sr-only" for="pinPullup">Pin Pullup</label>
+                                        <select class="form-control" id="pinPullup">
+                                            <option value="none">None</option>
+                                            <option value="up">Up</option>
+                                            <option value="down">Down</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-3 nopadding">
+                                        <button type="submit" class="btn btn-default btn-block">Save</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <table class="table table-hover table-condensed net-delarre-widget-gpio-pins">
+                                <thead>
+                                    <td>Name</td>
+                                    <td>Pin ID</td>
+                                    <td>Direction</td>
+                                    <td>State</td>
+                                    <td>Pullup</td>
+                                    <td></td>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
     </div>
 </body>
 
