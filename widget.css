@@ -21,4 +21,26 @@
     font-size: small;
 }
 
+#com-chilipeppr-widget-myhomecnc .panel-body {
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+#com-chilipeppr-widget-myhomecnc-connect-panel {
+    display : Block;
+}
+
+#com-chilipeppr-widget-myhomecnc-main-panel {
+    display : None;
+}
+
+#com-chilipeppr-widget-myhomecnc-connect-panel .myhomecnc-connected {
+    display : None;
+}
+
+#com-chilipeppr-widget-myhomecnc-main-panel .myhomecnc-connected {
+    display : Block;
+}
+
+
 

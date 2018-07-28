@@ -64,7 +64,7 @@ To better understand how ChiliPeppr's subscribe() method works see amplify.js's 
           </tr>
       </thead>
       <tbody>
-      <tr valign="top"><td>/com-chilipeppr-widget-myhomecnc/onExampleGenerate</td><td>Example: Publish this signal when we go to generate gcode.</td></tr>    
+      <tr><td colspan="2">(No signals defined in this widget/element)</td></tr>    
       </tbody>
   </table>
 
@@ -136,25 +136,25 @@ The table below shows, in order, the methods and properties inside the widget/el
 other widgets know how to subscribe to them and what they do.</td></tr><tr valign="top"><td>subscribe</td><td>object</td><td>Please see docs above.<br><br>Define the subscribe signals that this widget/element owns or defines so that
 other widgets know how to subscribe to them and what they do.</td></tr><tr valign="top"><td>foreignPublish</td><td>object</td><td>Please see docs above.<br><br>Document the foreign publish signals, i.e. signals owned by other widgets
 or elements, that this widget/element publishes to.</td></tr><tr valign="top"><td>foreignSubscribe</td><td>object</td><td>Please see docs above.<br><br>Document the foreign subscribe signals, i.e. signals owned by other widgets
-or elements, that this widget/element subscribes to.</td></tr><tr valign="top"><td>init</td><td>function</td><td>function () <br><br>All widgets should have an init method. It should be run by the
-instantiating code like a workspace or a different widget.</td></tr><tr valign="top"><td>btnSetup</td><td>function</td><td>function () <br><br>Call this method from init to setup all the buttons when this widget
-is first loaded. This basically attaches click events to your 
+or elements, that this widget/element subscribes to.</td></tr><tr valign="top"><td>init</td><td>function</td><td>function (host) <br><br>All widgets should have an init method. It should be run by the
+instantiating code like a workspace or a different widget.</td></tr><tr valign="top"><td>setupConnection</td><td>function</td><td>function () </td></tr><tr valign="top"><td>onRemoteHostConnect</td><td>function</td><td>function () </td></tr><tr valign="top"><td>sioConnect</td><td>function</td><td>function (hostname) </td></tr><tr valign="top"><td>publishSysMsg</td><td>function</td><td>function (msg) </td></tr><tr valign="top"><td>onSioConnect</td><td>function</td><td>function (id, host) </td></tr><tr valign="top"><td>onSioDisconnect</td><td>function</td><td>function (reason) </td></tr><tr valign="top"><td>publishStatus</td><td>function</td><td>function () </td></tr><tr valign="top"><td>publishFeedback</td><td>function</td><td>function (key,msg) </td></tr><tr valign="top"><td>sioSend</td><td>function</td><td>function (msg) </td></tr><tr valign="top"><td>sioDisconnect</td><td>function</td><td>function () </td></tr><tr valign="top"><td>onSioMessage</td><td>function</td><td>function () </td></tr><tr valign="top"><td>btnSetup</td><td>function</td><td>function () <br><br>Call this method from init to setup all the buttons when this widget
+is first loaded. This basically attaches click events to your
 buttons. It also turns on all the bootstrap popovers by scanning
-the entire DOM of the widget.</td></tr><tr valign="top"><td>cncChartTest</td><td>function</td><td>function () </td></tr><tr valign="top"><td>onHelloBtnClick</td><td>function</td><td>function (evt) <br><br>onHelloBtnClick is an example of a button click event callback</td></tr><tr valign="top"><td>options</td><td>object</td><td></td></tr><tr valign="top"><td>setupUiFromLocalStorage</td><td>function</td><td>function () <br><br>Call this method on init to setup the UI by reading the user's
+the entire DOM of the widget.</td></tr><tr valign="top"><td>cncChartTest</td><td>function</td><td>function () </td></tr><tr valign="top"><td>onEStopBtnClick</td><td>function</td><td>function (evt) <br><br>onHelloBtnClick is an example of a button click event callback</td></tr><tr valign="top"><td>options</td><td>object</td><td></td></tr><tr valign="top"><td>setupUiFromLocalStorage</td><td>function</td><td>function () <br><br>Call this method on init to setup the UI by reading the user's
 stored settings from localStorage and then adjust the UI to reflect
 what the user wants.</td></tr><tr valign="top"><td>saveOptionsLocalStorage</td><td>function</td><td>function () <br><br>When a user changes a value that is stored as an option setting, you
 should call this method immediately so that on next load the value
 is correctly set.</td></tr><tr valign="top"><td>showBody</td><td>function</td><td>function (evt) <br><br>Show the body of the panel.
-<br><br><b>evt</b> ({jquery_event})  - If you pass the event parameter in, we 
-know it was clicked by the user and thus we store it for the next 
-load so we can reset the user's preference. If you don't pass this 
-value in we don't store the preference because it was likely code 
+<br><br><b>evt</b> ({jquery_event})  - If you pass the event parameter in, we
+know it was clicked by the user and thus we store it for the next
+load so we can reset the user's preference. If you don't pass this
+value in we don't store the preference because it was likely code
 that sent in the param.</td></tr><tr valign="top"><td>hideBody</td><td>function</td><td>function (evt) <br><br>Hide the body of the panel.
-<br><br><b>evt</b> ({jquery_event})  - If you pass the event parameter in, we 
-know it was clicked by the user and thus we store it for the next 
-load so we can reset the user's preference. If you don't pass this 
-value in we don't store the preference because it was likely code 
-that sent in the param.</td></tr><tr valign="top"><td>forkSetup</td><td>function</td><td>function () <br><br>This method loads the pubsubviewer widget which attaches to our 
+<br><br><b>evt</b> ({jquery_event})  - If you pass the event parameter in, we
+know it was clicked by the user and thus we store it for the next
+load so we can reset the user's preference. If you don't pass this
+value in we don't store the preference because it was likely code
+that sent in the param.</td></tr><tr valign="top"><td>forkSetup</td><td>function</td><td>function () <br><br>This method loads the pubsubviewer widget which attaches to our
 upper right corner triangle menu and generates 3 menu items like
 Pubsub Viewer, View Standalone, and Fork Widget. It also enables
 the modal dialog that shows the documentation for this widget.<br><br>By using chilipeppr.load() we can ensure that the pubsubviewer widget

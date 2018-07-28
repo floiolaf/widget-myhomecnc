@@ -7,17 +7,17 @@ requirejs.config({
     /*
     Dependencies can be defined here. ChiliPeppr uses require.js so
     please refer to http://requirejs.org/docs/api.html for info.
-    
+
     Most widgets will not need to define Javascript dependencies.
-    
+
     Make sure all URLs are https and http accessible. Try to use URLs
     that start with // rather than http:// or https:// so they simply
     use whatever method the main page uses.
-    
+
     Also, please make sure you are not loading dependencies from different
     URLs that other widgets may already load like jquery, bootstrap,
     three.js, etc.
-    
+
     You may slingshot content through ChiliPeppr's proxy URL if you desire
     to enable SSL for non-SSL URL's. ChiliPeppr's SSL URL is
     https://i2dcui.appspot.com which is the SSL equivalent for
@@ -27,16 +27,15 @@ requirejs.config({
         // Example of how to define the key (you make up the key) and the URL
         // Make sure you DO NOT put the .js at the end of the URL
         // SmoothieCharts: '//smoothiecharts.org/smoothie',
-        ko: 'https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min',
         Chart : 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
-        //SocketIO: '//cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io'
+        SocketIO: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io',
+        Slider: 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.2.0/bootstrap-slider.min',
     },
     shim: {
         // See require.js docs for how to define dependencies that
         // should be loaded before your script/widget.
     }
 });
-
 cprequire_test(["inline:com-chilipeppr-widget-myhomecnc"], function(myWidget) {
 
     // Test this element. This code is auto-removed by the chilipeppr.load()
@@ -77,7 +76,7 @@ cprequire_test(["inline:com-chilipeppr-widget-myhomecnc"], function(myWidget) {
 } /*end_test*/ );
 
 // This is the main definition of your widget. Give it a unique name.
-cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart", "ko" /* other dependencies here */ ], function(a, Chart, ko) {
+cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart", "SocketIO", "Slider", /* other dependencies here */ ], function() {
     return {
         /**
          * The ID of the widget. You must define this and make it unique.
@@ -100,7 +99,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
          */
         publish: {
             // Define a key:value pair here as strings to document what signals you publish.
-            '/onExampleGenerate': 'Example: Publish this signal when we go to generate gcode.'
+            // '/onExampleGenerate': 'Example: Publish this signal when we go to generate gcode.'
         },
         /**
          * Define the subscribe signals that this widget/element owns or defines so that
@@ -133,23 +132,227 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
          * All widgets should have an init method. It should be run by the
          * instantiating code like a workspace or a different widget.
          */
-        init: function() {
-            console.log("I am being initted. Thanks.");
+        init: function(host) {
 
-            this.setupUiFromLocalStorage();
-            this.btnSetup();
-            this.forkSetup();
-            
-            this.cncChartTest();
-            //var vm = new this.cncObjectTemperatureChart();
-            //ko.applyBindings(vm);
-            //vm.initline();
+          console.log("myHomeCNC : I am being initted. Thanks.");
 
-            console.log("I am done being initted.");
+          this.forkSetup();
+
+          // setup onconnect pubsub event for foreign signal from SPJS
+          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/onconnect", this, function (msg) {
+            // payload => 'connected'
+          });
+          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/ondisconnect", this, function (msg) {
+            // payload => 'disconnected'
+          });
+          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/recvStatus", this, function (msg) {
+            // payload => '{"Connected":true, "Websocket": ws } or {"connected":false, "websocket":null}
+          });
+          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/onportopen", this, function (msg) {
+            // message OK = payload => 'disconnected'
+          });
+          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/onportclose", this, function (msg) {
+            // message OK = payload => 'disconnected'
+          });
+          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/list", this, function (msg) {
+            // payload => '' serial ports available + connected state
+          });
+          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/onComplete", this, function (msg) {
+            // message OK = payload => '{"Id":"123"}'
+          });
+
+          /* Foreign publish
+          /com-chilipeppr-widget-serialport/requestStatus => callback on /recvStatus
+          /com-chilipeppr-widget-serialport/getlist => callback on /list
+          /com-chilipeppr-widget-serialport/jsonSend => {"D": "G0 X1 ", "Id":"123"} callback on /onQueue, /onWrite, /onComplete
+          /com-chilipeppr-widget-serialport/send => "G1 X10 F500\n" to send Gcode to default port
+          */
+
+          // setup low-level send pubsub event
+          // this is when any widget sends wants to send data data to the socket
+          chilipeppr.subscribe("/" + this.id + "/send", this, function (key, msg) {
+            this.wsSend(key, msg);
+          });
+          chilipeppr.subscribe("/" + this.id + "/getstatus", this, function () {
+            this.publishStatus();
+          });
+          chilipeppr.subscribe("/" + this.id + "/getfeedback", this, function (key) {
+            //this.publishFeedback(key, msg);
+          });
+
+          this.setupUiFromLocalStorage();
+
+          this.isSioConnected = false;
+
+          this.sioConnect(host);
+
+          this.btnSetup();
+
+          //this.cncChartTest(); // CHECK afterwards
+
+          console.log("myHomeCNC : I am done being initted.");
         },
+        setupConnection: function () {
+          var that = this;
+
+          $('#' + this.id + '-header').removeClass('myhomecnc-connected');
+          $('#' + this.id + '-connect-panel').removeClass('myhomecnc-connected');
+
+          // show last remote host, if there is one
+          var lasthost = this.options.host_myhomecncserver;
+          if (lasthost !== undefined) {
+              $('#com-chilipeppr-widget-myhomecnc-host').val(lasthost);
+          }
+          // if connect btn or enter key on remote host connect
+          var remoteCon = $('#' + this.id + '-hostbtn');
+          remoteCon.click(this.onRemoteHostConnect.bind(this));
+
+          $('#com-chilipeppr-widget-myhomecnc-host').keypress(function(event){
+              //console.log("got keypress. event:", event);
+              var keycode = (event.keyCode ? event.keyCode : event.which);
+              if (keycode == '13'){
+                  that.onRemoteHostConnect();
+              }
+          });
+        },
+        onRemoteHostConnect: function() {
+          var that = this;
+
+          var host = $('#com-chilipeppr-widget-myhomecnc-host').val();
+          $('#' + this.id + '-hostconnectmsg').html(
+            "Trying to connect to " +
+            host + "...");
+
+          this.sioConnect(host, function() {
+            $('#' + that.id + '-hostconnectmsg').html("Last connect successful.");
+          }, function() {
+            $('#' + that.id + '-hostconnectmsg').html("Failed to connect to host.");
+          });
+        },
+        // Connect
+        sioConnect: function (hostname) {
+          //if (!window["WebSocket"]) {
+          //  this.publishSysMsg("Your browser does not support WebSockets.");
+          //}
+          if (!hostname) {
+            // see if local save is set and pull it if it is if not try localhost
+            if(this.options.host_myhomecncserver !== undefined){
+              hostname = this.options.host_myhomecncserver;
+            } else {
+              hostname = 'localhost';
+            }
+          }
+          var fullurl;
+          var namespace = "/cnc";
+
+          fullurl = "http://" + hostname;
+          // Passing through Nginx reverse proxy. Not necessary to specify any port
+          /*
+          if (hostname.match(/:\d+$/)) {
+            fullurl = "http://" + hostname;
+          } else {
+            fullurl = "http://" + hostname + ":8990";
+          }
+          */
+          console.log("myHomeCNC : Connecting to " + fullurl);
+          var that = this;
+
+		  var sio = SocketIO.connect(fullurl + namespace, {reconnection: false});
+          this.sio = sio;
+
+          this.sio.on('connect', function (id) {
+            console.log("myHomeCNC : Connected to " + fullurl + ". socket.id : " + id);
+            that.isSioConnected = true;
+            that.onSioMessage(); // Update event triggers
+            that.onSioConnect(socket.id, hostname);
+            that.options.host_myhomecncserver = hostname;
+            that.saveOptionsLocalStorage();
+          });
+          this.sio.on('connect_error', function (error) {
+            console.log("myHomeCNC : Connection error : " + error);
+            that.publishSysMsg("myHomeCNC Socket error.");
+            that.setupConnection(); // require right host
+          });
+          this.sio.on('connect_timeout', function (timeout) {
+            console.log("myHomeCNC : Connection timeout : " + timeout);
+            that.publishSysMsg("myHomeCNC Socket timeout.");
+            that.setupConnection(); // require right host
+          });
+          this.sio.on('disconnect', function (reason) {
+            console.log("myHomeCNC : Closing Sockets: " + this.sio + " => " + reason);
+            that.isSioConnected = false;
+            that.onSioDisconnect(reason);
+          });
+        },
+        publishSysMsg: function (msg) {
+          chilipeppr.publish("/" + this.id + "/sys", msg);
+          var now = Date.now();
+          if (this.lastMsg == msg && now - this.lastMsgTime < 20000) {
+            // skip publish
+            console.log("myHomeCNC : skipping publish. same msg or too fast.");
+          } else {
+            chilipeppr.publish("/com-chilipeppr-elem-flashmsg/flashmsg", "myHomeCNC Message", msg);
+            this.lastMsg = msg;
+            this.lastMsgTime = now;
+          }
+        },
+        onSioConnect: function (id, host) {
+          this.isSioConnected = true;
+          chilipeppr.publish("/" + this.id + "/sio/onconnect", "connected", host, id);
+          $('#' + this.id + '-connect-panel').addClass('myhomecnc-connected');
+          $('#' + this.id + '-header').addClass('myhomecnc-connected');
+          // because we're hiding a large mess of text, we should trigger
+          // a resize to make sure other widgets reflow since the scroll bar
+          // or other stuff may need repositioned
+          $(window).trigger('resize');
+        },
+        onSioDisconnect: function (reason) {
+          chilipeppr.publish("/" + this.id + "/sio/ondisconnect", "disconnected");
+          this.setupConnection(null);
+        },
+        publishStatus: function () {
+          if (this.isSioConnected) {
+            chilipeppr.publish("/" + this.id + "/sio/status", "connected");
+          } else{
+            chilipeppr.publish("/" + this.id + "/sio/status", "disconnected");
+          }
+        },
+        publishFeedback: function (key,msg) {
+          chilipeppr.publish("/" + this.id + "/" + key, msg);
+        },
+        //statusWatcher: function () { // CHECK IF NEEDED
+          // This method subscribes to "/sio/sys" and updates the UI with
+          // the latest msg
+        //  chilipeppr.subscribe("/" + this.id + "/sys", this, function (msg) {
+        //    $('.net-delarre-widget-gpio-status .well.well-sm').text(msg); //???
+        //  });
+        //},
+        sioSend: function (msg) {
+          if (this.isSioConnected) {
+            this.sio.send(msg);
+          } else {
+            this.publishSysMsg("Tried to send message, but we are not connected to myHomeCNC Socket server.");
+          }
+        },
+        sioDisconnect: function () {
+          try {
+            this.sio.disconnect();
+          }
+          catch (error) {
+              console.log("myHomeCNC : Disconnect Sockets error : " + error);
+          }
+        },
+        // to send anything down : this.sioSend(msg);
+        // to receive anything up : this.sio.on('key', function (event, data) {...}),
+        onSioMessage: function () {
+
+        },
+
+
+
         /**
          * Call this method from init to setup all the buttons when this widget
-         * is first loaded. This basically attaches click events to your 
+         * is first loaded. This basically attaches click events to your
          * buttons. It also turns on all the bootstrap popovers by scanning
          * the entire DOM of the widget.
          */
@@ -158,7 +361,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             // Chevron hide/show body
             var that = this;
             $('#' + this.id + ' .hidebody').click(function(evt) {
-                console.log("hide/unhide body");
+                console.log("myHomeCNC : hide/unhide body");
                 if ($('#' + that.id + ' .panel-body').hasClass('hidden')) {
                     // it's hidden, unhide
                     that.showBody(evt);
@@ -182,7 +385,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             // Init Say Hello Button on Main Toolbar
             // We are inlining an anonymous method as the callback here
             // as opposed to a full callback method in the Hello Word 2
-            // example further below. Notice we have to use "that" so 
+            // example further below. Notice we have to use "that" so
             // that the this is set correctly inside the anonymous method
             $('#' + this.id + ' .btn-sayhello').click(function() {
                 console.log("saying hello");
@@ -196,107 +399,58 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                     1000
                 );
             });
-
             // Init Hello World 2 button on Tab 1. Notice the use
             // of the slick .bind(this) technique to correctly set "this"
             // when the callback is called
-            $('#' + this.id + ' .btn-helloworld2').click(this.onHelloBtnClick.bind(this));
+            $('#' + this.id + ' .btn-cnc-estop').click(this.onEStopBtnClick.bind(this));
 
         },
+        // Object Temperature Chart
         cncChartTest: function() {
 
             Chart.defaults.global.defaultFontSize = 10;
             Chart.defaults.global.elements.line.borderWidth = 1;
             Chart.defaults.global.elements.point.radius = 1;
-            this.ObjectTemperatureChartConfig = this.ko.observable({
+            this.ObjectTemperatureChartConfig = {
                 type: 'line',
                 data: {
-                    labels: ["1","2","3","4","5","6"],
-                    datasets : [{
-                        backgroundColor: "rgba(255,0,0,1)",
-				        borderColor: "rgba(255,0,0,1)",
-                        data : [65,59,88.2,81,56,55,40],
-                        fill: false,
-				    }]
+                  labels: ["1","2","3","4","5","6"],
+                  datasets : [{
+                    backgroundColor: "rgba(255,0,0,1)",
+                    borderColor: "rgba(255,0,0,1)",
+                    data : [65,59,88.2,81,56,55,40],
+                    fill: false
+                  }]
                 },
                 options: {
-                    responsive: false,
-                    legend: false,
-                    animation : false,
-                    scaleOverride : false,
-                    scaleSteps : 10,//Number - The number of steps in a hard coded scale
-                    scaleStepWidth : 10,//Number - The value jump in the hard coded scale				
-                    scaleStartValue : 10,//Number - The scale starting value
-                    scales: {
-				        xAxes: [{display: false}],
-				        yAxes: [{display: true}]
-				    }
+                  responsive: false,
+                  legend: false,
+                  animation : false,
+                  scaleOverride : false,
+                  scaleSteps : 10,//Number - The number of steps in a hard coded scale
+                  scaleStepWidth : 10,//Number - The value jump in the hard coded scale
+                  scaleStartValue : 10,//Number - The scale starting value
+                  scales: {
+                    xAxes: [{display: false}],
+                    yAxes: [{display: true}]
+                  }
                 }
-            });
-            
+            };
             var ctx = $('#object-temperature-chart'); //.get(0).getContext("2d");
             var myLine = new this.Chart(ctx, this.ObjectTemperatureChartConfig);
         },
-        
-        /**
-         * Object Temperature Chart
-         */
-        /*
-        cncObjectTemperatureChart: function(data) {
-            
-            var self = this;
-		    //var sio = io.connect('http://localhost:8070');
-		
-		    self.lineChartData = ko.observable({
-			    labels : ["January","February","March","April","May","June","July"],
-			    datasets : [
-				    {
-					    fillColor : "rgba(151,187,205,0.5)",
-					    strokeColor : "rgba(151,187,205,1)",
-					    pointColor : "rgba(151,187,205,1)",
-					    pointStrokeColor : "#fff",
-					    data : [65,59,90,81,56,55,40]
-				    }
-			    ]
-		    });
-		
-		    //sio.on('pushdata', function (data) {
-			//    self.lineChartData().datasets[0].data.shift();
-			//    self.lineChartData().datasets[0].data.push(data);
-			
-			//    self.initLine();
-		    //});
-		
-		    self.initLine = function() {
-			    var options = {
-			        responsive: true,
-				    animation : false,
-				    scaleOverride : true,
-				    scaleSteps : 10,//Number - The number of steps in a hard coded scale
-				    scaleStepWidth : 10,//Number - The value jump in the hard coded scale				
-				    scaleStartValue : 10,//Number - The scale starting value
-				    scales: {
-				        xAxes: [{display: false}],
-				        yAxes: [{display: true}]
-				    }
-			    };
-			
-			    var ctx = $("#object-temperature-chart").get(0).getContext("2d");
-			    var myLine = new Chart(ctx).Line( vm.lineChartData(), options );
-		    };
-        },
-        */
         /**
          * onHelloBtnClick is an example of a button click event callback
          */
-        onHelloBtnClick: function(evt) {
-            console.log("saying hello 2 from btn in tab 1");
-            chilipeppr.publish(
-                '/com-chilipeppr-elem-flashmsg/flashmsg',
-                "Hello 2 Title",
-                "Hello World 2 from Tab 1 from widget " + this.id,
-                2000 /* show for 2 second */
-            );
+        onEStopBtnClick: function(evt) {
+            console.log("hey");
+            if ($('#' + this.id + '-connect-panel').hasClass('hidden')) {
+                $('#' + this.id + '-main-panel').addClass('hidden');
+                $('#' + this.id + '-connect-panel').removeClass('hidden');
+            } else {
+                $('#' + this.id + '-connect-panel').addClass('hidden');
+                $('#' + this.id + '-main-panel').removeClass('hidden');
+            }
         },
         /**
          * User options are available in this property for reference by your
@@ -316,14 +470,14 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             // widgets' options. By using this.id as the prefix of the
             // key we're safe that this will be unique.
 
-            // Feel free to add your own keys inside the options 
+            // Feel free to add your own keys inside the options
             // object for your own items
 
             var options = localStorage.getItem(this.id + '-options');
 
             if (options) {
                 options = $.parseJSON(options);
-                console.log("just evaled options: ", options);
+                console.log("myHomeCNC : just evaled options: ", options);
             }
             else {
                 options = {
@@ -335,7 +489,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             }
 
             this.options = options;
-            console.log("options:", options);
+            console.log("myHomeCNC : options:", options);
 
             // show/hide body
             if (options.showBody) {
@@ -357,16 +511,16 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             var options = this.options;
 
             var optionsStr = JSON.stringify(options);
-            console.log("saving options:", options, "json.stringify:", optionsStr);
+            console.log("myHomeCNC : saving options:", options, "json.stringify:", optionsStr);
             // store settings to localStorage
             localStorage.setItem(this.id + '-options', optionsStr);
         },
         /**
          * Show the body of the panel.
-         * @param {jquery_event} evt - If you pass the event parameter in, we 
-         * know it was clicked by the user and thus we store it for the next 
-         * load so we can reset the user's preference. If you don't pass this 
-         * value in we don't store the preference because it was likely code 
+         * @param {jquery_event} evt - If you pass the event parameter in, we
+         * know it was clicked by the user and thus we store it for the next
+         * load so we can reset the user's preference. If you don't pass this
+         * value in we don't store the preference because it was likely code
          * that sent in the param.
          */
         showBody: function(evt) {
@@ -384,10 +538,10 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
         },
         /**
          * Hide the body of the panel.
-         * @param {jquery_event} evt - If you pass the event parameter in, we 
-         * know it was clicked by the user and thus we store it for the next 
-         * load so we can reset the user's preference. If you don't pass this 
-         * value in we don't store the preference because it was likely code 
+         * @param {jquery_event} evt - If you pass the event parameter in, we
+         * know it was clicked by the user and thus we store it for the next
+         * load so we can reset the user's preference. If you don't pass this
+         * value in we don't store the preference because it was likely code
          * that sent in the param.
          */
         hideBody: function(evt) {
@@ -404,11 +558,11 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             $(window).trigger("resize");
         },
         /**
-         * This method loads the pubsubviewer widget which attaches to our 
+         * This method loads the pubsubviewer widget which attaches to our
          * upper right corner triangle menu and generates 3 menu items like
          * Pubsub Viewer, View Standalone, and Fork Widget. It also enables
          * the modal dialog that shows the documentation for this widget.
-         * 
+         *
          * By using chilipeppr.load() we can ensure that the pubsubviewer widget
          * is only loaded and inlined once into the final ChiliPeppr workspace.
          * We are given back a reference to the instantiated singleton so its
