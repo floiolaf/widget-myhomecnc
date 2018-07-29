@@ -91,8 +91,8 @@
     overflow: auto;
     min-width: 461px;
     min-height: 350px;
-    /*height: 350px;
-    width: 461px;*/
+    height: 350px;
+    width: 461px;
 }
 
 #com-chilipeppr-widget-myhomecnc .connect-panel-body {
@@ -100,8 +100,8 @@
     overflow: auto;
     min-width: 350px;
     min-height: 350px;
-    /*height: 350px;
-    width: 350px;*/
+    height: 350px;
+    width: 350px;
 }
 
 #com-chilipeppr-widget-myhomecnc .btn-cnc-estop {
