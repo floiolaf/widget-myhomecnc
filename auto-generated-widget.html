@@ -229,7 +229,6 @@ requirejs.config({
         // SmoothieCharts: '//smoothiecharts.org/smoothie',
         Chart : 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
         socketio: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io',
-        slider: 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.2.0/bootstrap-slider.min',
     },
     shim: {
         // See require.js docs for how to define dependencies that
@@ -276,7 +275,7 @@ cprequire_test(["inline:com-chilipeppr-widget-myhomecnc"], function(myWidget) {
 } /*end_test*/ );
 
 // This is the main definition of your widget. Give it a unique name.
-cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart", "socketio", "slider", /* other dependencies here */ ], function(chilipeppr_ready, Chart, io, slider) {
+cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart", "socketio", /* other dependencies here */ ], function(chilipeppr_ready, Chart, io) {
     return {
         /**
          * The ID of the widget. You must define this and make it unique.
