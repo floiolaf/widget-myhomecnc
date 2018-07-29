@@ -39,6 +39,24 @@
     height : 34px;
 }
 
+#com-chilipeppr-widget-myhomecnc .btn-cnctools {
+    width: 85px !important;
+    padding: 0px;
+    height : 34px;
+}
+
+#com-chilipeppr-widget-myhomecnc .btn-cncls {
+    width: 100% !important;
+    padding: 0px;
+    height : 34px;
+}
+
+#com-chilipeppr-widget-myhomecnc .btn-cncuvbox {
+    width: 85px !important;
+    padding: 0px;
+    height : 34px;
+}
+
 #com-chilipeppr-widget-myhomecnc .btn-cnccolorpresets {
     width: 34px !important;
     padding: 0px;
@@ -60,14 +78,29 @@
     height: 20px;
 }
 
-#com-chilipeppr-widget-myhomecnc .panel-body {
+#com-chilipeppr-widget-myhomecnc-main-panel .panel-body {
     padding: 2px 10px 10px 10px;
     overflow: auto;
     overflow-x: hidden;
+    min-height: 376px;
+    height: 376px;
+}
+
+#com-chilipeppr-widget-myhomecnc-connect-panel .panel-body {
+    padding: 5px 5px 5px 5px;
+    overflow: auto;
+    overflow-x: hidden;
+    min-height: 376px;
+    height: 376px;
 }
 
 #com-chilipeppr-widget-myhomecnc .btn-cnc-estop {
     width: 50px;
+}
+
+#com-chilipeppr-widget-myhomecnc .container {
+    height: 320px;
+    min-height: 320px;
 }
 
 #com-chilipeppr-widget-myhomecnc .chartjs-render-monitor {
@@ -900,7 +933,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
         <div id="com-chilipeppr-widget-myhomecnc-connect-panel" class="panel-body">
             <div class="row install-body">
                 <div class="col-xs-12">
-                    <div class="alert alert-warning" style="margin:0;">
+                    <div class="alert alert-warning" style="margin:0; height: 100%">
                         
                         <p xstyle="padding-top:0;">You need to install and run the myHomeCNC Server on the machine that has the GPIO.
                         </p>
@@ -912,7 +945,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                         <a name="com-chilipeppr-widget-myhomecnc-connect"></a>
                         <p>Connect to a local or remote host here.</p>
                         <div id="com-chilipeppr-widget-myhomecnc-hostconnectmsg"></div>
-                        <div class="input-group">
+                        <div class="input-group" style="padding-top: 20px">
                             <input type="text" class="form-control" id="com-chilipeppr-widget-myhomecnc-host" placeholder="Remote Host" />
                             <span class="input-group-btn">
                             <button class="btn btn-default" id="com-chilipeppr-widget-myhomecnc-hostbtn">Connect</button>
@@ -944,7 +977,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             <div class="tab-content">
     
                 <!-- Tab 1 -->
-                <div class="tab-pane active" id="com-chilipeppr-widget-myhomecnc-tab1">
+                <div class="container tab-pane active" id="com-chilipeppr-widget-myhomecnc-tab1">
                     <div style="padding-top: 10px; height: 30px; border-bottom: 1px solid grey; font-weight: bold">
                         <span class="pull-left" style="">Spindle :</span>
                     </div>
@@ -956,17 +989,17 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                             <span>Object Temperature  </span><span class="label label-primary cnc-label cnc-object-temperature">000.0</span><span> degC</span>
                         </span>
                     </div>
-                    <div class="" style="padding-top: 5px; height: 40px">
+                    <div class="" style="padding-top: 20px; height: 60px">
                         <button type="button" class="btn btn-s btn-default btn-cnc-plaser" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Activate Position Lasers">Position Lasers</button>
                         <span class="pull-right">
                             <span>Absolute Distance  </span><span class="label label-primary cnc-label cnc-absolute-distance">000</span><span> mm</span>
                         </span>
                     </div>
-                    <div style="padding-top: 10px; height: 30px; border-bottom: 1px solid grey; font-weight: bold">
+                    <div style="padding-top: 20px; height: 40px; border-bottom: 1px solid grey; font-weight: bold">
                         <span class="pull-left" style="">UV Laser :</span>
                         <span class="pull-right label label-info cnc-label cnc-uvlaser-onfocus">on focus</span>
                     </div>
-                    <div style="padding-top: 10px; height: 40px">
+                    <div style="padding-top: 20px; height: 50px">
                         <span class="pull-left">
                             <span>Current  </span><span class="label label-primary cnc-label cnc-uvlaser-current">0.000</span><span> Amps</span>
                         </span>
@@ -974,11 +1007,11 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                             <span>Temperature </span><span class="label label-primary cnc-label cnc-uvlaser-temperature">000.0</span><span> degC</span>
                         </span>
                     </div>
-                    <div style="padding-top: 10px; height: 30px; border-bottom: 1px solid grey; font-weight: bold">
+                    <div style="padding-top: 20px; height: 40px; border-bottom: 1px solid grey; font-weight: bold">
                         <span class="pull-left" style="">High-Power Laser :</span>
                         <span class="pull-right label label-info cnc-label cnc-hplaser-onfocus">on focus</span>
                     </div>
-                    <div style="padding-top: 10px; height: 40px">
+                    <div style="padding-top: 20px; height: 50px">
                         <span class="pull-left">
                             <span>Current  </span><span class="label label-primary cnc-label cnc-hplaser-current">0.000</span><span> Amps</span>
                         </span>
@@ -1076,12 +1109,12 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                     <div class="container" id="com-chilipeppr-widget-myhomecnc-uvbox-container">
                         <div class="row">
                             <div class="col-xs-3 no-gutters">
-                                <button type="button" class="btn btn-s btn-default btn-cncneopixels btn-cnc-uvlight pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Activate UV Lighht Timer">UV Light</button>
+                                <button type="button" class="btn btn-s btn-default btn-cncuvbox btn-cnc-uvlight pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Activate UV Lighht Timer">UV Light</button>
                             </div>
                             <div class="col-xs-6 no-gutters" style="padding-top: 17px">
                                 <span class="pull-right">Elapsed Time</span>
                             </div>
-                            <div class="col-xs-2 no-gutters" style="padding-top: 17px; padding-left: 15px">
+                            <div class="col-xs-2 no-gutters" style="padding-top: 16px; padding-left: 15px">
                                 <span class="label label-primary cnc-uvlight-etime" style="height: 30px; font-size: 150%">000</span>
                             </div>
                             <div class="col-xs-1 no-gutters" style="padding-top: 17px">
@@ -1090,7 +1123,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                         </div>
                         <div class="row">
                             <div class="col-xs-6 no-gutters">
-                                <button type="button" class="btn btn-s btn-default btn-cncneopixels btn-cnc-ack pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Acknowledge Buzzer">Ack Buzzer</button>
+                                <button type="button" class="btn btn-s btn-default btn-cncuvbox btn-cnc-ack pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Acknowledge Buzzer">Ack Buzzer</button>
                             </div>
                             <div class="col-xs-6 no-gutters">
                                 <div class="input-group pull-right">
@@ -1102,6 +1135,15 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                             </div>
                         </div>
                         <div class="row">
+                            <div class="col-xs-3 no-gutters" style="padding-top: 17px">
+                                <span class="pull-left">Intensity</span>
+                            </div>
+                             <div class="col-xs-7 no-gutters" style="padding-top: 17px">
+                                <input type="range" min="0" max="100" value="0" class="sld-cnc-uvlight-intensity">
+                            </div>
+                            <div class="col-xs-2 no-gutters" style="padding-top: 17px; padding-left: 20px">
+                                <span class="label cnc-label label-primary pull-right cnc-uvlight-intensity">100%</span>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-1" style="padding-left: 0px; padding-top: 5px">
@@ -1118,7 +1160,109 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                 
                 <!-- Tab 4 -->
                 <div class="tab-pane" id="com-chilipeppr-widget-myhomecnc-tab4">
-                    <p>This is the content of tab 4.</p>
+                    <div class="container" id="com-chilipeppr-widget-myhomecnc-tools-container">
+                        <div class="row">
+                            <div class="col-xs-3 no-gutters">
+                                <button type="button" class="btn btn-s btn-default btn-cnctools btn-cnc-vac pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Activate VAC">VAC</button>
+                            </div>
+                            <div class="col-xs-2 no-gutters" style="padding-top: 17px">
+                                <span class="pull-right">Start mode</span>
+                            </div>
+                            <div class="col-xs-7 no-gutters" style="padding-top: 10px; padding-left: 15px">
+                                <div class="pull-right" role="toolbar">
+                                    <div class="btn-group btn-group-toggle cnc-vacmode-toolbar" style="height:34px; padding-top: 0px" data-toggle="buttons"> <!--role="group"-->   
+                                        <button type="radio" class="btn btn-s btn-default btg-cnc-vac-manu" name="opt-cnc-vac" id="opt-cnc-vac1" style="width: 70px" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Sarts manually">Manual</button>
+                                        <button type="radio" class="btn btn-s btn-default btg-cnc-vac-cool" name="opt-cnc-vac" id="opt-cnc-vac2" style="width: 70px" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Starts with cooling signal">Cool</button>
+                                        <button type="radio" class="btn btn-s btn-default btg-cnc-vac-spindle" name="opt-cnc-vac" id="opt-cnc-vac3" style="width: 70px" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Starts with spindle signal">Spindle</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3 no-gutters">
+                                <button type="button" class="btn btn-s btn-default btn-cnctools btn-cnc-actool pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Activate VAC">AC Tool</button>
+                            </div>
+                            <div class="col-xs-2 no-gutters" style="padding-top: 17px">
+                                <span class="pull-right">Start mode</span>
+                            </div>
+                            <div class="col-xs-7 no-gutters" style="padding-top: 10px; padding-left: 15px">
+                                <div class="pull-right" role="toolbar">
+                                    <div class="btn-group btn-group-toggle cnc-actoolmode-toolbar" style="height:34px; padding-top: 0px" data-toggle="buttons"> <!--role="group"-->   
+                                        <button type="radio" class="btn btn-s btn-default btg-cnc-actool-manu" name="opt-cnc-actool" id="opt-cnc-actool1" style="width: 70px" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Sarts manually">Manual</button>
+                                        <button type="radio" class="btn btn-s btn-default btg-cnc-actool-cool" name="opt-cnc-actool" id="opt-cnc-actool2" style="width: 70px" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Starts with cooling signal">Cool</button>
+                                        <button type="radio" class="btn btn-s btn-default btg-cnc-actool-spindle" name="opt-cnc-actool" id="opt-cnc-actool3" style="width: 70px" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Starts with spindle signal">Spindle</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3 no-gutters">
+                                <button type="button" class="btn btn-s btn-default btn-cnctools btn-cnc-dctool pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Activate VAC">DC Tool</button>
+                            </div>
+                            <div class="col-xs-2 no-gutters" style="padding-top: 17px">
+                                <span class="pull-right">Start mode</span>
+                            </div>
+                            <div class="col-xs-7 no-gutters" style="padding-top: 10px; padding-left: 15px">
+                                <div class="pull-right" role="toolbar">
+                                    <div class="btn-group btn-group-toggle cnc-dctoolmode-toolbar" style="height:34px; padding-top: 0px" data-toggle="buttons"> <!--role="group"-->   
+                                        <button type="radio" class="btn btn-s btn-default btg-cnc-dctool-manu" name="opt-cnc-dctool" id="opt-cnc-dctool1" style="width: 70px" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Sarts manually">Manual</button>
+                                        <button type="radio" class="btn btn-s btn-default btg-cnc-dctool-cool" name="opt-cnc-dctool" id="opt-cnc-dctool2" style="width: 70px" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Starts with cooling signal">Cool</button>
+                                        <button type="radio" class="btn btn-s btn-default btg-cnc-dctool-spindle" name="opt-cnc-dctool" id="opt-cnc-dctool3" style="width: 70px" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Starts with spindle signal">Spindle</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 no-gutters" style="padding-left: 1px; padding-top: 17px">
+                                <span class="pull-left">DCTool Intensity</span>
+                            </div>
+                             <div class="col-xs-4 no-gutters" style="padding-top: 17px">
+                                <input type="range" min="50" max="100" value="0" class="sld-cnc-dctool-intensity">
+                            </div>
+                            <div class="col-xs-4 no-gutters" style="padding-top: 17px; padding-left: 20px">
+                                <span class="label cnc-label label-primary pull-right cnc-dctool-intensity" style="width: 100px">100% - 24.0V</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3 no-gutters" style="padding-left: 1px; padding-top: 10px">
+                              <button type="button" class="btn btn-s btn-default btn-cnctools btn-cnc-ls-reset pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Reset Capture">L.Shedding</button>
+                            </div>
+                            <div class="col-xs-2 no-gutters" style="padding-top: 17px">
+                                <span class="pull-left">Scheme</span>
+                            </div>
+                            <div class="col-xs-7 no-gutters" style="padding-left: 15px; padding-top: 10px">
+                                <div class="cnc-ls-dropdown dropup">
+                                  <button type="button" class="btn btn-s btn-default btn-cncls ddl-cnc-ls-scheme" data-toggle="dropdown">Shutdown Sequence
+                                  <span class="caret"></span></button>
+                                  <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#">VAC > Air Compressor > AC Tool</a></li>
+                                    <li><a href="#">VAC > AC Tool > Air Compressor</a></li>
+                                    <li><a href="#">Air Compressor > VAC > AC Tool</a></li>
+                                    <li><a href="#">Air Compressor > AC Tool > VAC</a></li>
+                                    <li><a href="#">AC Tool > VAC > Air Compressor</a></li>
+                                    <li><a href="#">AC Tool > Air Compressor > VAC</a></li>
+                                  </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 no-gutters" style="padding-left: 1px; padding-top: 17px">
+                                <span class="pull-left">AC In</span>
+                                <span style="padding-right: 25px"></span>
+                                <span class="label cnc-label label-primary cnc-acin" style="width: 40px">00.0</span>
+                                <span class="pull-right">Amps</span>
+                            </div>
+                            <div class="col-xs-4 no-gutters" style="padding-left: 10px; padding-top: 10px">
+                                <button type="button" class="btn btn-s btn-default btn-cnctools btn-cnc-ls-reset pull-right" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Reset Capture">Reset</button>
+                            </div>
+                            <div class="col-xs-4 no-gutters" style="padding-left: 15px; padding-top: 17px">
+                                <span class="label cnc-label label-primary pull-right cnc-ls-actool" style="width: 40px; border-radius: 0px">ACT</span>
+                                <span class="label cnc-label label-primary pull-right cnc-ls-air" style="width: 40px; border-radius: 0px">Air</span>
+                                <span class="label cnc-label label-primary pull-right cnc-ls-vac" style="width: 40px; border-radius: 0px">VAC</span>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
                 
                 <!-- Tab 5 -->
