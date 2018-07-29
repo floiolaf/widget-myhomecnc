@@ -20,19 +20,19 @@
 #com-chilipeppr-widget-myhomecnc .btn-cncneopixels {
     width: 85px !important;
     padding: 0px;
-    height : 30px;
+    height : 34px;
 }
 
 #com-chilipeppr-widget-myhomecnc .btn-cnccolorpresets {
     width: 34px !important;
     padding: 0px;
-    height : 30px;
+    height : 34px;
 }
 
 #com-chilipeppr-widget-myhomecnc .btn-cncintensitypresets {
     width: 42px !important;
     padding: 0px;
-    height : 30px;
+    height : 34px;
 }
 
 #com-chilipeppr-widget-myhomecnc .cnc-toolbar {
@@ -41,6 +41,7 @@
 
 #com-chilipeppr-widget-myhomecnc .cnc-label {
     font-size: small;
+    height: 20px;
 }
 
 #com-chilipeppr-widget-myhomecnc .panel-body {
@@ -62,7 +63,7 @@
     width: 80%;
 }
 
-#com-chilipeppr-widget-myhomecnc-neopixels-container .no-gutters {
+#com-chilipeppr-widget-myhomecnc .no-gutters {
     margin-right: 0px;
     margin-left: 0px;
     padding-right: 0px;
