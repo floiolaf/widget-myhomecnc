@@ -29,7 +29,7 @@ requirejs.config({
         // SmoothieCharts: '//smoothiecharts.org/smoothie',
         Chart : 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
         socketio: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io',
-        bootstrapSlider: 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.2.0/bootstrap-slider.min',
+        slider: 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.2.0/bootstrap-slider.min',
     },
     shim: {
         // See require.js docs for how to define dependencies that
@@ -76,7 +76,7 @@ cprequire_test(["inline:com-chilipeppr-widget-myhomecnc"], function(myWidget) {
 } /*end_test*/ );
 
 // This is the main definition of your widget. Give it a unique name.
-cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart", "socketio", "bootstrapSlider", /* other dependencies here */ ], function(chilipeppr_ready, Chart, io, bootstrapSlider) {
+cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart", "socketio", "slider", /* other dependencies here */ ], function(chilipeppr_ready, Chart, io, slider) {
     return {
         /**
          * The ID of the widget. You must define this and make it unique.
@@ -196,9 +196,12 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           chilipeppr.subscribe("/" + this.id + "/getfeedback", this, function (key) {
             //this.publishFeedback(key, msg);
           });
+          
 
           this.setupUiFromLocalStorage();
 
+          this.setupBody();
+          
           this.isSioConnected = false;
 
           this.sioConnect(host);
@@ -206,6 +209,8 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           this.btnSetup();
 
           this.cncChartTest(); // CHECK afterwards
+          
+          
 
           console.log("myHomeCNC : I am done being initted.");
         },
@@ -363,7 +368,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
         // to send anything down : this.sioSend(msg);
         // to receive anything up : this.sio.on('key', function (event, data) {...}),
         onSioMessage: function () {
-
+          
         },
         connectPanelScheme: function () {
           if (this.isSioConnected) {
@@ -531,6 +536,36 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             }    
             
         },
+        setupBody: function() {
+        	
+        	var that = this;
+        	
+          $("#com-chilipeppr-widget-xbox-settings-container > .cnc-slider").each(function(){
+            if ( this.id == 'com-chilipeppr-widget-xbox-incjog' ) {
+        	     $(this).prev('span').text( this.value / 10 )
+        	  } else {
+               $(this).prev('span').text(this.value)
+        	  }
+          });
+        	
+        	$('#com-chilipeppr-widget-xbox-settings-container > .cnc-slider').on("input", function(e) {
+        	    if ( e.target.id == 'com-chilipeppr-widget-xbox-incjog' ) {
+        	        $(e.target).prev('span').text( $(e.target).val() / 10 )
+        	    } else {
+                    $(e.target).prev('span').text( $(e.target).val() )
+        	    }
+            });
+            
+            $('#com-chilipeppr-widget-xbox-settings-container > .cnc-slider').on("change", function(e) {
+                that.options.Deadzone = $('#com-chilipeppr-widget-xbox-deadzone').val();
+                that.options.RateXY = $('#com-chilipeppr-widget-xbox-ratexy').val();
+                that.options.RateZ = $('#com-chilipeppr-widget-xbox-ratez').val();
+                that.options.IncJog = $('#com-chilipeppr-widget-xbox-incjog').val();
+                that.options.RPM = $('#com-chilipeppr-widget-xbox-rpm').val();
+                that.saveOptionsLocalStorage();
+            });
+			
+        },
         /**
          * User options are available in this property for reference by your
          * methods. If any change is made on these options, please call
@@ -577,6 +612,12 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             else {
                 this.hideBody();
             }
+            
+            $('#com-chilipeppr-widget-xbox-deadzone').val(options.Deadzone);
+            $('#com-chilipeppr-widget-xbox-ratexy').val(options.RateXY);
+            $('#com-chilipeppr-widget-xbox-ratez').val(options.RateZ);
+            $('#com-chilipeppr-widget-xbox-incjog').val(options.IncJog);
+            $('#com-chilipeppr-widget-xbox-rpm').val(options.RPM);
 
         },
         /**

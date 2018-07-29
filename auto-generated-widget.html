@@ -33,6 +33,24 @@
     top: 6px;
 }
 
+#com-chilipeppr-widget-myhomecnc .btn-cncneopixels {
+    width: 85px !important;
+    padding: 0px;
+    height : 30px;
+}
+
+#com-chilipeppr-widget-myhomecnc .btn-cnccolorpresets {
+    width: 34px !important;
+    padding: 0px;
+    height : 30px;
+}
+
+#com-chilipeppr-widget-myhomecnc .btn-cncintensitypresets {
+    width: 42px !important;
+    padding: 0px;
+    height : 30px;
+}
+
 #com-chilipeppr-widget-myhomecnc .cnc-toolbar {
     width: 150px;
 }
@@ -55,6 +73,19 @@
     padding: 20px 2px 0px 2px;
 }
 
+#com-chilipeppr-widget-myhomecnc .cnc-slider {
+    margin-left: 5px;
+    width: 80%;
+}
+
+#com-chilipeppr-widget-myhomecnc-neopixels-container .no-gutters {
+    margin-right: 0px;
+    margin-left: 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 
 /* Modal */
 #com-chilipeppr-widget-myhomecnc-modal-settings .net-delarre-widget-gpio-pins-area {
@@ -73,9 +104,34 @@
     text-align: right;
     line-height: 33px;
 }
-#com-chilipeppr-widget-myhomecnc-modal-settings input[type=range] {
+#com-chilipeppr-widget-myhomecnc-modal-settings input[type=range]::-webkit-slider-thumb {
     padding: 6px 12px;
+    width: 10px;
 }
+
+.input[type='range'].cnc-slider {
+      overflow: hidden;
+      width: 220px;
+      -webkit-appearance: none;
+      background-color: #9a905d;
+}
+    
+.input[type='range'].cnc-slider::-webkit-slider-runnable-track {
+      height: 10px;
+      -webkit-appearance: none;
+      color: #13bba4;
+      margin-top: -1px;
+    }
+    
+.input[type='range'].cnc-slider::-webkit-slider-thumb {
+      width: 10px;
+      -webkit-appearance: none;
+      height: 10px;
+      cursor: pointer;
+      background: #434343;
+      box-shadow: -80px 0 0 80px #43e5f7;
+}
+
 
 
 
@@ -115,7 +171,7 @@ requirejs.config({
         // SmoothieCharts: '//smoothiecharts.org/smoothie',
         Chart : 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
         socketio: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io',
-        bootstrapSlider: 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.2.0/bootstrap-slider.min',
+        slider: 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.2.0/bootstrap-slider.min',
     },
     shim: {
         // See require.js docs for how to define dependencies that
@@ -162,7 +218,7 @@ cprequire_test(["inline:com-chilipeppr-widget-myhomecnc"], function(myWidget) {
 } /*end_test*/ );
 
 // This is the main definition of your widget. Give it a unique name.
-cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart", "socketio", "bootstrapSlider", /* other dependencies here */ ], function(chilipeppr_ready, Chart, io, bootstrapSlider) {
+cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart", "socketio", "slider", /* other dependencies here */ ], function(chilipeppr_ready, Chart, io, slider) {
     return {
         /**
          * The ID of the widget. You must define this and make it unique.
@@ -282,9 +338,12 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           chilipeppr.subscribe("/" + this.id + "/getfeedback", this, function (key) {
             //this.publishFeedback(key, msg);
           });
+          
 
           this.setupUiFromLocalStorage();
 
+          this.setupBody();
+          
           this.isSioConnected = false;
 
           this.sioConnect(host);
@@ -292,6 +351,8 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           this.btnSetup();
 
           this.cncChartTest(); // CHECK afterwards
+          
+          
 
           console.log("myHomeCNC : I am done being initted.");
         },
@@ -449,7 +510,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
         // to send anything down : this.sioSend(msg);
         // to receive anything up : this.sio.on('key', function (event, data) {...}),
         onSioMessage: function () {
-
+          
         },
         connectPanelScheme: function () {
           if (this.isSioConnected) {
@@ -617,6 +678,36 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             }    
             
         },
+        setupBody: function() {
+        	
+        	var that = this;
+        	
+          $("#com-chilipeppr-widget-xbox-settings-container > .cnc-slider").each(function(){
+            if ( this.id == 'com-chilipeppr-widget-xbox-incjog' ) {
+        	     $(this).prev('span').text( this.value / 10 )
+        	  } else {
+               $(this).prev('span').text(this.value)
+        	  }
+          });
+        	
+        	$('#com-chilipeppr-widget-xbox-settings-container > .cnc-slider').on("input", function(e) {
+        	    if ( e.target.id == 'com-chilipeppr-widget-xbox-incjog' ) {
+        	        $(e.target).prev('span').text( $(e.target).val() / 10 )
+        	    } else {
+                    $(e.target).prev('span').text( $(e.target).val() )
+        	    }
+            });
+            
+            $('#com-chilipeppr-widget-xbox-settings-container > .cnc-slider').on("change", function(e) {
+                that.options.Deadzone = $('#com-chilipeppr-widget-xbox-deadzone').val();
+                that.options.RateXY = $('#com-chilipeppr-widget-xbox-ratexy').val();
+                that.options.RateZ = $('#com-chilipeppr-widget-xbox-ratez').val();
+                that.options.IncJog = $('#com-chilipeppr-widget-xbox-incjog').val();
+                that.options.RPM = $('#com-chilipeppr-widget-xbox-rpm').val();
+                that.saveOptionsLocalStorage();
+            });
+			
+        },
         /**
          * User options are available in this property for reference by your
          * methods. If any change is made on these options, please call
@@ -663,6 +754,12 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             else {
                 this.hideBody();
             }
+            
+            $('#com-chilipeppr-widget-xbox-deadzone').val(options.Deadzone);
+            $('#com-chilipeppr-widget-xbox-ratexy').val(options.RateXY);
+            $('#com-chilipeppr-widget-xbox-ratez').val(options.RateZ);
+            $('#com-chilipeppr-widget-xbox-incjog').val(options.IncJog);
+            $('#com-chilipeppr-widget-xbox-rpm').val(options.RPM);
 
         },
         /**
@@ -789,12 +886,12 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                 </div>
             </div> <span class="panel-title" data-toggle="popover">myHomeCNC </span> <span style="font-size:9px;" class="fb-build">v1</span>
             <div class="btn-toolbar" role="toolbar">
-                <div class="btn-group cnc-mode-toolbar" style="height:30px; padding-top: 2px" role="group">    
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-mill" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Mill">Mill</button>
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-uvlaser" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode UV Laser">UV Laser</button>
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-hplaser" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode High-Power Laser">HP Laser</button>
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-pen" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Pen">Pen</button>
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-dispenser" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Dispenser">Dispenser</button>
+                <div class="btn-group btn-group-toggle cnc-mode-toolbar" style="height:30px; padding-top: 2px" data-toggle="buttons" role="group">    
+                    <button type="radio" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-mill" name="opt-cnc-mode" id="opt-cnc-mode1" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Mill">Mill</button>
+                    <button type="radio" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-uvlaser" name="opt-cnc-mode" id="opt-cnc-mode2" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode UV Laser">UV Laser</button>
+                    <button type="radio" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-hplaser" name="opt-cnc-mode" id="opt-cnc-mode3" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode High-Power Laser">HP Laser</button>
+                    <button type="radio" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-pen" name="opt-cnc-mode" id="opt-cnc-mode4" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Pen">Pen</button>
+                    <button type="radio" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-dispenser" name="opt-cnc-mode" id="opt-cnc-mode5" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Dispenser">Dispenser</button>
                 </div>
             </div>
         </div>
@@ -892,7 +989,90 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
 
                 <!-- Tab 2 -->
                 <div class="tab-pane" id="com-chilipeppr-widget-myhomecnc-tab2">
-                    
+                    <div class="container" id="com-chilipeppr-widget-myhomecnc-neopixels-container">
+                        <div class="row">
+                            <div class="col-xs-3 no-gutters">
+                                <button type="button" class="btn btn-s btn-default btn-cncneopixels btn-cnc-neopixels pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Activate RGB Light">Light</button>
+                            </div>
+                            <div class="col-xs-4 no-gutters" style="padding-top: 14.5px">
+                                <div class="" style="width: 100%; ; padding-left: 5px">
+                                    <div class="pull-left">Actual Color </div><button type="button" class="btn btn-s btn-default pull-right cnc-neopixels-actual-color" style="width: 47px; height: 21px; background-color: rgba(255,255,255,1)" ></button>
+                                </div>
+                            </div>
+                            <div class="col-xs-5 no-gutters" style="padding-top: 14.5px; padding-left: 20px">
+                                <span class="">Actual Intensity</span><span class="label cnc-label label-primary pull-right cnc-neopixels-actual-intensity">100%</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3 no-gutters">
+                                <button type="button" class="btn btn-s btn-default btn-cncneopixels btn-cnc-neopixels-newcolor pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set new color/Intensity">Set new</button>
+                            </div>
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <div class="pull-right">Color Presets</div>
+                            </div>
+                            <div class="col-xs-6 no-gutters" style="">
+                                <div class="btn-toolbar pull-right" role="toolbar">
+                                    <div class="btn-group" style="" role="group">    
+                                        <button type="button" class="btn btn-s btn-cnccolorpresets btn-default btg-cnc-neopixels-pswhite" style="background-color: rgba(255,255,255,1)" ></button>
+                                        <button type="button" class="btn btn-s btn-cnccolorpresets btn-default btg-cnc-neopixels-psred" style="background-color: rgba(255,0,0,1)"></button>
+                                        <button type="button" class="btn btn-s btn-cnccolorpresets btn-default btg-cnc-neopixels-psblue" style="background-color: rgba(0,0,255,1)"></button>
+                                        <button type="button" class="btn btn-s btn-cnccolorpresets btn-default btg-cnc-neopixels-psgreen" style="background-color: rgba(0,255,0,1)"></button>
+                                        <button type="button" class="btn btn-s btn-cnccolorpresets btn-default btg-cnc-neopixels-psyellow" style="background-color: rgba(255,255,0,1)"></button>
+                                        <button type="button" class="btn btn-s btn-cnccolorpresets btn-default btg-cnc-neopixels-pspurple" style="background-color: rgba(128,0,128,1)"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <div class="pull-left" style="padding-left: 0px">Int/ty</div><span style="padding-left: 8px"></span><span class="label cnc-label label-default cnc-neopixels-intensity">100%</span>
+                            </div>
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <div class="pull-left" style="padding-left: 8px; color: red">Red</div><span style="padding-left: 12px"></span><span class="label cnc-label label-danger cnc-neopixels-red">100%</span>
+                            </div>
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <div class="pull-left" style="color: green">Green </div><span style="padding-left: 10px"></span><span class="label cnc-label label-success cnc-neopixels-green">100%</span>
+                            </div>
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <div class="pull-left" style="padding-left: 10px; color: blue">Blue</div><span style="padding-left: 12px"></span><span class="label cnc-label label-primary pull-right cnc-neopixels-blue">100%</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <input type="range" min="0" max="100" value="0" class="cnc-slider sld-cnc-neopixels-intensity">
+                            </div>
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <input type="range" min="0" max="100" value="0" class="cnc-slider sld-cnc-neopixels-red">
+                            </div>
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <input type="range" min="0" max="100" value="0" class="cnc-slider sld-cnc-neopixels-green">
+                            </div>
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <input type="range" min="0" max="100" value="0" class="cnc-slider sld-cnc-neopixels-blue">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 no-gutters">
+                                <span style="padding-left: 5px;">New </span><span style="padding-left: 8px;"></span><button type="button" class="btn btn-s btn-default cnc-neopixels-rgba" style="width: 85px; height: 30px; background-color: rgba(255,255,255,1)" ></button>
+                            </div>
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <span class="pull-right" style="">Intensity Presets </span>
+                            </div>
+                            <div class="col-xs-5 no-gutters" style="">
+                                <div class="pull-right" role="toolbar">
+                                    <div class="btn-group" style="" role="group">    
+                                        <button type="button" class="btn btn-s btn-cncintensitypresets btn-default btg-cnc-neopixels-intensity25" style="" >25%</button>
+                                        <button type="button" class="btn btn-s btn-cncintensitypresets btn-default btg-cnc-neopixels-intensity50" style="">50%</button>
+                                        <button type="button" class="btn btn-s btn-cncintensitypresets btn-default btg-cnc-neopixels-intensity75" style="">75%</button>
+                                        <button type="button" class="btn btn-s btn-cncintensitypresets btn-default btg-cnc-neopixels-intensity100" style="">100%</button>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        
+                        
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Tab 3 -->

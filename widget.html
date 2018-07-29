@@ -55,12 +55,12 @@
                 </div>
             </div> <span class="panel-title" data-toggle="popover">myHomeCNC </span> <span style="font-size:9px;" class="fb-build">v1</span>
             <div class="btn-toolbar" role="toolbar">
-                <div class="btn-group cnc-mode-toolbar" style="height:30px; padding-top: 2px" role="group">    
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-mill" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Mill">Mill</button>
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-uvlaser" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode UV Laser">UV Laser</button>
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-hplaser" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode High-Power Laser">HP Laser</button>
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-pen" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Pen">Pen</button>
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btn-cnc-mode-dispenser" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Dispenser">Dispenser</button>
+                <div class="btn-group btn-group-toggle cnc-mode-toolbar" style="height:30px; padding-top: 2px" data-toggle="buttons" role="group">    
+                    <button type="radio" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-mill" name="opt-cnc-mode" id="opt-cnc-mode1" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Mill">Mill</button>
+                    <button type="radio" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-uvlaser" name="opt-cnc-mode" id="opt-cnc-mode2" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode UV Laser">UV Laser</button>
+                    <button type="radio" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-hplaser" name="opt-cnc-mode" id="opt-cnc-mode3" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode High-Power Laser">HP Laser</button>
+                    <button type="radio" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-pen" name="opt-cnc-mode" id="opt-cnc-mode4" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Pen">Pen</button>
+                    <button type="radio" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-dispenser" name="opt-cnc-mode" id="opt-cnc-mode5" disabled='disabled' data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set mode Dispenser">Dispenser</button>
                 </div>
             </div>
         </div>
@@ -158,7 +158,90 @@
 
                 <!-- Tab 2 -->
                 <div class="tab-pane" id="com-chilipeppr-widget-myhomecnc-tab2">
-                    
+                    <div class="container" id="com-chilipeppr-widget-myhomecnc-neopixels-container">
+                        <div class="row">
+                            <div class="col-xs-3 no-gutters">
+                                <button type="button" class="btn btn-s btn-default btn-cncneopixels btn-cnc-neopixels pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Activate RGB Light">Light</button>
+                            </div>
+                            <div class="col-xs-4 no-gutters" style="padding-top: 14.5px">
+                                <div class="" style="width: 100%; ; padding-left: 5px">
+                                    <div class="pull-left">Actual Color </div><button type="button" class="btn btn-s btn-default pull-right cnc-neopixels-actual-color" style="width: 47px; height: 21px; background-color: rgba(255,255,255,1)" ></button>
+                                </div>
+                            </div>
+                            <div class="col-xs-5 no-gutters" style="padding-top: 14.5px; padding-left: 20px">
+                                <span class="">Actual Intensity</span><span class="label cnc-label label-primary pull-right cnc-neopixels-actual-intensity">100%</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3 no-gutters">
+                                <button type="button" class="btn btn-s btn-default btn-cncneopixels btn-cnc-neopixels-newcolor pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set new color/Intensity">Set new</button>
+                            </div>
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <div class="pull-right">Color Presets</div>
+                            </div>
+                            <div class="col-xs-6 no-gutters" style="">
+                                <div class="btn-toolbar pull-right" role="toolbar">
+                                    <div class="btn-group" style="" role="group">    
+                                        <button type="button" class="btn btn-s btn-cnccolorpresets btn-default btg-cnc-neopixels-pswhite" style="background-color: rgba(255,255,255,1)" ></button>
+                                        <button type="button" class="btn btn-s btn-cnccolorpresets btn-default btg-cnc-neopixels-psred" style="background-color: rgba(255,0,0,1)"></button>
+                                        <button type="button" class="btn btn-s btn-cnccolorpresets btn-default btg-cnc-neopixels-psblue" style="background-color: rgba(0,0,255,1)"></button>
+                                        <button type="button" class="btn btn-s btn-cnccolorpresets btn-default btg-cnc-neopixels-psgreen" style="background-color: rgba(0,255,0,1)"></button>
+                                        <button type="button" class="btn btn-s btn-cnccolorpresets btn-default btg-cnc-neopixels-psyellow" style="background-color: rgba(255,255,0,1)"></button>
+                                        <button type="button" class="btn btn-s btn-cnccolorpresets btn-default btg-cnc-neopixels-pspurple" style="background-color: rgba(128,0,128,1)"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <div class="pull-left" style="padding-left: 0px">Int/ty</div><span style="padding-left: 8px"></span><span class="label cnc-label label-default cnc-neopixels-intensity">100%</span>
+                            </div>
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <div class="pull-left" style="padding-left: 8px; color: red">Red</div><span style="padding-left: 12px"></span><span class="label cnc-label label-danger cnc-neopixels-red">100%</span>
+                            </div>
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <div class="pull-left" style="color: green">Green </div><span style="padding-left: 10px"></span><span class="label cnc-label label-success cnc-neopixels-green">100%</span>
+                            </div>
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <div class="pull-left" style="padding-left: 10px; color: blue">Blue</div><span style="padding-left: 12px"></span><span class="label cnc-label label-primary pull-right cnc-neopixels-blue">100%</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <input type="range" min="0" max="100" value="0" class="cnc-slider sld-cnc-neopixels-intensity">
+                            </div>
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <input type="range" min="0" max="100" value="0" class="cnc-slider sld-cnc-neopixels-red">
+                            </div>
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <input type="range" min="0" max="100" value="0" class="cnc-slider sld-cnc-neopixels-green">
+                            </div>
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <input type="range" min="0" max="100" value="0" class="cnc-slider sld-cnc-neopixels-blue">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 no-gutters">
+                                <span style="padding-left: 5px;">New </span><span style="padding-left: 8px;"></span><button type="button" class="btn btn-s btn-default cnc-neopixels-rgba" style="width: 85px; height: 30px; background-color: rgba(255,255,255,1)" ></button>
+                            </div>
+                            <div class="col-xs-3 no-gutters" style="padding-top: 14.5px">
+                                <span class="pull-right" style="">Intensity Presets </span>
+                            </div>
+                            <div class="col-xs-5 no-gutters" style="">
+                                <div class="pull-right" role="toolbar">
+                                    <div class="btn-group" style="" role="group">    
+                                        <button type="button" class="btn btn-s btn-cncintensitypresets btn-default btg-cnc-neopixels-intensity25" style="" >25%</button>
+                                        <button type="button" class="btn btn-s btn-cncintensitypresets btn-default btg-cnc-neopixels-intensity50" style="">50%</button>
+                                        <button type="button" class="btn btn-s btn-cncintensitypresets btn-default btg-cnc-neopixels-intensity75" style="">75%</button>
+                                        <button type="button" class="btn btn-s btn-cncintensitypresets btn-default btg-cnc-neopixels-intensity100" style="">100%</button>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        
+                        
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Tab 3 -->

@@ -17,6 +17,24 @@
     top: 6px;
 }
 
+#com-chilipeppr-widget-myhomecnc .btn-cncneopixels {
+    width: 85px !important;
+    padding: 0px;
+    height : 30px;
+}
+
+#com-chilipeppr-widget-myhomecnc .btn-cnccolorpresets {
+    width: 34px !important;
+    padding: 0px;
+    height : 30px;
+}
+
+#com-chilipeppr-widget-myhomecnc .btn-cncintensitypresets {
+    width: 42px !important;
+    padding: 0px;
+    height : 30px;
+}
+
 #com-chilipeppr-widget-myhomecnc .cnc-toolbar {
     width: 150px;
 }
@@ -39,6 +57,19 @@
     padding: 20px 2px 0px 2px;
 }
 
+#com-chilipeppr-widget-myhomecnc .cnc-slider {
+    margin-left: 5px;
+    width: 80%;
+}
+
+#com-chilipeppr-widget-myhomecnc-neopixels-container .no-gutters {
+    margin-right: 0px;
+    margin-left: 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 
 /* Modal */
 #com-chilipeppr-widget-myhomecnc-modal-settings .net-delarre-widget-gpio-pins-area {
@@ -57,9 +88,34 @@
     text-align: right;
     line-height: 33px;
 }
-#com-chilipeppr-widget-myhomecnc-modal-settings input[type=range] {
+#com-chilipeppr-widget-myhomecnc-modal-settings input[type=range]::-webkit-slider-thumb {
     padding: 6px 12px;
+    width: 10px;
 }
+
+.input[type='range'].cnc-slider {
+      overflow: hidden;
+      width: 220px;
+      -webkit-appearance: none;
+      background-color: #9a905d;
+}
+    
+.input[type='range'].cnc-slider::-webkit-slider-runnable-track {
+      height: 10px;
+      -webkit-appearance: none;
+      color: #13bba4;
+      margin-top: -1px;
+    }
+    
+.input[type='range'].cnc-slider::-webkit-slider-thumb {
+      width: 10px;
+      -webkit-appearance: none;
+      height: 10px;
+      cursor: pointer;
+      background: #434343;
+      box-shadow: -80px 0 0 80px #43e5f7;
+}
+
 
 
 
