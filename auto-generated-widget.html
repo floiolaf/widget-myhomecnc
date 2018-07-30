@@ -103,7 +103,7 @@
 }
 
 #com-chilipeppr-widget-myhomecnc .panel-body {
-    padding: 0px 0px 0px 0px important;
+    padding: 2px 0px 10px 10px important;
     overflow: auto;
     min-width: 461px;
     min-height: 450px;
@@ -125,11 +125,11 @@
 }
     
 #com-chilipeppr-widget-myhomecnc .container {    
-    padding: 0px 0px 0px 0px !important;
+    /*padding: 0px 0px 0px 0px !important;*/
     height: 450px;
     min-height: 450px;
-    width: 461px;
-    min-width: 461px;
+    width: 441px;
+    min-width: 441px;
 
 #com-chilipeppr-widget-myhomecnc .chartjs-render-monitor {
     padding: 20px 2px 0px 2px;
@@ -350,11 +350,11 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           });
           chilipeppr.subscribe("/com-chilipeppr-widget-serialport/list", this, function (msg) {
             // payload => '' serial ports available + connected state
-            if (msg.connected) {
-              this.isSerialConnected = true;
-            } else {
-              this.isSerialConnected = false;
-            }
+            //if (msg.connected) {
+            //  this.isSerialConnected = true;
+            //} else {
+            //  this.isSerialConnected = false;
+            //}
           });
           chilipeppr.subscribe("/com-chilipeppr-widget-serialport/onComplete", this, function (msg) {
             // message OK = payload => '{"Id":"123"}'

@@ -167,11 +167,11 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           });
           chilipeppr.subscribe("/com-chilipeppr-widget-serialport/list", this, function (msg) {
             // payload => '' serial ports available + connected state
-            if (msg.connected) {
-              this.isSerialConnected = true;
-            } else {
-              this.isSerialConnected = false;
-            }
+            //if (msg.connected) {
+            //  this.isSerialConnected = true;
+            //} else {
+            //  this.isSerialConnected = false;
+            //}
           });
           chilipeppr.subscribe("/com-chilipeppr-widget-serialport/onComplete", this, function (msg) {
             // message OK = payload => '{"Id":"123"}'
