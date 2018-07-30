@@ -125,7 +125,7 @@
                         </span>
                     </div>
                     <div class="" style="padding-top: 20px; height: 60px">
-                        <button type="button" class="btn btn-s btn-default btn-cnc-plaser" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Activate Position Lasers">Position Lasers</button>
+                        <button type="button" class="btn btn-s btn-default btn-cnc-plaser" style="" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Activate Position Lasers">Position Lasers</button>
                         <span class="pull-right">
                             <span>Absolute Distance  </span><span class="label label-primary cnc-label cnc-absolute-distance">000</span><span> mm</span>
                         </span>
@@ -159,71 +159,96 @@
                 <!-- Tab 2 -->
                 <div class="tab-pane" id="com-chilipeppr-widget-myhomecnc-tab2">
                     <div class="container" id="com-chilipeppr-widget-myhomecnc-neopixels-container" style="padding-top: 10px; width: 441px; height: 310px">
-                        <div class="row">
-                            <div class="col-xs-3 no-gutters">
-                                <button type="button" class="btn btn-s btn-default btn-cncneopixels btn-cnc-neopixels pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Activate RGB Light">Light</button>
+                        <div class="row cnc-row-s-mix">
+                            <div class="col-xs-3 cnc-col-s-mix">
+                                <div class="cnc-div-s-mix pull-left">
+                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xl btn-cnc-neopixels" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Toggle RGB Light On">Light</button>
+                                </div>
                             </div>
-                            <div class="col-xs-4 no-gutters" style="">
-                                <span style="padding-left: 0px; padding-top: 17px">Actual Color </span><span style="padding-left: 5px;"></span><button type="button" class="btn btn-s btn-default cnc-neopixels-actual-color" style="width: 34px; height: 34px; background-color: rgba(255,255,255,1)" ></button>
+                            <div class="col-xs-4 cnc-col-s-mix">
+                                <div class="cnc-div-s-mix pull-right">
+                                    <span class="cnc-span-s-mix">Actual Color</span><span class="cnc-space-right"></span><button type="button" class="btn btn-s btn-default cnc-button-s-xs cnc-neopixels-actual-color" style="background-color: rgba(255,255,255,1)"></button>
+                                </div>
                             </div>
-                            <div class="col-xs-5 no-gutters" style="padding-top: 17px; padding-left: 20px">
-                                <span class="">Actual Intensity</span><span class="label cnc-label label-primary pull-right cnc-neopixels-actual-intensity">100%</span>
+                            <div class="col-xs-5 cnc-col-s-mix">
+                                <div class="cnc-div-s-mix pull-right">
+                                    <span class="cnc-span-s-mix">Actual Intensity</span><span class="cnc-space-right"></span><span class="label cnc-label-s-mix label-primary cnc-neopixels-actual-intensity">100%</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-3 no-gutters">
-                                <button type="button" class="btn btn-s btn-default btn-cncneopixels btn-cnc-neopixels-newcolor pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set new color/Intensity">Set new</button>
+                        <div class="row cnc-row-s-mix">
+                            <div class="col-xs-3 cnc-col-s-mix">
+                                <div class="cnc-div-s-mix pull-left">
+                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xl btn-cnc-neopixels-newcolor" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Set new color/Intensity">Set new</button>
+                                </div>
                             </div>
-                            <div class="col-xs-3 no-gutters" style="padding-top: 17px">
-                                <div class="pull-right">Color Presets</div>
-                            </div>
-                            <div class="col-xs-6 no-gutters" style="">
-                                <div class="btn-toolbar pull-right" role="toolbar">
-                                    <div class="btn-group" style="" role="group">    
-                                        <button type="button" class="btn btn-s btn-cnccolorpresets btn-default btg-cnc-neopixels-pswhite" style="background-color: rgba(255,255,255,1)" ></button>
-                                        <button type="button" class="btn btn-s btn-cnccolorpresets btn-default btg-cnc-neopixels-psred" style="background-color: rgba(255,0,0,1)"></button>
-                                        <button type="button" class="btn btn-s btn-cnccolorpresets btn-default btg-cnc-neopixels-psblue" style="background-color: rgba(0,0,255,1)"></button>
-                                        <button type="button" class="btn btn-s btn-cnccolorpresets btn-default btg-cnc-neopixels-psgreen" style="background-color: rgba(0,255,0,1)"></button>
-                                        <button type="button" class="btn btn-s btn-cnccolorpresets btn-default btg-cnc-neopixels-psyellow" style="background-color: rgba(255,255,0,1)"></button>
-                                        <button type="button" class="btn btn-s btn-cnccolorpresets btn-default btg-cnc-neopixels-pspurple" style="background-color: rgba(128,0,128,1)"></button>
+                            <div class="col-xs-9 cnc-col-s-mix">
+                                <div class="btn-toolbar cnc-div-s-mix pull-right" role="toolbar">
+                                    <span class="cnc-span-s-mix cnc-space-right">Color Presets</span>
+                                    <div class="btn-group pull-right" style="" role="group">    
+                                        <button type="button" class="btn btn-s cnc-button-s-xs btn-default btg-cnc-neopixels-pswhite" style="background-color: rgba(255,255,255,1)" ></button>
+                                        <button type="button" class="btn btn-s cnc-button-s-xs btn-default btg-cnc-neopixels-psred" style="background-color: rgba(255,0,0,1)"></button>
+                                        <button type="button" class="btn btn-s cnc-button-s-xs btn-default btg-cnc-neopixels-psblue" style="background-color: rgba(0,0,255,1)"></button>
+                                        <button type="button" class="btn btn-s cnc-button-s-xs btn-default btg-cnc-neopixels-psgreen" style="background-color: rgba(0,255,0,1)"></button>
+                                        <button type="button" class="btn btn-s cnc-button-s-xs btn-default btg-cnc-neopixels-psyellow" style="background-color: rgba(255,255,0,1)"></button>
+                                        <button type="button" class="btn btn-s cnc-button-s-xs btn-default btg-cnc-neopixels-pspurple" style="background-color: rgba(128,0,128,1)"></button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-3 no-gutters" style="padding-top: 17px">
-                                <div class="pull-left" style="padding-left: 0px">Int/ty</div><span style="padding-left: 8px"></span><span class="label cnc-label label-default cnc-neopixels-intensity">100%</span>
+                        <div class="row cnc-row-s-label">
+                            <div class="col-xs-3 cnc-col-s-label pull-left">
+                                <div class="cnc-div-s-label">
+                                    <span class="cnc-span-s cnc-space-right">Int/ty</span><span class="label cnc-label-s-mix label-default cnc-neopixels-intensity">100%</span>
+                                </div>
                             </div>
-                            <div class="col-xs-3 no-gutters" style="padding-top: 17px">
-                                <div class="pull-left" style="padding-left: 8px; color: red">Red</div><span style="padding-left: 12px"></span><span class="label cnc-label label-danger cnc-neopixels-red">100%</span>
+                            <div class="col-xs-3 cnc-col-s-label">
+                                <div class="cnc-div-s-label">
+                                    <span class="cnc-span-s cnc-space-right">Red</span><span class="label cnc-label-s-mix label-danger cnc-neopixels-red">100%</span>
+                                </div>
                             </div>
-                            <div class="col-xs-3 no-gutters" style="padding-top: 17px">
-                                <div class="pull-left" style="color: green">Green </div><span style="padding-left: 10px"></span><span class="label cnc-label label-success cnc-neopixels-green">100%</span>
+                            <div class="col-xs-3 cnc-col-s-label">
+                                <div class="cnc-div-s-label">
+                                    <span class="cnc-span-s cnc-space-right">Green</span><span class="label cnc-label-s-mix label-success cnc-neopixels-green">100%</span>
+                                </div>
                             </div>
-                            <div class="col-xs-3 no-gutters" style="padding-top: 17px">
-                                <div class="pull-left" style="padding-left: 10px; color: blue">Blue</div><span style="padding-left: 12px"></span><span class="label cnc-label label-primary pull-right cnc-neopixels-blue">100%</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-3 no-gutters" style="padding-top: 17px">
-                                <input type="range" min="0" max="100" value="0" class="cnc-slider sld-cnc-neopixels-intensity">
-                            </div>
-                            <div class="col-xs-3 no-gutters" style="padding-top: 17px">
-                                <input type="range" min="0" max="100" value="0" class="cnc-slider sld-cnc-neopixels-red">
-                            </div>
-                            <div class="col-xs-3 no-gutters" style="padding-top: 17px">
-                                <input type="range" min="0" max="100" value="0" class="cnc-slider sld-cnc-neopixels-green">
-                            </div>
-                            <div class="col-xs-3 no-gutters" style="padding-top: 17px">
-                                <input type="range" min="0" max="100" value="0" class="cnc-slider sld-cnc-neopixels-blue">
+                            <div class="col-xs-3 cnc-col-s-label">
+                                <div class="cnc-div-s-label pull-right">
+                                    <span class="cnc-span-s cnc-space-right">Blue</span><span class="label cnc-label-s-mix label-primary cnc-neopixels-blue">100%</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-4 no-gutters">
-                                <span style="padding-left: 5px; padding-top: 17px">New </span><span style="padding-left: 8px;"></span><button type="button" class="btn btn-s btn-default cnc-neopixels-rgba" style="width: 85px; height: 34px; background-color: rgba(255,255,255,1)" ></button>
+                        <div class="row cnc-row-s-label">
+                            <div class="col-xs-3 cnc-col-s-label">
+                                <div class="cnc-div-s-label cnc-space-right pull-left">
+                                    <input type="range" min="0" max="100" value="0" class="cnc-slider-s sld-cnc-neopixels-intensity">
+                                </div>
+                            </div>
+                           <div class="col-xs-3 cnc-col-s-label">
+                                <div class="cnc-div-s-label cnc-space-both">
+                                    <input type="range" min="0" max="100" value="0" class="cnc-slider-s sld-cnc-neopixels-intensity">
+                                </div>
+                            </div>
+                            <div class="col-xs-3 cnc-col-s-label cnc-space-both">
+                                <div class="cnc-div-s-label">
+                                    <input type="range" min="0" max="100" value="0" class="cnc-slider-s sld-cnc-neopixels-intensity">
+                                </div>
+                            </div>
+                           <div class="col-xs-3 cnc-col-s-label">
+                                <div class="cnc-div-s-label pull-right cnc-space-left">
+                                    <input type="range" min="0" max="100" value="0" class="cnc-slider-s sld-cnc-neopixels-intensity">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row cnc-row-s-mix">
+                            <div class="col-xs-4 cnc-col-s-mix">
+                                <div class="cnc-div-s-mix pull-left">
+                                    <span style="cnc-span-s-mix cnc-space-right">New Color</span>
+                                    <button type="button" class="btn btn-s cnc-button-s-xs btn-default cnc-neopixels-rgba" style="background-color: rgba(255,255,255,1)"></button>
+                                </div>
                             </div>
                             <div class="col-xs-3 no-gutters" style="padding-top: 17px">
-                                <span class="pull-right" style="">Intensity Presets </span>
+                                <span class="pull-right" style="">Intensity Presets</span>
                             </div>
                             <div class="col-xs-5 no-gutters" style="">
                                 <div class="pull-right" role="toolbar">
@@ -250,7 +275,7 @@
                                 <span class="pull-right">Elapsed Time</span>
                             </div>
                             <div class="col-xs-2 no-gutters" style="padding-top: 16px; padding-left: 15px">
-                                <span class="label label-primary cnc-uvlight-etime" style="height: 30px; font-size: 150%">000</span>
+                                <span class="label label-primary cnc-uvlight-etime" style="font-size: large">000</span>
                             </div>
                             <div class="col-xs-1 no-gutters" style="padding-top: 17px">
                                 <span class="pull-right">sec</span>
@@ -258,11 +283,11 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-6 no-gutters">
-                                <button type="button" class="btn btn-s btn-default btn-cncuvbox btn-cnc-ack pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Acknowledge Buzzer">Ack Buzzer</button>
+                                <button type="button" class="btn btn-xs btn-default btn-cncuvbox btn-cnc-ack pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Acknowledge Buzzer">Ack Buzzer</button>
                             </div>
                             <div class="col-xs-6 no-gutters">
                                 <div class="input-group pull-right">
-                                    <input type="text" class="form-control pull-right inb-cnc-uvlight-newtime" id="inb-cnc-uvlight-newtime" placeholder="180" style="width: 50px"/>
+                                    <input type="text" class="btn-x form-control pull-right inb-cnc-uvlight-newtime" id="inb-cnc-uvlight-newtime" placeholder="180" style="width: 50px"/>
                                         <span class="input-group-addon">sec</span><span class="input-group-btn" style="padding-left: 5px">
                                         <button class="btn btn-default btn-cnc-uvlight-timeset" style="width: 85px">Time Set</button>
                                         </span>
@@ -283,7 +308,7 @@
                         <div class="row">
                             <div class="col-xs-1" style="padding-left: 0px; padding-top: 5px">
                                 <div class="checkbox" style="padding-top: 0px">
-                                    <input type="checkbox" class="" style="width: 15x; height: 15px" id="chk-cnc-uvlight-buzzer">
+                                    <input type="checkbox" class="" style="width: 16px; height: 16px" id="chk-cnc-uvlight-buzzer">
                                 </div>
                             </div>
                             <div class="col-xs-11 no-gutters" style="padding-top: 17px">
@@ -296,104 +321,112 @@
                 <!-- Tab 4 -->
                 <div class="tab-pane" id="com-chilipeppr-widget-myhomecnc-tab4">
                     <div class="container" id="com-chilipeppr-widget-myhomecnc-tools-container" style="padding-top: 10px; width: 441px; height: 310px">
-                        <div class="row">
-                            <div class="col-xs-3 no-gutters">
-                                <button type="button" class="btn btn-s btn-default btn-cnctools btn-cnc-vac pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Activate VAC">VAC</button>
+                        <div class="row cnc-row-s-mix">
+                            <div class="col-xs-3 cnc-col-s-mix">
+                                <div class="cnc-div-s-mix pull-left">
+                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xl btn-cnc-vac" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Toggle VAC On">VAC</button>
+                                </div>
                             </div>
-                            <div class="col-xs-2 no-gutters" style="padding-top: 17px">
-                                <span class="pull-right">Trigger</span>
-                            </div>
-                            <div class="col-xs-7 no-gutters" style="padding-top: 10px; padding-left: 15px">
-                                <div class="pull-right" role="toolbar">
-                                    <div class="btn-group btn-group-toggle cnc-vacmode-toolbar" style="height:34px; padding-top: 0px" data-toggle="buttons"> <!--role="group"-->   
-                                        <button type="radio" class="btn btn-s btn-default btg-cnc-vac-manu" name="opt-cnc-vac" id="opt-cnc-vac1" style="width: 70px" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Sarts manually">Manual</button>
-                                        <button type="radio" class="btn btn-s btn-default btg-cnc-vac-cool" name="opt-cnc-vac" id="opt-cnc-vac2" style="width: 70px" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Starts with cooling signal">Cool</button>
-                                        <button type="radio" class="btn btn-s btn-default btg-cnc-vac-spindle" name="opt-cnc-vac" id="opt-cnc-vac3" style="width: 70px" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Starts with spindle signal">Spindle</button>
+                            <div class="col-xs-9 cnc-col-s-mix">
+                                <div class="pull-right cnc-div-s-mix pull-right" role="toolbar">
+                                    <span class="cnc-label-s-mix cnc-space-right">Trigger</span>
+                                    <div class="btn-group btn-group-toggle cnc-div-s-mix cnc-vacmode-toolbar" data-toggle="buttons"> <!--role="group"-->   
+                                        <button type="radio" class="btn btn-s btn-default cnc-button-s-l rdo-cnc-vac-manu" name="opt-cnc-vac" id="opt-cnc-vac1" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Sarts manually">Manual</button>
+                                        <button type="radio" class="btn btn-s btn-default cnc-button-s-l rdo-cnc-vac-cool" name="opt-cnc-vac" id="opt-cnc-vac2" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Starts with cooling signal">Cool</button>
+                                        <button type="radio" class="btn btn-s btn-default cnc-button-s-l rdo-cnc-vac-spindle" name="opt-cnc-vac" id="opt-cnc-vac3" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Starts with spindle signal">Spindle</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-3 no-gutters">
-                                <button type="button" class="btn btn-s btn-default btn-cnctools btn-cnc-actool pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Activate VAC">AC Tool</button>
+                        <div class="row cnc-row-s-mix">
+                            <div class="col-xs-3 cnc-col-s-mix">
+                                <div class="cnc-div-s-mix pull-left">
+                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xl btn-cnc-actool" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Toggle AC Tool On">ACTool</button>
+                                </div>
                             </div>
-                            <div class="col-xs-2 no-gutters" style="padding-top: 17px">
-                                <span class="pull-right">Trigger</span>
-                            </div>
-                            <div class="col-xs-7 no-gutters" style="padding-top: 10px; padding-left: 15px">
-                                <div class="pull-right" role="toolbar">
-                                    <div class="btn-group btn-group-toggle cnc-actoolmode-toolbar" style="height:34px; padding-top: 0px" data-toggle="buttons"> <!--role="group"-->   
-                                        <button type="radio" class="btn btn-s btn-default btg-cnc-actool-manu" name="opt-cnc-actool" id="opt-cnc-actool1" style="width: 70px" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Sarts manually">Manual</button>
-                                        <button type="radio" class="btn btn-s btn-default btg-cnc-actool-cool" name="opt-cnc-actool" id="opt-cnc-actool2" style="width: 70px" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Starts with cooling signal">Cool</button>
-                                        <button type="radio" class="btn btn-s btn-default btg-cnc-actool-spindle" name="opt-cnc-actool" id="opt-cnc-actool3" style="width: 70px" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Starts with spindle signal">Spindle</button>
+                            <div class="col-xs-9 cnc-col-s-mix">
+                                <div class="pull-right cnc-div-s-mix pull-right" role="toolbar">
+                                    <span class="cnc-label-s-mix cnc-space-right">Trigger</span>
+                                    <div class="btn-group btn-group-toggle cnc-div-s-mix cnc-actoolmode-toolbar" data-toggle="buttons"> <!--role="group"-->   
+                                        <button type="radio" class="btn btn-s btn-default cnc-button-s-l rdo-cnc-actool-manu" name="opt-cnc-actool" id="opt-cnc-actool1" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Sarts manually">Manual</button>
+                                        <button type="radio" class="btn btn-s btn-default cnc-button-s-l rdo-cnc-actool-cool" name="opt-cnc-actool" id="opt-cnc-actool2" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Starts with cooling signal">Cool</button>
+                                        <button type="radio" class="btn btn-s btn-default cnc-button-s-l rdo-cnc-actool-spindle" name="opt-cnc-actool" id="opt-cnc-actool3" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Starts with spindle signal">Spindle</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-3 no-gutters">
-                                <button type="button" class="btn btn-s btn-default btn-cnctools btn-cnc-dctool pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Activate VAC">DC Tool</button>
+                        <div class="row cnc-row-s-mix">
+                            <div class="col-xs-3 cnc-col-s-mix">
+                                <div class="cnc-div-s-mix pull-left">
+                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xl btn-cnc-dctool" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Toggle AC Tool On">ACTool</button>
+                                </div>
                             </div>
-                            <div class="col-xs-2 no-gutters" style="padding-top: 17px">
-                                <span class="pull-right">Trigger</span>
-                            </div>
-                            <div class="col-xs-7 no-gutters" style="padding-top: 10px; padding-left: 15px">
-                                <div class="pull-right" role="toolbar">
-                                    <div class="btn-group btn-group-toggle cnc-dctoolmode-toolbar" style="height:34px; padding-top: 0px" data-toggle="buttons"> <!--role="group"-->   
-                                        <button type="radio" class="btn btn-s btn-default btg-cnc-dctool-manu" name="opt-cnc-dctool" id="opt-cnc-dctool1" style="width: 70px" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Sarts manually">Manual</button>
-                                        <button type="radio" class="btn btn-s btn-default btg-cnc-dctool-cool" name="opt-cnc-dctool" id="opt-cnc-dctool2" style="width: 70px" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Starts with cooling signal">Cool</button>
-                                        <button type="radio" class="btn btn-s btn-default btg-cnc-dctool-spindle" name="opt-cnc-dctool" id="opt-cnc-dctool3" style="width: 70px" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Starts with spindle signal">Spindle</button>
+                            <div class="col-xs-9 cnc-col-s-mix">
+                                <div class="pull-right cnc-div-s-mix pull-right" role="toolbar">
+                                    <span class="cnc-label-s-mix cnc-space-right">Trigger</span>
+                                    <div class="btn-group btn-group-toggle cnc-div-s-mix cnc-dctoolmode-toolbar" data-toggle="buttons"> <!--role="group"-->   
+                                        <button type="radio" class="btn btn-s btn-default cnc-button-s-l rdo-cnc-dctool-manu" name="opt-cnc-dctool" id="opt-cnc-dctool1" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Sarts manually">Manual</button>
+                                        <button type="radio" class="btn btn-s btn-default cnc-button-s-l rdo-cnc-dctool-cool" name="opt-cnc-dctool" id="opt-cnc-dctool2" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Starts with cooling signal">Cool</button>
+                                        <button type="radio" class="btn btn-s btn-default cnc-button-s-l rdo-cnc-dctool-spindle" name="opt-cnc-dctool" id="opt-cnc-dctool3" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Starts with spindle signal">Spindle</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-4 no-gutters" style="padding-left: 1px; padding-top: 17px">
-                                <span class="pull-left">DCTool Intensity</span>
+                        <div class="row cnc-row-s-label">
+                            <div class="col-xs-3 cnc-col-s-label">
+                                <div class="cnc-div-s-label pull-left">
+                                    <span class="cnc-span-s">DCTool Intensity</span>
+                                </div>
                             </div>
-                             <div class="col-xs-4 no-gutters" style="padding-top: 17px">
-                                <input type="range" min="50" max="100" value="0" class="sld-cnc-dctool-intensity">
+                            <div class="col-xs-6 cnc-col-s-label cnc-space-left">
+                                <div class="cnc-div-s-label pull-left" style="width: 100%">
+                                    <input type="range" min="50" max="100" value="50" class="cnc-slider-s sld-dctool-intensity">
+                                </div>
                             </div>
-                            <div class="col-xs-4 no-gutters" style="padding-top: 17px; padding-left: 20px">
-                                <span class="label cnc-label label-primary pull-right cnc-dctool-intensity" style="width: 100px">100% - 24.0V</span>
+                            <div class="col-xs-3 cnc-col-s-label cnc-space-left">
+                                <div class="cnc-div-s-label pull-right">
+                                    <span class="label cnc-label-s label-primary ppull-right cnc-dctool-intensity">100% - 24.0V</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-3 no-gutters" style="padding-left: 1px; padding-top: 0px">
-                              <button type="button" class="btn btn-s btn-default btn-cnctools btn-cnc-ls-reset pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Reset Capture">L.Shedding</button>
+                        </div>    
+                        <div class="row cnc-row-s-mix">
+                            <div class="cnc-col col-xs-3 cnc-col-s-label pull-left">
+                                <div class="cnc-div-s-mix">
+                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xxl btn-cnc-ls-loadshedding" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Toggle Load Shedding On">L.Shedding</button>
+                                </div>
                             </div>
-                            <div class="col-xs-2 no-gutters" style="padding-top: 7px">
-                                <span class="pull-left">Scheme</span>
-                            </div>
-                            <div class="col-xs-7 no-gutters" style="padding-left: 15px; padding-top: 0px">
-                                <div class="cnc-ls-dropdown dropup">
-                                  <button type="button" class="btn btn-s btn-default btn-cncls ddl-cnc-ls-scheme" data-toggle="dropdown">Shutdown Sequence
-                                  <span class="caret"></span></button>
-                                  <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">VAC > Air Compressor > AC Tool</a></li>
-                                    <li><a href="#">VAC > AC Tool > Air Compressor</a></li>
-                                    <li><a href="#">Air Compressor > VAC > AC Tool</a></li>
-                                    <li><a href="#">Air Compressor > AC Tool > VAC</a></li>
-                                    <li><a href="#">AC Tool > VAC > Air Compressor</a></li>
-                                    <li><a href="#">AC Tool > Air Compressor > VAC</a></li>
-                                  </ul>
+                            <div class="cnc-col col-xs-9 cnc-col-s-mix right">
+                                <div class="cnc-div-s-mix dropup cnc-ls-dropdown pull-right">
+                                    <span class="cnc-space-right">Scheme</span>
+                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xxxl ddl-cnc-ls-scheme" data-toggle="dropdown">Shutdown Sequence
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="#">VAC > Air Compressor > AC Tool</a></li>
+                                        <li><a href="#">VAC > AC Tool > Air Compressor</a></li>
+                                        <li><a href="#">Air Compressor > VAC > AC Tool</a></li>
+                                        <li><a href="#">Air Compressor > AC Tool > VAC</a></li>
+                                        <li><a href="#">AC Tool > VAC > Air Compressor</a></li>
+                                        <li><a href="#">AC Tool > Air Compressor > VAC</a></li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-4 no-gutters" style="padding-left: 1px; padding-top: 7px">
-                                <span class="pull-left">AC In</span>
-                                <span style="padding-right: 25px"></span>
-                                <span class="label cnc-label label-primary cnc-acin" style="width: 40px">00.0</span>
-                                <span class="pull-right">Amps</span>
+                        <div class="row cnc-row-s-mix">
+                            <div class="col-xs-4 cnc-col-s-mix">
+                                <div class="cnc-div-s-mix pull-left">
+                                    <span class="cnc-span-s-mix cnc-space-right">AC In</span>
+                                    <span class="label cnc-label-s-mix label-primary cnc-acin">00.0</span>
+                                    <span class="cnc-span-s-mix cnc-space-left">Amps</span>
+                                </div>
                             </div>
-                            <div class="col-xs-4 no-gutters" style="padding-left: 10px; padding-top: 0px">
-                                <button type="button" class="btn btn-s btn-default btn-cnctools btn-cnc-ls-reset pull-right" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Reset Capture">Reset</button>
-                            </div>
-                            <div class="col-xs-4 no-gutters" style="padding-left: 15px; padding-top: 7px">
-                                <span class="label cnc-label label-primary pull-right cnc-ls-actool" style="width: 40px; border-radius: 0px">ACT</span>
-                                <span class="label cnc-label label-primary pull-right cnc-ls-air" style="width: 40px; border-radius: 0px">Air</span>
-                                <span class="label cnc-label label-primary pull-right cnc-ls-vac" style="width: 40px; border-radius: 0px">VAC</span>
+                            <div class="col-xs-8 cnc-col-s-mix">
+                                <div class="cnc-div-s-mix pull-right">
+                                    <button type="button" class="btn btn-s btn-default cnc-button-s-l btn-cnc-ls-reset" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Reset Capture">Reset</button>
+                                    <span class="label cnc-label-s-mix label-primary cnc-ls-actool" style="min-width: 43px; border-radius: 0px">ACT</span>
+                                    <span class="label cnc-label-s-mix label-primary cnc-ls-air" style="min-width: 43px; border-radius: 0px">Air</span>
+                                    <span class="label cnc-label-s-mix label-primary cnc-ls-vac" style="min-width: 43px; border-radius: 0px">VAC</span>
+                                </div>
                             </div>
                         </div>
                     </div>
