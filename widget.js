@@ -199,7 +199,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
 
           this.setupUiFromLocalStorage();
 
-          this.setupBody();
+          //this.setupBody();
           
           this.isSioConnected = false;
 
