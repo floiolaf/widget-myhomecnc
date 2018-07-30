@@ -105,7 +105,7 @@
 #com-chilipeppr-widget-myhomecnc .panel-body {
     padding: 2px 10px 0px 10px important;
     overflow: auto;
-    overflow-x: hidden
+    overflow-x: hidden;
     /*min-width: 461px;
     min-height: 450px;
     height: 450px;
@@ -113,8 +113,9 @@
 }
 
 #com-chilipeppr-widget-myhomecnc .connect-panel-body {
-    padding: 0px 5px 5px 5px;
+    padding: 0px 5px 5px 5px important;
     overflow: auto;
+    overflow-x: hidden;
     /*min-width: 461px;
     min-height: 450px;
     height: 450px;
@@ -934,10 +935,10 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             </div>
         </div>
         
-        <div id="com-chilipeppr-widget-myhomecnc-connect-panel" class="connect-panel-body">
+        <div id="com-chilipeppr-widget-myhomecnc-connect-panel" class="connect-panel-body" style="margin:0; height: 310px; width: 441px">
             <div class="row install-body" style="">
                 <div class="col-xs-12">
-                    <div class="alert alert-warning" style="margin:0; height: 310px; width: 441px">
+                    <div class="alert alert-warning" style="margin:0">
                         
                         <p xstyle="padding-top:0;">You need to install and run the myHomeCNC Server on the machine that has the GPIO.
                         </p>
@@ -949,7 +950,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                         <a name="com-chilipeppr-widget-myhomecnc-connect"></a>
                         <p>Connect to a local or remote host here.</p>
                         <div id="com-chilipeppr-widget-myhomecnc-hostconnectmsg"></div>
-                        <div class="input-group" style="padding-top: 50px">
+                        <div class="input-group" style="padding-top: 30px">
                             <input type="text" class="form-control" id="com-chilipeppr-widget-myhomecnc-host" placeholder="Remote Host" />
                             <span class="input-group-btn">
                             <button class="btn btn-default" id="com-chilipeppr-widget-myhomecnc-hostbtn">Connect</button>
