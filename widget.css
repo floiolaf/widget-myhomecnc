@@ -26,8 +26,8 @@
 /* Chart */
 #com-chilipeppr-widget-myhomecnc .chartjs-render-monitor {
     padding: 20px 2px 0px 2px;
-    height: 220px;
-    width: 441px;
+    height: 200px !important;
+    width: 441px !important;
     
 }
 #com-chilipeppr-widget-myhomecnc .cnc-chart {
