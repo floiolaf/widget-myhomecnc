@@ -643,7 +643,11 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
          * that sent in the param.
          */
         showBody: function(evt) {
-            $('#' + this.id + ' .panel-body').removeClass('hidden');
+            if (this.isSioConnected) {
+              $('#' + this.id + ' .panel-body').removeClass('hidden');
+            } else {
+              $('#' + this.id + ' .connect-panel-body').removeClass('hidden');
+            }
             $('#' + this.id + ' .panel-footer').removeClass('hidden');
             $('#' + this.id + ' .hidebody span').addClass('glyphicon-chevron-up');
             $('#' + this.id + ' .hidebody span').removeClass('glyphicon-chevron-down');
@@ -665,6 +669,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
          */
         hideBody: function(evt) {
             $('#' + this.id + ' .panel-body').addClass('hidden');
+            $('#' + this.id + ' .connect-panel-body').addClass('hidden');
             $('#' + this.id + ' .panel-footer').addClass('hidden');
             $('#' + this.id + ' .hidebody span').removeClass('glyphicon-chevron-up');
             $('#' + this.id + ' .hidebody span').addClass('glyphicon-chevron-down');

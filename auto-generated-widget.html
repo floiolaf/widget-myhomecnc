@@ -43,7 +43,7 @@
 #com-chilipeppr-widget-myhomecnc .chartjs-render-monitor {
     padding: 20px 2px 0px 2px;
     height: 200px !important;
-    width: 441px !important;
+    /*width: 441px !important;*/
     
 }
 #com-chilipeppr-widget-myhomecnc .cnc-chart {
@@ -81,12 +81,12 @@
     overflow-y: hidden;
     overflow-x: hidden;
     height: 276px;
-    width: 465px;
+    /*width: 465px;*/
 }
 
 /* Widget Resize */
 #com-chilipeppr-widget-myhomecnc .cnc-container-s {
-    width: 461px;
+    /*width: 461px;*/
     height: 240px;
     padding-top: 3px;
     padding-left: 10px;
@@ -929,7 +929,11 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
          * that sent in the param.
          */
         showBody: function(evt) {
-            $('#' + this.id + ' .panel-body').removeClass('hidden');
+            if (this.isSioConnected) {
+              $('#' + this.id + ' .panel-body').removeClass('hidden');
+            } else {
+              $('#' + this.id + ' .connect-panel-body').removeClass('hidden');
+            }
             $('#' + this.id + ' .panel-footer').removeClass('hidden');
             $('#' + this.id + ' .hidebody span').addClass('glyphicon-chevron-up');
             $('#' + this.id + ' .hidebody span').removeClass('glyphicon-chevron-down');
@@ -951,6 +955,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
          */
         hideBody: function(evt) {
             $('#' + this.id + ' .panel-body').addClass('hidden');
+            $('#' + this.id + ' .connect-panel-body').addClass('hidden');
             $('#' + this.id + ' .panel-footer').addClass('hidden');
             $('#' + this.id + ' .hidebody span').removeClass('glyphicon-chevron-up');
             $('#' + this.id + ' .hidebody span').addClass('glyphicon-chevron-down');
@@ -1044,7 +1049,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
         <div id="com-chilipeppr-widget-myhomecnc-connect-panel" class="connect-panel-body">
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="alert alert-warning" style="margin:0; font-size:smaller; height: 262px">
+                    <div class="alert alert-warning" style="margin:0; font-size:smaller; height: 264px">
                         
                         <p xstyle="padding-top:0;">You need to install and run the myHomeCNC Server on the machine that has the GPIO.
                         </p>
