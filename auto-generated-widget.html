@@ -69,33 +69,21 @@
 }
 
 /* Size */
+#com-chilipeppr-widget-myhomecnc .cnc-padding {
+    padding: 5px 5px 5px 5px !important;
+}
 #com-chilipeppr-widget-myhomecnc .panel-body {
-    padding: 2px 10px 0px 10px important;
     overflow-y: hidden;
     overflow-x: hidden;
-    /*min-width: 461px;
-    min-height: 450px;
-    height: 450px;
-    width: 461px;*/
 }
 #com-chilipeppr-widget-myhomecnc .connect-panel-body {
-    padding: 2px 10px 0px 10px important;
+    padding: 5px 5px 5px 5px;
     overflow-y: hidden;
     overflow-x: hidden;
-    /*min-width: 461px;
-    min-height: 450px;
-    height: 450px;
-    width: 461px;*/
+    height: 266px;
+    width: 461px;
 }
-/*#com-chilipeppr-widget-myhomecnc .container {    
-    padding-left: 5px;
-    padding-left: 5px;
-    margin-top: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    margin-right: 0px;
-    
-}*/
+
 /* Widget Resize */
 #com-chilipeppr-widget-myhomecnc .cnc-container-s {
     width: 441px;
@@ -1052,10 +1040,10 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
         
         <!-- INIT CONNECT PANEL -->
         
-        <div id="com-chilipeppr-widget-myhomecnc-connect-panel" class="connect-panel-body cnc-container-s">
+        <div id="com-chilipeppr-widget-myhomecnc-connect-panel" class="connect-panel-body">
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="alert alert-warning" style="margin:0; font-size:smaller">
+                    <div class="alert alert-warning" style="margin:0; font-size:smaller; height: 256px">
                         
                         <p xstyle="padding-top:0;">You need to install and run the myHomeCNC Server on the machine that has the GPIO.
                         </p>
@@ -1084,7 +1072,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
         
         <!-- INIT MAIN PANEL -->
         
-        <div id="com-chilipeppr-widget-myhomecnc-main-panel" class="panel-body hidden" style="padding-top:2px">
+        <div id="com-chilipeppr-widget-myhomecnc-main-panel" class="panel-body cnc-padding hidden">
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
                 <li class="active"><a href="#com-chilipeppr-widget-myhomecnc-tab1" role="tab" data-toggle="tab">Main</a></li>
