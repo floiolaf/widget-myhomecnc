@@ -135,6 +135,10 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
         init: function(host) {
 
           console.log("myHomeCNC : I am being initted. Thanks.");
+          
+          this.isSioConnected = false;
+          this.isSPJSConnected = false;
+          this.isSerialConnected = false;
 
           this.forkSetup();
 
@@ -176,7 +180,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           chilipeppr.subscribe("/com-chilipeppr-widget-serialport/onComplete", this, function (msg) {
             // message OK = payload => '{"Id":"123"}'
           });
-
+          
           this.getSPJSinfo();
           
           /* Foreign publish
@@ -196,21 +200,16 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             //this.publishFeedback(key, msg);
           });
           
-
           this.setupUiFromLocalStorage();
 
-          //this.setupBody();
+          this.setupBody();
           
-          this.isSioConnected = false;
+          this.btnSetup();
 
           this.sioConnect(host);
 
-          this.btnSetup();
-
           this.cncChartTest(); // CHECK afterwards
           
-          
-
           console.log("myHomeCNC : I am done being initted.");
         },
         setupConnection: function () {
@@ -423,7 +422,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             var that = this;
             $('#' + this.id + ' .hidebody').click(function(evt) {
                 console.log("myHomeCNC : hide/unhide body");
-                if ($('#' + that.id + ' .panel-body').hasClass('hidden')) {
+                if ($('#' + that.id + ' .panel-body').hasClass('hidden') && $('#' + that.id + ' .connect-panel-body').hasClass('hidden')) {
                     // it's hidden, unhide
                     that.showBody(evt);
                 }
@@ -643,10 +642,13 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
          * that sent in the param.
          */
         showBody: function(evt) {
+          console.log("--------------------------HEY:"+ this.isSioConnected);
             if (this.isSioConnected) {
               $('#' + this.id + ' .panel-body').removeClass('hidden');
+              console.log("---A-----------------------HEY:"+ this.isSioConnected);
             } else {
               $('#' + this.id + ' .connect-panel-body').removeClass('hidden');
+              console.log("---B----------------------HEY:"+ this.isSioConnected);
             }
             $('#' + this.id + ' .panel-footer').removeClass('hidden');
             $('#' + this.id + ' .hidebody span').addClass('glyphicon-chevron-up');
