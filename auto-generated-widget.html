@@ -145,12 +145,14 @@
 }
 #com-chilipeppr-widget-myhomecnc .cnc-label-s-mix { /* Same for span and slider */ 
     display: inline-block;
+    /*vertical-align: middle;*/
     font-size: small;
     height: 20px;
     margin-top: 7px;
 }
 #com-chilipeppr-widget-myhomecnc .cnc-label-s {
     display: inline-block;
+    /*vertical-align: middle;*/
     font-size: small;
     height: 20px;
     margin-top: 0px;
@@ -162,18 +164,20 @@
 #com-chilipeppr-widget-myhomecnc .cnc-span-s {
     display: inline-block;
     font-size: smaller;
+    /*vertical-align: middle;*/
     height: 20px;
     margin-top: 2px;
 }
 #com-chilipeppr-widget-myhomecnc .cnc-span-s-mix {
     display: inline-block;
     font-size: smaller;
+    /*vertical-align: middle;*/
     height: 20px;
     margin-top: 7px;
 }
 #com-chilipeppr-widget-myhomecnc .cnc-check-s-mix {
     height: 16px;
-    margin-top: 9px;
+    margin-top: 7px; /*7px instead of 9px because every check has a span inside the same div */ 
     width: 16px;
 }
 #com-chilipeppr-widget-myhomecnc .cnc-check-s {
@@ -1668,7 +1672,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                             <div class="col-xs-4 cnc-col-s-mix">
                                 <div class="checkbox cnc-div-s-mix pull-right">
                                     <input type="checkbox" class="cnc-check-s-mix chk-cnc-offset-allowzero" id="chk-cnc-offset-allowzero"/>
-                                    <span class="cnc-span-s-mix" style="margin-top: 9px">Allow zeroing</span> <!-- don't understand why needed to add 2px more on the margin. Seems all object embbeded to inputs are a mess.-->
+                                    <span class="cnc-span-s-mix">Allow zeroing</span> 
                                 </div>
                             </div>
                             <div class="col-xs-5 cnc-col-s-mix">
@@ -1860,7 +1864,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                             </div>
                         </div>
                         <div class="row cnc-row-s-label">
-                            <div class="col-xs-7 cnc-col-s-label">
+                            <div class="col-xs-6 cnc-col-s-label">
                                 <div class="cnc-div-s-label pull-left">
                                     <span class="cnc-span-s">Temperature Laser Drivers Section</span>
                                 </div>
@@ -1871,14 +1875,14 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                                     <span class="cnc-span-s">degC</span>
                                 </div>
                             </div>
-                            <div class="col-xs-2 cnc-col-s-label">
+                            <div class="col-xs-3 cnc-col-s-label">
                                 <div class="cnc-div-s-label pull-right">
                                     <span class="label cnc-label-s label-primary cnc-driver-fan">Fan</span>
                                 </div>
                             </div>
                         </div>
                         <div class="row cnc-row-s-label">
-                            <div class="col-xs-7 cnc-col-s-label">
+                            <div class="col-xs-6 cnc-col-s-label">
                                 <div class="cnc-div-s-label pull-left">
                                     <span class="cnc-span-s">Temperature Stepper Drivers Section</span>
                                 </div>
@@ -1889,14 +1893,14 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                                     <span class="cnc-span-s">degC</span>
                                 </div>
                             </div>
-                            <div class="col-xs-2 cnc-col-s-label">
+                            <div class="col-xs-3 cnc-col-s-label">
                                 <div class="cnc-div-s-label pull-right">
                                     <span class="label cnc-label-s label-primary cnc-stepper-fan">Fan</span>
                                 </div>
                             </div>
                         </div>
                         <div class="row cnc-row-s-label">
-                            <div class="col-xs-7 cnc-col-s-label">
+                            <div class="col-xs-6 cnc-col-s-label">
                                 <div class="cnc-div-s-label pull-left">
                                     <span class="cnc-span-s">Temperature Power/Spindle Section</span>
                                 </div>
@@ -1907,8 +1911,9 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                                     <span class="cnc-span-s">degC</span>
                                 </div>
                             </div>
-                            <div class="col-xs-2 cnc-col-s-label">
+                            <div class="col-xs-3 cnc-col-s-label">
                                 <div class="cnc-div-s-label pull-right">
+                                    <span class="label cnc-label-s label-primary cnc-fan-lock">Locked</span>
                                     <span class="label cnc-label-s label-primary cnc-power-fan">Fan</span>
                                 </div>
                             </div>

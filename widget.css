@@ -129,12 +129,14 @@
 }
 #com-chilipeppr-widget-myhomecnc .cnc-label-s-mix { /* Same for span and slider */ 
     display: inline-block;
+    /*vertical-align: middle;*/
     font-size: small;
     height: 20px;
     margin-top: 7px;
 }
 #com-chilipeppr-widget-myhomecnc .cnc-label-s {
     display: inline-block;
+    /*vertical-align: middle;*/
     font-size: small;
     height: 20px;
     margin-top: 0px;
@@ -146,18 +148,20 @@
 #com-chilipeppr-widget-myhomecnc .cnc-span-s {
     display: inline-block;
     font-size: smaller;
+    /*vertical-align: middle;*/
     height: 20px;
     margin-top: 2px;
 }
 #com-chilipeppr-widget-myhomecnc .cnc-span-s-mix {
     display: inline-block;
     font-size: smaller;
+    /*vertical-align: middle;*/
     height: 20px;
     margin-top: 7px;
 }
 #com-chilipeppr-widget-myhomecnc .cnc-check-s-mix {
     height: 16px;
-    margin-top: 9px;
+    margin-top: 7px; /*7px instead of 9px because every check has a span inside the same div */ 
     width: 16px;
 }
 #com-chilipeppr-widget-myhomecnc .cnc-check-s {
