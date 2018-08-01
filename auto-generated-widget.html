@@ -1224,6 +1224,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                 <li><a href="#com-chilipeppr-widget-myhomecnc-tab6" role="tab" data-toggle="tab">Air</a></li>
                 <li><a href="#com-chilipeppr-widget-myhomecnc-tab7" role="tab" data-toggle="tab">Charts</a></li>
                 <li><a href="#com-chilipeppr-widget-myhomecnc-tab8" role="tab" data-toggle="tab">CNC</a></li>
+                <li><a href="#com-chilipeppr-widget-myhomecnc-tab9" role="tab" data-toggle="tab" class="cnc-debug-log">Log</a></li>
             </ul>
             
             <!-- Tab Panes -->
@@ -1234,25 +1235,18 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                 <div class="tab-pane active" id="com-chilipeppr-widget-myhomecnc-tab1">
                     <div class="container cnc-container-s" id="com-chilipeppr-widget-myhomecnc-main-container">
                         <div class="row cnc-row-s-label cnc-row-bottomline">
-                            <div class="col-xs-12 cnc-col-s-label" style="padding-top: 4px">
-                                <div class="cnc-div-s-label pull-left">
-                                    <span class="cnc-span-s" style="font-size: small; font-weight: bold">Spindle</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row cnc-row-s-label">
                             <div class="col-xs-6 cnc-col-s-label">
                                 <div class="cnc-div-s-label pull-left">
-                                    <span class="cnc-span-s cnc-space-right">Speed</span>
+                                    <span class="cnc-span-s cnc-space-right"> Spindle Speed</span>
                                     <span class="label cnc-label-s label-primary cnc-spindle-speed">00000</span>
                                     <span class="cnc-span-s cnc-space-left">rpm</span>   
                                 </div>
                             </div>
-                            <div class="col-xs-6 cnc-col-s-label">
-                                <div class="cnc-div-s-label pull-right">
-                                    <span class=cnc-span-s>Object Temperature</span>
-                                    <span class="label cnc-label-s label-primary cnc-object-temperature">000.0</span>
-                                    <span class="cnc-span-s">degC</span>    
+                            <div class="col-xs-6 cnc-col-s-mix">
+                                <div class="cnc-div-s-mix pull-right">
+                                    <span class=cnc-span-s>Absolute distance</span>
+                                    <span class="label cnc-label-s label-primary cnc-absolute-distance">000</span>
+                                    <span class="cnc-span-s">mm</span> 
                                 </div>
                             </div>
                         </div>
@@ -1264,65 +1258,66 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                             </div>
                             <div class="col-xs-6 cnc-col-s-mix">
                                 <div class="cnc-div-s-mix pull-right">
-                                    <span class=cnc-span-s>Absolute distance</span>
-                                    <span class="label cnc-label-s label-primary cnc-absolute-distance">000</span>
-                                    <span class="cnc-span-s">mm</span> 
+                                    <span class=cnc-span-s-mix>Object Temperature</span>
+                                    <span class="label cnc-label-s-mix label-primary cnc-object-temperature">000.0</span>
+                                    <span class="cnc-span-s-mix">degC</span>    
                                 </div>
                             </div>
                         </div>
-                        <div class="row cnc-row-s-label cnc-row-bottomline">
-                            <div class="col-xs-6 cnc-col-s-label"  style="padding-top: 4px">
+                        <div class="row cnc-row-s-label">
+                            <div class="col-xs-4 cnc-col-s-label">
                                 <div class="cnc-div-s-label pull-left">
-                                    <span class="cnc-span-s" style="font-size: small; font-weight: bold">UV Laser</span>
                                 </div>
                             </div>
-                            <div class="col-xs-6 cnc-col-s-label"  style="padding-top: 4px">
+                            <div class="col-xs-8 cnc-col-s-label">
                                 <div class="cnc-div-s-label pull-right">
-                                    <span class="label cnc-label-s label-default cnc-uvlaser-onfocus">on focus</span>
+                                    <span class=cnc-span-s>Object Ambient Temperature</span>
+                                    <span class="label cnc-label-s label-primary cnc-object-amb-temperature">000.0</span>
+                                    <span class="cnc-span-s">degC</span>    
                                 </div>
                             </div>
                         </div>
                         <div class="row cnc-row-s-label">
                             <div class="col-xs-6 cnc-col-s-label">
                                 <div class="cnc-div-s-label pull-left">
-                                    <span class="cnc-span-s cnc-space-right">Current</span>
+                                    <span class="cnc-span-s cnc-space-right">UV Laser Current</span>
                                     <span class="label cnc-label-s label-primary cnc-uvlaser-current">0.000</span>
-                                    <span class="cnc-span-s cnc-space-left">Amps</span>   
+                                    <span class="cnc-span-s">Amps</span>   
                                 </div>
                             </div>
                             <div class="col-xs-6 cnc-col-s-label">
                                 <div class="cnc-div-s-label pull-right">
-                                    <span class=cnc-span-s>Temperature</span>
-                                    <span class="label cnc-label-s label-primary cnc-uvlaser-temperature">000.0</span>
-                                    <span class="cnc-span-s">degC</span>    
+                                    <span class=cnc-span-s>Laser Temperature</span>
+                                    <span class="label cnc-label-s label-primary cnc-laser-temperature">000.0</span>
+                                    <span class="cnc-span-s">degC</span>  
                                 </div>
                             </div>
                         </div>
                         <div class="row cnc-row-s-label cnc-row-bottomline">
-                            <div class="col-xs-6 cnc-col-s-label" style="padding-top: 4px">
+                            <div class="col-xs-5 cnc-col-s-label">
                                 <div class="cnc-div-s-label pull-left">
-                                    <span class="cnc-span-s" style="font-size: small; font-weight: bold">High-Power Laser</span>
+                                    <span class="cnc-span-s cnc-space-right">HP Laser Current</span>
+                                    <span class="label cnc-label-s label-primary cnc-hplaser-current">0.000</span>
+                                    <span class="cnc-span-s">Amps</span>   
                                 </div>
                             </div>
-                            <div class="col-xs-6 cnc-col-s-label" style="padding-top: 4px">
+                            <div class="col-xs-7 cnc-col-s-label">
                                 <div class="cnc-div-s-label pull-right">
-                                    <span class="label cnc-label-s label-default cnc-hplaser-onfocus">on focus</span>
+                                    <span class=cnc-span-s>Laser Ambient Temperature</span>
+                                    <span class="label cnc-label-s label-primary cnc-laser-amb-temperature">000.0</span>
+                                    <span class="cnc-span-s">degC</span>  
                                 </div>
                             </div>
                         </div>
-                        <div class="row cnc-row-s-label">
-                            <div class="col-xs-6 cnc-col-s-label">
-                                <div class="cnc-div-s-label pull-left">
-                                    <span class="cnc-span-s cnc-space-right">Current</span>
-                                    <span class="label cnc-label-s label-primary cnc-hplaser-current">0.000</span>
-                                    <span class="cnc-span-s cnc-space-left">Amps</span>   
+                        <div class="row cnc-row-s-mix">
+                            <div class="col-xs-6 cnc-col-s-mix">
+                                <div class="cnc-div-s-mix pull-left">
+                                    <span class="label cnc-label-s-mix label-default cnc-laser-onfocus">Lase on focus</span>
                                 </div>
                             </div>
-                            <div class="col-xs-6 cnc-col-s-label">
-                                <div class="cnc-div-s-label pull-right">
-                                    <span class=cnc-span-s>Temperature</span>
-                                    <span class="label cnc-label-s label-primary cnc-hplaser-temperature">000.0</span>
-                                    <span class="cnc-span-s">degC</span>    
+                            <div class="col-xs-6 cnc-col-s-mix">
+                                <div class="cnc-div-s-mix pull-right">
+                                    <button type="button" class="btn btn-s cnc-button-s-xl btn-default btn-cnc-test-laser" style="" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Toggle M3/M5 at test charge">Test Laser</button> 
                                 </div>
                             </div>
                         </div>
@@ -1445,7 +1440,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                                 <div class="cnc-div-s-mix pull-left">
                                     <button type="button" class="btn btn-s btn-default cnc-button-s-xxl cnc-space-right btn-cnc-uvlight" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Toggle UV Light On">UV Light</button>
                                     <span class="cnc-space-both"></span>
-                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xxl cnc-space-left btn-cnc-ack" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Acknowledge Buzzer">Ack Buzzer</button>
+                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xxl cnc-space-left btn-cnc-uvlight-reset" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Reset Time">Reset</button>
                                 </div>
                             </div>
                             <div class="col-xs-5 cnc-col-s-mix">
@@ -1482,26 +1477,26 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                                 </div>
                             </div>
                         </div>
-                        <div class="row cnc-row-s-label">
-                            <div class="col-xs-5 cnc-col-s-label">
-                                <div class="checkbox cnc-div-s-label pull-left">
-                                    <input type="checkbox" class="cnc-check-s chk-cnc-uvlight-buzzer" id="chk-cnc-uvlight-buzzer"/>
-                                    <span class="cnc-span-s">Buzzer on complete</span>
+                        <div class="row cnc-row-s-mix">
+                            <div class="col-xs-5 cnc-col-s-mix">
+                                <div class="checkbox cnc-div-s-mix pull-left">
+                                    <input type="checkbox" class="cnc-check-s-mix chk-cnc-uvlight-buzzer" id="chk-cnc-uvlight-buzzer"/>
+                                    <span class="cnc-span-s-mix">Buzzer on complete</span>
                                 </div>
                             </div>
-                            <div class="col-xs-2 cnc-col-s-label">
-                                <div class="cnc-div-s-label pull-right cnc-space-right">
-                                    <span class="cnc-span-s cnc-space-right">Intensity</span>
+                            <div class="col-xs-2 cnc-col-s-mix">
+                                <div class="cnc-div-s-mix pull-right cnc-space-right">
+                                    <button class="btn btn-s btn-default cnc-button-s-xxl btn-cnc-uvlight-setintensity">Set Intensity</button>
                                 </div>
                             </div>
-                            <div class="col-xs-3 cnc-col-s-label">
-                                <div class="cnc-div-s-label cnc-space-left">
-                                    <input type="range" min="0" max="100" value="0" class="cnc-slider-s uvlight-intensity" style="width: 120px">
+                            <div class="col-xs-3 cnc-col-s-mix">
+                                <div class="cnc-div-s-mix cnc-space-left">
+                                    <input type="range" min="0" max="100" value="0" class="cnc-slider-s-mix sld-uvlight-intensity" style="width: 120px">
                                 </div>
                             </div>
-                            <div class="col-xs-2 cnc-col-s-label">
+                            <div class="col-xs-2 cnc-col-s-mix">
                                 <div class="cnc-div-s-mix pull-right">
-                                    <span class="label cnc-label-s label-primary cnc-uvlight-intensity">100%</span>
+                                    <span class="label cnc-label-s-mix label-primary cnc-uvlight-intensity">100%</span>
                                 </div>
                             </div>
                         </div>
@@ -1742,7 +1737,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                                 </div>
                             </div>
                         </div>
-                        <div class="row cnc-row-s-mix">
+                        <div class="row cnc-row-s-mix cnc-row-bottomline">
                             <div class="col-xs-3 cnc-col-s-mix">
                                 <div class="cnc-div-s-mix pull-left">
                                     <button type="button" class="btn btn-s btn-default cnc-button-s-xxxl btn-cnc-air-dispenservalve pull-left" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Open/Close Dispenser valve">Dispenser Valve</button>
@@ -1753,6 +1748,17 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                                     <span class="cnc-span-s-mix cnc-space-right">Dispenser Pressure</span>
                                     <span class="label cnc-label-s-mix label-primary cnc-air-dispenserpressure">00.0</span>
                                     <span class="cnc-span-s-mix cnc-space-left">bars</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row cnc-row-s-mix">
+                            <div class="col-xs-6 cnc-col-s-mix">
+                                <div class="cnc-div-s-mix pull-left">
+                                </div>
+                            </div>
+                            <div class="col-xs-6 cnc-col-s-mix">
+                                <div class="cnc-div-s-mix pull-right">
+                                    <button type="button" class="btn btn-s cnc-button-s-l btn-default btn-cnc-test-air" style="" data-delay="1000" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="" data-content="Toggle M7-M8/M9">Test Air</button> 
                                 </div>
                             </div>
                         </div>
@@ -1795,7 +1801,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
 
                  <!-- Tab 8 -->
                 <div class="tab-pane" id="com-chilipeppr-widget-myhomecnc-tab8" style="">
-                    <div class="container cnc-container-s" id="com-chilipeppr-widget-myhomecnc-air-container">
+                    <div class="container cnc-container-s" id="com-chilipeppr-widget-myhomecnc-system-container">
                         <div class="row cnc-row-s-mix cnc-row-bottomline">
                             <div class="col-xs-8 cnc-col-s-mix">
                                 <div class="cnc-div-s-mix pull-left">
@@ -1916,6 +1922,13 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                         -->
                     </div>
                 </div>
+                
+                 <!-- Tab 9 -->
+                <div class="tab-pane" id="com-chilipeppr-widget-myhomecnc-tab9" style="">
+                    <div class="container cnc-container-s" id="com-chilipeppr-widget-myhomecnc-log-container">
+                    </div>
+                </div>
+                
             </div>
         </div>
     </div>
