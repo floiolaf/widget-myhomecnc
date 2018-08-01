@@ -136,9 +136,12 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
 
           console.log("myHomeCNC : I am being initted. Thanks.");
           
-          this.isSioConnected = false;
-          this.isSPJSConnected = false;
-          this.isSerialConnected = false;
+          // Reset main vars
+          this.isSioConnected = true;
+          this.isSPJSConnected = true;
+          this.isSerialConnected = true;
+          this.iseStopActive = false;
+          this.isPWMAvailable = true;
 
           this.forkSetup();
 
@@ -206,17 +209,16 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           
           this.btnSetup();
 
+          this.cncTemperatureChart();
+          
           this.sioConnect(host);
-
-          this.cncChartTest(); // CHECK afterwards
           
           console.log("myHomeCNC : I am done being initted.");
         },
         setupConnection: function () {
           var that = this;
 
-          this.connectPanelScheme();
-          this.toolbarScheme();
+          this.setupPermissions();
 
           // show last remote host, if there is one
           var lasthost = this.options.host_myhomecncserver;
@@ -249,11 +251,10 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             $('#' + that.id + '-hostconnectmsg').html("Failed to connect to host.");
           });
         },
-        // Connect
+        // Connect to socket.io
         sioConnect: function (hostname) {
-          //if (!window["WebSocket"]) {
-          //  this.publishSysMsg("Your browser does not support WebSockets.");
-          //}
+          var that = this;
+          
           if (!hostname) {
             // see if local save is set and pull it if it is if not try localhost
             if(this.options.host_myhomecncserver !== undefined){
@@ -275,36 +276,67 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           }
           */
           console.log("myHomeCNC : Connecting to " + fullurl);
-          var that = this;
 
-		  var sio = io.connect(fullurl + namespace, {reconnection: false});
+		      var sio = io.connect(fullurl + namespace, {reconnection: false});
           this.sio = sio;
 
           this.sio.on('connect', function (id) {
             console.log("myHomeCNC : Connected to " + fullurl + ". socket.id : " + id);
             that.isSioConnected = true;
-            that.onSioMessage(); // Update event triggers
+            
+            that.onSioMessage(); // Subscribe to socket messages
             that.onSioConnect(id, hostname);
+            
             that.options.host_myhomecncserver = hostname;
             that.saveOptionsLocalStorage();
           });
           this.sio.on('connect_error', function (error) {
             console.log("myHomeCNC : Connection error : " + error);
+            
             that.publishSysMsg("myHomeCNC Socket error.");
             that.setupConnection(); // require right host
           });
           this.sio.on('connect_timeout', function (timeout) {
             console.log("myHomeCNC : Connection timeout : " + timeout);
+            
             that.publishSysMsg("myHomeCNC Socket timeout.");
             that.setupConnection(); // require right host
           });
           this.sio.on('disconnect', function (reason) {
             console.log("myHomeCNC : Closing Sockets: " + this.sio + " => " + reason);
+            
             that.isSioConnected = false;
             that.onSioDisconnect(reason);
           });
         },
+        onSioConnect: function (id, host) {
+          var that = this;
+          
+          chilipeppr.publish("/" + this.id + "/sio/onconnect", "connected", host, id);
+          
+          this.setupPermissions();
+          
+          // because we're hiding a large mess of text, we should trigger
+          // a resize to make sure other widgets reflow since the scroll bar
+          // or other stuff may need repositioned
+          $(window).trigger('resize');
+        },
+        onSioDisconnect: function (reason) {
+          
+          chilipeppr.publish("/" + this.id + "/sio/ondisconnect", "disconnected");
+          
+          this.setupConnection(null);
+        },
+        publishStatus: function () {
+          
+          if (this.isSioConnected) {
+            chilipeppr.publish("/" + this.id + "/sio/status", "connected");
+          } else{
+            chilipeppr.publish("/" + this.id + "/sio/status", "disconnected");
+          }
+        },
         publishSysMsg: function (msg) {
+          
           chilipeppr.publish("/" + this.id + "/sys", msg);
           var now = Date.now();
           if (this.lastMsg == msg && now - this.lastMsgTime < 20000) {
@@ -316,29 +348,8 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             this.lastMsgTime = now;
           }
         },
-        onSioConnect: function (id, host) {
-          chilipeppr.publish("/" + this.id + "/sio/onconnect", "connected", host, id);
-          
-          this.connectPanelScheme();
-          this.toolbarScheme();
-          
-          // because we're hiding a large mess of text, we should trigger
-          // a resize to make sure other widgets reflow since the scroll bar
-          // or other stuff may need repositioned
-          $(window).trigger('resize');
-        },
-        onSioDisconnect: function (reason) {
-          chilipeppr.publish("/" + this.id + "/sio/ondisconnect", "disconnected");
-          this.setupConnection(null);
-        },
-        publishStatus: function () {
-          if (this.isSioConnected) {
-            chilipeppr.publish("/" + this.id + "/sio/status", "connected");
-          } else{
-            chilipeppr.publish("/" + this.id + "/sio/status", "disconnected");
-          }
-        },
         publishFeedback: function (key,msg) {
+          
           chilipeppr.publish("/" + this.id + "/" + key, msg);
         },
         //statusWatcher: function () { // CHECK IF NEEDED
@@ -348,68 +359,65 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
         //    $('.net-delarre-widget-gpio-status .well.well-sm').text(msg); //???
         //  });
         //},
-        sioSend: function (msg) {
+        sioSend: function (key, msg) {
+          var that = this;
+          
           if (this.isSioConnected) {
-            this.sio.send(msg);
+            this.sio.send(key, msg);
           } else {
             this.publishSysMsg("Tried to send message, but we are not connected to myHomeCNC Socket server.");
           }
         },
-        sioDisconnect: function () {
-          try {
-            this.sio.disconnect();
-          }
-          catch (error) {
-              console.log("myHomeCNC : Disconnect Sockets error : " + error);
-          }
-        },
+        
         // to send anything down : this.sioSend(msg);
         // to receive anything up : this.sio.on('key', function (event, data) {...}),
         onSioMessage: function () {
           
         },
-        connectPanelScheme: function () {
-          if (this.isSioConnected) {
-             $('#' + this.id + '-connect-panel').addClass('hidden');
-             $('#' + this.id + '-main-panel').removeClass('hidden');
+        setupPermissions: function() {
+          var that = this;
+          
+          // Enable/disable elements according to the connection and cnc status
+          if (!this.isSioConnected){
+            $('#' + this.id + '-main-panel').addClass('hidden');
+            $('#' + this.id + '-connect-panel').removeClass('hidden');
+            $('#' + this.id + ' .cnc-mode-toolbar button').attr('disabled', 'disabled');
+            $('#' + this.id + ' .btn-cnc-estop').attr('disabled', 'disabled');
+            $('#' + this.id + ' .btn-cnc-settings').attr('disabled', 'disabled');
+            if ($('#com-chilipeppr-widget-myhomecnc-modal-settings').hasClass('in')) {
+              $('#com-chilipeppr-widget-myhomecnc-modal-settings').modal('hide');
+            }
           } else {
-             $('#' + this.id + '-main-panel').addClass('hidden');
-             $('#' + this.id + '-connect-panel').removeClass('hidden');
-             
-             if ($('#com-chilipeppr-widget-myhomecnc-modal-settings').hasClass('in')) {
-                $('#com-chilipeppr-widget-myhomecnc-modal-settings').modal('hide');
-             }
-          }
-        },
-        toolbarScheme: function() {
-          if (this.isSPJSCOnnected && this.isSerialConnected && this.isSioConnected) {
-             $('#' + this.id + ' .cnc-mode-toolbar button').removeAttr('disabled'); // or try addClass/removeClass display-only
-             $('#' + this.id + ' .btn-cnc-estop').removeAttr('disabled');
-             $('#' + this.id + ' .btn-cnc-settings').removeAttr('disabled');
-          } else {
-             $('#' + this.id + ' .cnc-mode-toolbar button').attr('disabled', 'disabled');
-             $('#' + this.id + ' .btn-cnc-estop').attr('disabled');
-             $('#' + this.id + ' .btn-cnc-settings').attr('disabled');
+            $('#' + this.id + '-connect-panel').addClass('hidden');
+            $('#' + this.id + '-main-panel').removeClass('hidden');
+            $('#' + this.id + ' .btn-cnc-estop').removeAttr('disabled');
+            $('#' + this.id + ' .btn-cnc-settings').removeAttr('disabled');
+            
+            if (this.iseStopActive) {
+              $('#' + this.id + ' .cnc-btn-g1 button').attr('disabled', 'disabled');
+              $('#' + this.id + ' .cnc-btn-g2 button').attr('disabled', 'disabled');
+              $('#' + this.id + ' .cnc-mode-toolbar button').attr('disabled', 'disabled');
+            } else if (!this.iseStopActive){
+              $('#' + this.id + ' .cnc-btn-g1 button').removeAttr('disabled');
+            }
+            if (!this.isSPJSConnected || !this.isSerialConnected || !this.isPWMAvailable) {
+              $('#' + this.id + ' .cnc-btn-g2 button').attr('disabled', 'disabled');
+              $('#' + this.id + ' .cnc-mode-toolbar button').attr('disabled', 'disabled');
+            } else if (this.isSPJSConnected && this.isSerialConnected && this.isPWMAvailable) {
+              $('#' + this.id + ' .cnc-btn-g2 button').attr('disabled', 'disabled');
+            }
+            if (!this.iseStopActive && this.isSPJSConnected && this.isSerialConnected && this.isPWMAvailable) {
+              $('#' + this.id + ' .cnc-mode-toolbar button').removeAttr('disabled');
+            }
           }
         },
         getSPJSinfo: function() {
+          
           // /com-chilipeppr-widget-serialport/requestStatus => callback on /recvStatus
           // /com-chilipeppr-widget-serialport/getlist => callback on /list
           chilipeppr.publish("/com-chilipeppr-widget-serialport/requestStatus")
           chilipeppr.publish("/com-chilipeppr-widget-serialport/getlist")
         },
-        // total_lenght includes '.' for decimals
-        formatNumber : function (num, total_lenght, decimals) {
-          if ((typeof num) == "number") {
-            var myNum = num.toFixed(decimals)
-            var zero = total_lenght - myNum.toString().length + 1;
-            return Array(+(zero > 0 && zero)).join("0") + num;
-          } else {
-            return num;
-          }
-        },
-
-
         /**
          * Call this method from init to setup all the buttons when this widget
          * is first loaded. This basically attaches click events to your
@@ -465,104 +473,119 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             $('#' + this.id + ' .btn-cnc-estop').dblclick(this.onEStopBtnDblClick.bind(this));
 
         },
-        // Create an array of len items filled with c char
+        formatNumber : function (num, total_lenght, decimals) {
+          
+          // total_lenght includes '.' for decimals
+          if ((typeof num) == "number") {
+            var myNum = num.toFixed(decimals)
+            var zero = total_lenght - myNum.toString().length + 1;
+            return Array(+(zero > 0 && zero)).join("0") + num;
+          } else {
+            return num;
+          }
+        },
         arrayFill : function (c, len) {
+        
+          // Create an array of len items filled with c char
           var arr = [];
           while (len--) {
             arr[len] = c;
           }
           return arr;
         },
-        // Object Temperature Chart
-        cncChartTest: function() {
-
-            var xxx = [65,59,88.2,81,56,55,40];
+      
+        cncTemperatureChart: function() {
+          var that = this;
+          
+          // Object Temperature Chart
+          var xxx = [65,59,88.2,81,56,55,40];
             
-            Chart.defaults.global.defaultFontSize = 8;
-            Chart.defaults.global.elements.line.borderWidth = 1;
-            Chart.defaults.global.elements.point.radius = 1;
-            this.temperatureChartConfig = {
-                type: 'line',
-                data: {
+          Chart.defaults.global.defaultFontSize = 8;
+          Chart.defaults.global.elements.line.borderWidth = 1;
+          Chart.defaults.global.elements.point.radius = 1;
+          this.temperatureChartConfig = {
+            type: 'line',
+            data: {
                   labels: ["1","2","3","4","5","6"],
                   datasets : [{
-                    backgroundColor: "rgba(255,0,0,1)",
-                    borderColor: "rgba(255,0,0,1)",
-                    data : xxx,
-                    fill: false
-                  }]
-                },
-                options: {
-                  responsive: false,
-                  legend: false,
-                  animation : false,
-                  scaleOverride : false,
-                  scaleSteps : 10,//Number - The number of steps in a hard coded scale
-                  scaleStepWidth : 10,//Number - The value jump in the hard coded scale
-                  scaleStartValue : 10,//Number - The scale starting value
-                  scales: {
-                    xAxes: [{display: false}],
-                    yAxes: [{display: true}]
-                  }
-                }
-            };
-            var ctx = $('#cnc-temperature-chart'); //.get(0).getContext("2d");
-            var myLine = new Chart(ctx, this.temperatureChartConfig);
+                            backgroundColor: "rgba(255,0,0,1)",
+                            borderColor: "rgba(255,0,0,1)",
+                            data : xxx,
+                            fill: false
+                            }]
+                  },
+                  options: {
+                            responsive: false,
+                            legend: false,
+                            animation : false,
+                            scaleOverride : false,
+                            scaleSteps : 10,//Number - The number of steps in a hard coded scale
+                            scaleStepWidth : 10,//Number - The value jump in the hard coded scale
+                            scaleStartValue : 10,//Number - The scale starting value
+                            scales: {
+                                    xAxes: [{display: false}],
+                                    yAxes: [{display: true}]
+                                    }
+                            }
+                  };
+          var ctx = $('#cnc-temperature-chart'); //.get(0).getContext("2d");
+          var myLine = new Chart(ctx, this.temperatureChartConfig);
         },
-        /**
-         * onHelloBtnClick is an example of a button click event callback
-         */
         onEStopBtnDblClick: function(evt) {
-            if ($('#' + this.id + '-connect-panel').hasClass('hidden')) {
-                $('#' + this.id + '-main-panel').addClass('hidden');
-                $('#' + this.id + '-connect-panel').removeClass('hidden');
-            } else {
-                $('#' + this.id + '-connect-panel').addClass('hidden');
-                $('#' + this.id + '-main-panel').removeClass('hidden');
-                $('#' + this.id + ' .btn-cnc-estop').addClass('btn-danger');
-            }
-            if ($('#' + this.id + ' .btn-cnc-estop').hasClass('btn-danger')) { // Activate e-Stop
-                $('#' + this.id + ' .btn-cnc-estop').removeClass('btn-danger');
-                $('#' + this.id + ' .btn-cnc-estop').addClass('btn-success');
-                $('#' + this.id + ' .btn-cnc-estop').text("Reset");
-                // Actions for e-Stop activation
-            } else {
-                $('#' + this.id + ' .btn-cnc-estop').removeClass('btn-success');
-                $('#' + this.id + ' .btn-cnc-estop').addClass('btn-danger');
-                $('#' + this.id + ' .btn-cnc-estop').text("e-Stop");
-                // Actions for Reset e-Stop
-            }    
-            
+          var that = this;
+          
+          if ($('#' + this.id + '-connect-panel').hasClass('hidden')) {
+            $('#' + this.id + '-main-panel').addClass('hidden');
+            $('#' + this.id + '-connect-panel').removeClass('hidden');
+          } else {
+            $('#' + this.id + '-connect-panel').addClass('hidden');
+            $('#' + this.id + '-main-panel').removeClass('hidden');
+            $('#' + this.id + ' .btn-cnc-estop').addClass('btn-danger');
+          }
+          if ($('#' + this.id + ' .btn-cnc-estop').hasClass('btn-danger')) { // Activate e-Stop
+            $('#' + this.id + ' .btn-cnc-estop').removeClass('btn-danger');
+            $('#' + this.id + ' .btn-cnc-estop').addClass('btn-success');
+            $('#' + this.id + ' .btn-cnc-estop').text("Reset");
+            // Actions for e-Stop activation
+          } else {
+            $('#' + this.id + ' .btn-cnc-estop').removeClass('btn-success');
+            $('#' + this.id + ' .btn-cnc-estop').addClass('btn-danger');
+            $('#' + this.id + ' .btn-cnc-estop').text("e-Stop");
+            // Actions for Reset e-Stop
+          }    
         },
         setupBody: function() {
         	
         	var that = this;
         	
+        	/* ------------------XBOX Widget for Slider
+        	
           $("#com-chilipeppr-widget-xbox-settings-container > .cnc-slider").each(function(){
             if ( this.id == 'com-chilipeppr-widget-xbox-incjog' ) {
-        	     $(this).prev('span').text( this.value / 10 )
+        	    $(this).prev('span').text( this.value / 10 )
         	  } else {
-               $(this).prev('span').text(this.value)
+              $(this).prev('span').text(this.value)
         	  }
           });
         	
         	$('#com-chilipeppr-widget-xbox-settings-container > .cnc-slider').on("input", function(e) {
-        	    if ( e.target.id == 'com-chilipeppr-widget-xbox-incjog' ) {
-        	        $(e.target).prev('span').text( $(e.target).val() / 10 )
-        	    } else {
-                    $(e.target).prev('span').text( $(e.target).val() )
-        	    }
-            });
+        	  if ( e.target.id == 'com-chilipeppr-widget-xbox-incjog' ) {
+        	    $(e.target).prev('span').text( $(e.target).val() / 10 )
+        	  } else {
+              $(e.target).prev('span').text( $(e.target).val() )
+        	  }
+          });
             
-            $('#com-chilipeppr-widget-xbox-settings-container > .cnc-slider').on("change", function(e) {
-                that.options.Deadzone = $('#com-chilipeppr-widget-xbox-deadzone').val();
-                that.options.RateXY = $('#com-chilipeppr-widget-xbox-ratexy').val();
-                that.options.RateZ = $('#com-chilipeppr-widget-xbox-ratez').val();
-                that.options.IncJog = $('#com-chilipeppr-widget-xbox-incjog').val();
-                that.options.RPM = $('#com-chilipeppr-widget-xbox-rpm').val();
-                that.saveOptionsLocalStorage();
-            });
-			
+          $('#com-chilipeppr-widget-xbox-settings-container > .cnc-slider').on("change", function(e) {
+            that.options.Deadzone = $('#com-chilipeppr-widget-xbox-deadzone').val();
+            that.options.RateXY = $('#com-chilipeppr-widget-xbox-ratexy').val();
+            that.options.RateZ = $('#com-chilipeppr-widget-xbox-ratez').val();
+            that.options.IncJog = $('#com-chilipeppr-widget-xbox-incjog').val();
+            that.options.RPM = $('#com-chilipeppr-widget-xbox-rpm').val();
+            that.saveOptionsLocalStorage();
+          });
+          
+          -----------------------END of XBOX*/
         },
         /**
          * User options are available in this property for reference by your
@@ -611,12 +634,13 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
                 this.hideBody();
             }
             
+            /* ------------------------XBOX
             $('#com-chilipeppr-widget-xbox-deadzone').val(options.Deadzone);
             $('#com-chilipeppr-widget-xbox-ratexy').val(options.RateXY);
             $('#com-chilipeppr-widget-xbox-ratez').val(options.RateZ);
             $('#com-chilipeppr-widget-xbox-incjog').val(options.IncJog);
             $('#com-chilipeppr-widget-xbox-rpm').val(options.RPM);
-
+            ---------------------------END OF XBOX */
         },
         /**
          * When a user changes a value that is stored as an option setting, you
@@ -642,13 +666,10 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
          * that sent in the param.
          */
         showBody: function(evt) {
-          console.log("--------------------------HEY:"+ this.isSioConnected);
             if (this.isSioConnected) {
               $('#' + this.id + ' .panel-body').removeClass('hidden');
-              console.log("---A-----------------------HEY:"+ this.isSioConnected);
             } else {
               $('#' + this.id + ' .connect-panel-body').removeClass('hidden');
-              console.log("---B----------------------HEY:"+ this.isSioConnected);
             }
             $('#' + this.id + ' .panel-footer').removeClass('hidden');
             $('#' + this.id + ' .hidebody span').addClass('glyphicon-chevron-up');
