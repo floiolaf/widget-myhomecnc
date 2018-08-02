@@ -3,10 +3,12 @@
 #com-chilipeppr-widget-myhomecnc {
 
 }
-#com-chilipeppr-widget-myhomecnc .nav-tabs>li>a {
+#com-chilipeppr-widget-myhomecnc .nav-tabs>li>a ,
+#com-chilipeppr-widget-myhomecnc-modal-settings .nav-tabs>li>a {
     padding: 2px 6px;
 }
-#com-chilipeppr-widget-myhomecnc .nav nav-tabs {
+#com-chilipeppr-widget-myhomecnc .nav nav-tabs ,
+#com-chilipeppr-widget-myhomecnc-modal-settings .nav nav-tabs {
     padding: 0px;
 }
 
@@ -15,10 +17,6 @@
     width: 65px !important;
     top: 6px;
 }
-
-/*#com-chilipeppr-widget-myhomecnc .cnc-toolbar {
-    width: 150px;
-}*/
 #com-chilipeppr-widget-myhomecnc .btn-cnc-estop {
     width: 50px;
 }
@@ -56,7 +54,8 @@
 #com-chilipeppr-widget-myhomecnc .cnc-padding {
     padding: 5px 5px 5px 5px !important;
 }
-#com-chilipeppr-widget-myhomecnc .panel-body {
+#com-chilipeppr-widget-myhomecnc .panel-body , 
+#com-chilipeppr-widget-myhomecnc-modal-settings .modal-body {
     overflow-y: hidden;
     overflow-x: hidden;
 }
@@ -80,7 +79,8 @@
     margin-left: 0px;
     margin-right: 0px;
 }
-#com-chilipeppr-widget-myhomecnc .cnc-row-s-mix {
+#com-chilipeppr-widget-myhomecnc .cnc-row-s-mix , 
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-row-s-mix {
     padding-left: 0px;
     padding-right: 0px;
     margin-left: 0px;
@@ -98,7 +98,8 @@
     padding-top: 5px;
     padding-bottom: 5px;
 }
-#com-chilipeppr-widget-myhomecnc .cnc-col-s-mix {
+#com-chilipeppr-widget-myhomecnc .cnc-col-s-mix ,
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-col-s-mix {
     padding: 0px 0px 0px 0px;
     margin-left: 0px;
     margin-right: 0px;
@@ -114,10 +115,12 @@
     margin-bottom: 0px;
     height: 20px;
 }
-#com-chilipeppr-widget-myhomecnc .cnc-row-bottomline {
+#com-chilipeppr-widget-myhomecnc .cnc-row-bottomline , 
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-row-bottomline {
     border-bottom: solid 1px lightgray;
 }
-#com-chilipeppr-widget-myhomecnc .cnc-div-s-mix {
+#com-chilipeppr-widget-myhomecnc .cnc-div-s-mix ,
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-div-s-mix {
     display: inline-block;
     height: 34px;
     margin-top: 0px;
@@ -127,7 +130,8 @@
     height: 20px;
     margin-top: 0px;
 }
-#com-chilipeppr-widget-myhomecnc .cnc-label-s-mix { /* Same for span and slider */ 
+#com-chilipeppr-widget-myhomecnc .cnc-label-s-mix ,
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-label-s-mix { /* Same for span and slider */ 
     display: inline-block;
     /*vertical-align: middle;*/
     font-size: small;
@@ -141,7 +145,8 @@
     height: 20px;
     margin-top: 0px;
 }
-#com-chilipeppr-widget-myhomecnc .cnc-input-s-mix { /* Same for span and slider */ 
+#com-chilipeppr-widget-myhomecnc .cnc-input-s-mix ,
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-input-s-mix { /* Same for span and slider */ 
     margin-top: 0px;
     height: 30px;
 }
@@ -152,7 +157,8 @@
     height: 20px;
     margin-top: 2px;
 }
-#com-chilipeppr-widget-myhomecnc .cnc-span-s-mix {
+#com-chilipeppr-widget-myhomecnc .cnc-span-s-mix ,
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-span-s-mix {
     display: inline-block;
     font-size: smaller;
     /*vertical-align: middle;*/
@@ -178,18 +184,22 @@
     height: 16px;
     margin-top: 3px; /* Moved from 2px to 3px due to the handle */
 }
-#com-chilipeppr-widget-myhomecnc .cnc-button-s { /* Same of input */
+#com-chilipeppr-widget-myhomecnc .cnc-button-s ,
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-button-s { /* Same of input */
     font-size: small;
     margin-top: 2px;
     height: 30px;
 }
-#com-chilipeppr-widget-myhomecnc .cnc-space-left {
+#com-chilipeppr-widget-myhomecnc .cnc-space-left , 
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-space-left {
     padding-left: 5px;
 }
-#com-chilipeppr-widget-myhomecnc .cnc-space-right {
+#com-chilipeppr-widget-myhomecnc .cnc-space-right ,
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-space-right {
     padding-right: 5px;
 }
-#com-chilipeppr-widget-myhomecnc .cnc-space-both {
+#com-chilipeppr-widget-myhomecnc .cnc-space-both ,
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-space-both {
     padding-right: 5px;
     padding-left: 5px;
 }
@@ -211,7 +221,8 @@
     width: 42px;
     height: 30px;
 }
-#com-chilipeppr-widget-myhomecnc .cnc-button-s-s {
+#com-chilipeppr-widget-myhomecnc .cnc-button-s-s , 
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-button-s-s {
     font-size: small;
     margin-top: 2px;
     padding-left: 0px;
@@ -220,7 +231,8 @@
     width: 50px;
     height: 30px;
 }
-#com-chilipeppr-widget-myhomecnc .cnc-button-s-l {
+#com-chilipeppr-widget-myhomecnc .cnc-button-s-l , 
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-button-s-l {
     font-size: small;
     margin-top: 2px;
     padding-left: 0px;
@@ -229,7 +241,8 @@
     width: 70px;
     height: 30px;
 }
-#com-chilipeppr-widget-myhomecnc .cnc-button-s-xl {
+#com-chilipeppr-widget-myhomecnc .cnc-button-s-xl, 
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-button-s-xl {
     font-size: small;
     margin-top: 2px;
     padding-left: 0px;
@@ -238,7 +251,8 @@
     width: 85px;
     height: 30px;
 }
-#com-chilipeppr-widget-myhomecnc .cnc-button-s-xxl {
+#com-chilipeppr-widget-myhomecnc .cnc-button-s-xxl , 
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-button-s-xxl {
     font-size: small;
     margin-top: 2px;
     padding-left: 0px;
@@ -414,6 +428,37 @@
     width: 240px;
     height: 24px;
 }
+#com-chilipeppr-widget-myhomecnc .btn:focus , 
+#com-chilipeppr-widget-myhomecnc-modal-settings .btn:focus {
+  outline: none;
+}
+#com-chilipeppr-widget-myhomecnc .cnc-cursor:hover {
+    cursor: context-menu;
+}
+/* Label toolbar from btn toolbar */
+#com-chilipeppr-widget-myhomecnc .btn-to-lbl {
+  display: inline-block;
+  font-size: small;
+  box-shadow: inset 0px 0px 0px;
+  padding: 0px;
+  margin-top: 0px;
+  text-align: center;
+}
+#com-chilipeppr-widget-myhomecnc .btn-to-lbl:hover {
+    cursor: context-menu;
+}
+#com-chilipeppr-widget-myhomecnc .cnc-frame {
+  box-sizing: border-box;
+  display: inline-block;
+  padding: 0px;
+  margin-top: 1px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  margin-right: opx;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  height: 30px
+}
 /* Loader */
 #com-chilipeppr-widget-myhomecnc .cnc-loader {
   margin-top: 10px;
@@ -442,12 +487,109 @@
     display: block;
     overflow-x: hidden;
     overflow-y: auto;
+    word-wrap: break-word;
+    box-shadow: inset 1px 1px 1px darkgray;
     border: 1px solid lightgray;
-    font-size: smaller;
-    font-color: black;
+    font-size: 0.84em;
     width: 441px;
     height: 195px;
     margin: 0px;
     padding: 0px;
 }
-    
+#com-chilipeppr-widget-myhomecnc .cnc-log-msg {
+    display: block;
+    padding-left: 2px ;
+}
+/* Colors */
+#com-chilipeppr-widget-myhomecnc .cnc-bkgwhite {
+    background-color: rgba(255,255,255,1);
+}
+#com-chilipeppr-widget-myhomecnc .cnc-bkgblack {
+    background-color: rgba(0,0,0,1);
+}
+#com-chilipeppr-widget-myhomecnc .cnc-bkgred {
+    background-color: rgba(255,0,0,1);
+}
+#com-chilipeppr-widget-myhomecnc .cnc-bkggreen {
+    background-color: rgba(0,255,0,1);
+}
+#com-chilipeppr-widget-myhomecnc .cnc-bkgblue {
+    background-color: rgba(0,0,255,1);
+}
+#com-chilipeppr-widget-myhomecnc .cnc-bkgyellow {
+    background-color: rgba(255,255,0,1);
+}
+#com-chilipeppr-widget-myhomecnc .cnc-bkgpurple {
+    background-color: rgba(128,0,128,1);
+}
+#com-chilipeppr-widget-myhomecnc .cnc-bkgorange {
+    background-color: rgba(255,127,0,1);
+}
+#com-chilipeppr-widget-myhomecnc .cnc-bkgice {
+    background-color: rgba(255,255,240, 1)
+}
+
+#com-chilipeppr-widget-myhomecnc .cnc-white {
+    color: rgba(255,255,255,1);
+}
+#com-chilipeppr-widget-myhomecnc .cnc-black {
+    color: rgba(0,0,0,1);
+}
+#com-chilipeppr-widget-myhomecnc .cnc-red {
+    color: rgba(255,0,0,1);
+}
+#com-chilipeppr-widget-myhomecnc .cnc-green {
+    color: rgba(0,100,0,1);
+}
+#com-chilipeppr-widget-myhomecnc .cnc-blue {
+    color: rgba(0,0,255,1);
+}
+#com-chilipeppr-widget-myhomecnc .cnc-yellow {
+    color: rgba(255,255,0,1);
+}
+#com-chilipeppr-widget-myhomecnc .cnc-purple {
+    color: rgba(127,0,127,1);
+}
+#com-chilipeppr-widget-myhomecnc .cnc-orange {
+    color: rgba(255,127,0,1);
+}
+/* Modal Settings */
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-settings-container {
+    width: 558px;
+    height: 200px;
+    padding-top: 3px;
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-m-input {
+    display: inline-block;
+    height: 30px;
+    margin-top: 2px;
+}
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-m-input-label-addon {
+    display: inline-block;
+    height: 30px;
+    font-size: smaller;
+    margin-top: 2px;
+    margin-right: 0px;
+    padding-top: 7px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-m-input-group-btn-addon {
+    display: inline-block;
+    padding: 0px;
+    margin: 0px;
+}
+#com-chilipeppr-widget-myhomecnc-modal-settings .cnc-m-input-btn-addon {
+    display: inline-block;
+    height: 30px;
+    font-size: small;
+    margin-top: 2px;
+    margin-left: 0px;
+    padding: 0px;
+}

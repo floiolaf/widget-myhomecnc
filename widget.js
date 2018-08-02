@@ -4,37 +4,20 @@
 // ChiliPeppr Widget/Element Javascript
 
 requirejs.config({
-    /*
-    Dependencies can be defined here. ChiliPeppr uses require.js so
-    please refer to http://requirejs.org/docs/api.html for info.
-
-    Most widgets will not need to define Javascript dependencies.
-
-    Make sure all URLs are https and http accessible. Try to use URLs
-    that start with // rather than http:// or https:// so they simply
-    use whatever method the main page uses.
-
-    Also, please make sure you are not loading dependencies from different
-    URLs that other widgets may already load like jquery, bootstrap,
-    three.js, etc.
-
-    You may slingshot content through ChiliPeppr's proxy URL if you desire
-    to enable SSL for non-SSL URL's. ChiliPeppr's SSL URL is
-    https://i2dcui.appspot.com which is the SSL equivalent for
-    http://chilipeppr.com
-    */
-    paths: {
-        // Example of how to define the key (you make up the key) and the URL
-        // Make sure you DO NOT put the .js at the end of the URL
-        // SmoothieCharts: '//smoothiecharts.org/smoothie',
-        Chart : 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
-        socketio: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io',
-    },
-    shim: {
-        // See require.js docs for how to define dependencies that
-        // should be loaded before your script/widget.
-    }
+   
+  paths: {
+    // Example of how to define the key (you make up the key) and the URL
+    // Make sure you DO NOT put the .js at the end of the URL
+    // SmoothieCharts: '//smoothiecharts.org/smoothie',
+    Chart : 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min',
+    socketio: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io',
+  },
+  shim: {
+    // See require.js docs for how to define dependencies that
+    // should be loaded before your script/widget.
+  }
 });
+
 cprequire_test(["inline:com-chilipeppr-widget-myhomecnc"], function(myWidget) {
 
     // Test this element. This code is auto-removed by the chilipeppr.load()
@@ -88,11 +71,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
         fiddleurl: "(auto fill by runme.js)", // The edit URL. This can be auto-filled by runme.js in Cloud9 if you'd like, or just define it on your own to help people know where they can edit/fork your widget
         githuburl: "(auto fill by runme.js)", // The backing github repo
         testurl: "(auto fill by runme.js)",   // The standalone working widget so can view it working by itself
-        /**
-         * Define pubsub signals below. These are basically ChiliPeppr's event system.
-         * ChiliPeppr uses amplify.js's pubsub system so please refer to docs at
-         * http://amplifyjs.com/api/pubsub/
-         */
+        
         /**
          * Define the publish signals that this widget/element owns or defines so that
          * other widgets know how to subscribe to them and what they do.
@@ -128,13 +107,12 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             // that are owned by foreign/other widgets.
             // '/com-chilipeppr-elem-dragdrop/ondropped': 'Example: We subscribe to this signal at a higher priority to intercept the signal. We do not let it propagate by returning false.'
         },
-        /**
-         * All widgets should have an init method. It should be run by the
-         * instantiating code like a workspace or a different widget.
-         */
+        
         init: function(host) {
 
           console.log("myHomeCNC : I am being initted. Thanks.");
+          
+          var that = this;
           
           // Reset main vars
           this.isSioConnected = true;
@@ -142,49 +120,92 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           this.isSerialConnected = true;
           this.iseStopActive = false;
           this.isPWMAvailable = true;
-
+          
+          // Setup UI
           this.forkSetup();
+          this.setupUiFromLocalStorage();
+          this.setupLog();
+          this.setupBody();
+          this.btnSetup();
 
           // setup onconnect pubsub event for foreign signal from SPJS
-          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/onconnect", this, function (msg) {
-            this.isSPJSConnected = true;
-            this.toolbarScheme();
+          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/onconnect", this, function (payload) {
+            // whether ws was just connected.
+            // payload from SPJS widget => msg = {websocket:this.conn, host:this.activehost}
+            that.pubLog('spjs', 'in', '/onconnect', payload);
+            
+            that.wsHost = payload.host;
+      
+            that.isSPJSConnected = true;
+            that.setupPermissions();
           });
-          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/ondisconnect", this, function (msg) {
-            this.isSPJSConnected = false;
-            this.toolbarScheme();
+          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/ondisconnect", this, function (payload) {
+            // Whether ws was just disconnected. 
+            // payload from SPJS => msg = "disconnected"
+            that.pubLog('spjs', 'in', '/ondisconnect', payload);
+            
+            that.isSPJSConnected = false;
+            that.setupPermissions();
           });
-          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/recvStatus", this, function (msg) {
-            // payload => '{"connected":true, "Websocket": ws } or {"connected":false, "websocket":null}
-            if (msg.connected) {
-              this.isSPJSConnected = true;
+          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/recvStatus", this, function (payload) {
+            // Wheter ws is connected to SPJS. Payload from SPJS widget => '{"connected":true, "Websocket": ws } or {"connected":false, "websocket":null}
+            that.pubLog('spjs', 'in', '/recvStatus', payload);
+            
+            this.isSPJSConnected = payload.connected;
+            
+            that.setupPermissions();
+          });
+          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/onportopen", this, function (payload) {
+            // payload from SPJS=> {Cmd: "Open", Desc: "Got register/open on port.", Port: "COM22", Baud: 115200, BufferType: "tinyg"}
+            that.pubLog('spjs', 'in', '/onportopen', payload);
+            
+            if (payload.Cmd == "Open" && payload.Desc == "Got register/open on port." && payload.BufferType.includes("tiny")) {
+              that.isSerialConnected = true;
             } else {
-              this.isSPJSConnected = false;
+              that.isSerialConnected = false;
             }
+            that.portName = payload;
+            
+            that.setupPermissions();
           });
-          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/onportopen", this, function (msg) {
-            // message OK = payload => 
-            this.isSerialConnected = true;
-            this.toolbarScheme();
+          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/onportclose", this, function (payload) {
+            // payload from SPJS => {Cmd: "Close", Desc: "Got unregister/close on port.", Port: "COM22", Baud: 115200}
+            that.pubLog('spjs', 'in', '/onportclose', payload)
+            
+            if (payload.Cmd == 'Close') {
+              that.isSerialConnected = false;
+            } else {
+              that.isSerialConnected = true;
+            }
+            that.setupPermissions();
           });
-          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/onportclose", this, function (msg) {
-            // message OK = payload =>
-            this.isSerialConnected = false;
-            this.toolbarScheme();
-          });
-          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/list", this, function (msg) {
-            // payload => '' serial ports available + connected state
-            //if (msg.connected) {
-            //  this.isSerialConnected = true;
-            //} else {
-            //  this.isSerialConnected = false;
-            //}
+          chilipeppr.subscribe("/com-chilipeppr-widget-serialport/list", this, function (payload) {
+            // payloas from SPJS is an array like => {"SerialPorts": [{"Name": "/dev/ttymxc3","Friendly": "/dev/ttymxc3","SerialNumber": "","DeviceClass": "","IsOpen": true,"IsPrimary": true,"RelatedNames": null,"Baud": 115200,"BufferAlgorithm": "","AvailableBufferAlgorithms": ["default","tinyg","tinygg2","grbl","marlin"],"Ver": 1.83,"UsbVid": "","UsbPid": ""}
+            var andThat = this;
+            
+            that.pubLog('spjs', 'in', '/list', payload);
+            
+            if (payload) {
+              andThat.openPort = payload.SerialPorts.filter(function(item) {
+                return (item.IsOpen && item.IsPrimary && item.BufferAlgorithm.includes("tiny"));  
+              }); 
+              if (this.openPort.length == 1) {
+                that.isSerialConnected = true;
+              } else {
+                that.isSerialConnected = false;
+              }
+            } else {
+              that.isSerialConnected = false;
+            }
+            that.portName = this.openPort;
+            
+            that.setupPermissions();
           });
           chilipeppr.subscribe("/com-chilipeppr-widget-serialport/onComplete", this, function (msg) {
-            // message OK = payload => '{"Id":"123"}'
+            // payload from SPJS => '{"Id":"123"}'
           });
           
-          this.getSPJSinfo();
+          this.requestChilipepprInfo();
           
           /* Foreign publish
           /com-chilipeppr-widget-serialport/jsonSend => {"D": "G0 X1 ", "Id":"123"} callback on /onQueue, /onWrite, /onComplete
@@ -193,25 +214,27 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
 
           // setup low-level send pubsub event
           // this is when any widget sends wants to send data data to the socket
-          chilipeppr.subscribe("/" + this.id + "/send", this, function (key, msg) {
-            this.wsSend(key, msg);
+          chilipeppr.subscribe("/" + this.id + "/send", this, function (key, message) {
+            
+            this.wsSend(key, message);
           });
           chilipeppr.subscribe("/" + this.id + "/getstatus", this, function () {
+            
             this.publishStatus();
           });
           chilipeppr.subscribe("/" + this.id + "/getfeedback", this, function (key) {
+            
             //this.publishFeedback(key, msg);
           });
           
-          this.setupUiFromLocalStorage();
 
-          this.setupBody();
-          
-          this.btnSetup();
-
-          this.cncTemperatureChart();
+          this.setupCharts();
           
           this.sioConnect(host);
+          
+          //this.logEnabled = true;
+          //this.pubLog('spjs', 'out', 'welcome', 'hello');
+          
           
           console.log("myHomeCNC : I am done being initted.");
         },
@@ -221,7 +244,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           this.setupPermissions();
 
           // show last remote host, if there is one
-          var lasthost = this.options.host_myhomecncserver;
+          var lasthost = this.options.myhomecncServerHost;
           if (lasthost !== undefined) {
               $('#com-chilipeppr-widget-myhomecnc-host').val(lasthost);
           }
@@ -251,14 +274,15 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             $('#' + that.id + '-hostconnectmsg').html("Failed to connect to host.");
           });
         },
-        // Connect to socket.io
+        
         sioConnect: function (hostname) {
           var that = this;
           
+          // Connect to socket.io
           if (!hostname) {
             // see if local save is set and pull it if it is if not try localhost
             if(this.options.host_myhomecncserver !== undefined){
-              hostname = this.options.host_myhomecncserver;
+              hostname = this.options.myhomecncServerHost;
             } else {
               hostname = 'localhost';
             }
@@ -282,23 +306,25 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
 
           this.sio.on('connect', function (id) {
             console.log("myHomeCNC : Connected to " + fullurl + ". socket.id : " + id);
-            that.isSioConnected = true;
             
+            that.isSioConnected = true;
             that.onSioMessage(); // Subscribe to socket messages
             that.onSioConnect(id, hostname);
             
-            that.options.host_myhomecncserver = hostname;
+            that.options.myhomecncServerHost = hostname;
             that.saveOptionsLocalStorage();
           });
           this.sio.on('connect_error', function (error) {
             console.log("myHomeCNC : Connection error : " + error);
             
+            //that.isSioConnected = false; DISABLED FOR TESTS ONLY
             that.publishSysMsg("myHomeCNC Socket error.");
             that.setupConnection(); // require right host
           });
           this.sio.on('connect_timeout', function (timeout) {
             console.log("myHomeCNC : Connection timeout : " + timeout);
             
+            that.isSioConnected = false;
             that.publishSysMsg("myHomeCNC Socket timeout.");
             that.setupConnection(); // require right host
           });
@@ -310,58 +336,23 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           });
         },
         onSioConnect: function (id, host) {
-          var that = this;
           
-          chilipeppr.publish("/" + this.id + "/sio/onconnect", "connected", host, id);
+          chilipeppr.publish("/" + this.id + "/sio/onconnect", id, host);
           
           this.setupPermissions();
           
-          // because we're hiding a large mess of text, we should trigger
-          // a resize to make sure other widgets reflow since the scroll bar
-          // or other stuff may need repositioned
           $(window).trigger('resize');
         },
         onSioDisconnect: function (reason) {
           
-          chilipeppr.publish("/" + this.id + "/sio/ondisconnect", "disconnected");
+          chilipeppr.publish("/" + this.id + "/sio/ondisconnect", reason);
           
           this.setupConnection(null);
         },
-        publishStatus: function () {
-          
-          if (this.isSioConnected) {
-            chilipeppr.publish("/" + this.id + "/sio/status", "connected");
-          } else{
-            chilipeppr.publish("/" + this.id + "/sio/status", "disconnected");
-          }
-        },
-        publishSysMsg: function (msg) {
-          
-          chilipeppr.publish("/" + this.id + "/sys", msg);
-          var now = Date.now();
-          if (this.lastMsg == msg && now - this.lastMsgTime < 20000) {
-            // skip publish
-            console.log("myHomeCNC : skipping publish. same msg or too fast.");
-          } else {
-            chilipeppr.publish("/com-chilipeppr-elem-flashmsg/flashmsg", "myHomeCNC Message", msg);
-            this.lastMsg = msg;
-            this.lastMsgTime = now;
-          }
-        },
-        publishFeedback: function (key,msg) {
-          
-          chilipeppr.publish("/" + this.id + "/" + key, msg);
-        },
-        //statusWatcher: function () { // CHECK IF NEEDED
-          // This method subscribes to "/sio/sys" and updates the UI with
-          // the latest msg
-        //  chilipeppr.subscribe("/" + this.id + "/sys", this, function (msg) {
-        //    $('.net-delarre-widget-gpio-status .well.well-sm').text(msg); //???
-        //  });
-        //},
         sioSend: function (key, msg) {
           var that = this;
           
+          // to send anything down : this.sioSend(msg);
           if (this.isSioConnected) {
             this.sio.send(key, msg);
           } else {
@@ -369,9 +360,10 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           }
         },
         
-        // to send anything down : this.sioSend(msg);
-        // to receive anything up : this.sio.on('key', function (event, data) {...}),
+        // Subscribe to socket.io events
         onSioMessage: function () {
+        var that = this;
+          // to receive anything up : this.sio.on('key', function (event, data) {...}),
           
         },
         setupPermissions: function() {
@@ -411,93 +403,12 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             }
           }
         },
-        getSPJSinfo: function() {
-          
-          // /com-chilipeppr-widget-serialport/requestStatus => callback on /recvStatus
-          // /com-chilipeppr-widget-serialport/getlist => callback on /list
-          chilipeppr.publish("/com-chilipeppr-widget-serialport/requestStatus")
-          chilipeppr.publish("/com-chilipeppr-widget-serialport/getlist")
-        },
-        /**
-         * Call this method from init to setup all the buttons when this widget
-         * is first loaded. This basically attaches click events to your
-         * buttons. It also turns on all the bootstrap popovers by scanning
-         * the entire DOM of the widget.
-         */
-        btnSetup: function() {
-
-            // Chevron hide/show body
-            var that = this;
-            $('#' + this.id + ' .hidebody').click(function(evt) {
-                console.log("myHomeCNC : hide/unhide body");
-                if ($('#' + that.id + ' .panel-body').hasClass('hidden') && $('#' + that.id + ' .connect-panel-body').hasClass('hidden')) {
-                    // it's hidden, unhide
-                    that.showBody(evt);
-                }
-                else {
-                    // hide
-                    that.hideBody(evt);
-                }
-            });
-
-            // Ask bootstrap to scan all the buttons in the widget to turn
-            // on popover menus
-            $('#' + this.id + ' .btn').popover({
-                delay: 1000,
-                animation: true,
-                placement: "auto",
-                trigger: "hover",
-                container: 'body'
-            });
-
-            // Init Say Hello Button on Main Toolbar
-            // We are inlining an anonymous method as the callback here
-            // as opposed to a full callback method in the Hello Word 2
-            // example further below. Notice we have to use "that" so
-            // that the this is set correctly inside the anonymous method
-            $('#' + this.id + ' .btn-sayhello').click(function() {
-                console.log("saying hello");
-                // Make sure popover is immediately hidden
-                $('#' + that.id + ' .btn-sayhello').popover("hide");
-                // Show a flash msg
-                chilipeppr.publish(
-                    "/com-chilipeppr-elem-flashmsg/flashmsg",
-                    "Hello Title",
-                    "Hello World from widget " + that.id,
-                    1000
-                );
-            });
-            // Init Hello World 2 button on Tab 1. Notice the use
-            // of the slick .bind(this) technique to correctly set "this"
-            // when the callback is called
-            $('#' + this.id + ' .btn-cnc-estop').dblclick(this.onEStopBtnDblClick.bind(this));
-
-        },
-        formatNumber : function (num, total_lenght, decimals) {
-          
-          // total_lenght includes '.' for decimals
-          if ((typeof num) == "number") {
-            var myNum = num.toFixed(decimals)
-            var zero = total_lenght - myNum.toString().length + 1;
-            return Array(+(zero > 0 && zero)).join("0") + num;
-          } else {
-            return num;
-          }
-        },
-        arrayFill : function (c, len) {
         
-          // Create an array of len items filled with c char
-          var arr = [];
-          while (len--) {
-            arr[len] = c;
-          }
-          return arr;
-        },
-      
-        cncTemperatureChart: function() {
+        // Charts
+        setupCharts: function() {
           var that = this;
           
-          // Object Temperature Chart
+          // Temperature Chart
           var xxx = [65,59,88.2,81,56,55,40];
             
           Chart.defaults.global.defaultFontSize = 8;
@@ -531,61 +442,204 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           var ctx = $('#cnc-temperature-chart'); //.get(0).getContext("2d");
           var myLine = new Chart(ctx, this.temperatureChartConfig);
         },
-        onEStopBtnDblClick: function(evt) {
+        
+        // Setup Event Listeners
+        btnSetup: function() {
+
+          // Chevron hide/show body
+          var that = this;
+            
+          $('#' + this.id + ' .hidebody').click(function(evt) {
+            console.log("myHomeCNC : hide/unhide body");
+            if ($('#' + that.id + ' .panel-body').hasClass('hidden') && $('#' + that.id + ' .connect-panel-body').hasClass('hidden')) {
+              // it's hidden, unhide
+              that.showBody(evt);
+            } else {
+              // hide
+              that.hideBody(evt);
+            }
+          });
+          // Ask bootstrap to scan all the buttons in the widget to turn
+          // on popover menus
+          $('#' + this.id + ' .btn').popover({
+            delay: 1000,
+            animation: true,
+            placement: "auto",
+            trigger: "hover",
+            container: 'body'
+          });
+          // same for buttons in the modal
+          $('#' + this.id + '-modal-settings .btn').popover({
+            delay: 1000,
+            animation: true,
+            placement: "auto",
+            trigger: "hover",
+            container: '#com-chilipeppr-widget-myhomecnc-modal-settings'
+          });
+
+          // Bind events to their functions
+          $('#' + this.id + ' .btn-cnc-log-copy').click(this.copyLog.bind(this));
+          $('#' + this.id + ' .btn-cnc-log-clear').click(this.clearLog.bind(this));
+          $('#' + this.id + '-modal-settings .btn-cnc-log-enable').click(this.toggleLog.bind(this));
+
+          // Event Listeners
+          $('#' + this.id + ' .btn-cnc-estop').dblclick(function() { //e-Stop
+          
+            that.toggleClass('btn-cnc-estop', 'btn-danger', 'btn-warning');
+          
+            if ($('#' + that.id + ' .btn-cnc-estop').text() == ("e-Stop")) { 
+              $('#' + that.id + ' .btn-cnc-estop').text("Reset");
+              that.iseStopActive = true;
+            } else {
+              $('#' + that.id + ' .btn-cnc-estop').text("e-Stop");
+              that.iseStopActive = false;
+            }
+              
+            that.setupPermissions();
+          });
+            
+          $('#' + this.id + ' .sld-uvlight-intensity').on('input', function() { // UVLight slider
+            //$('#' + that.id + ' .cnc-uvlight-intensity').text(that.formatNumber($('#' + that.id + ' .sld-uvlight-intensity').val(), 3, 0) + '%');
+            $('#' + that.id + ' .cnc-uvlight-intensity').text($('#' + that.id + ' .sld-uvlight-intensity').val() + '%');
+          });
+            
+        },
+
+        // Publishing 
+        publishSysMsg: function (msg) {
+          
+          chilipeppr.publish("/" + this.id + "/sys", msg);
+          var now = Date.now();
+          if (this.lastMsg == msg && now - this.lastMsgTime < 20000) {
+            // skip publish
+            console.log("myHomeCNC : skipping publish. same msg or too fast.");
+          } else {
+            chilipeppr.publish("/com-chilipeppr-elem-flashmsg/flashmsg", "myHomeCNC Message", msg);
+            this.lastMsg = msg;
+            this.lastMsgTime = now;
+          }
+        },
+        requestChilipepprInfo: function() {
+          
+          chilipeppr.publish("/com-chilipeppr-widget-serialport/requestStatus"); // callback on /recvStatus
+          chilipeppr.publish("/com-chilipeppr-widget-serialport/getlist"); // callback on /list
+        },
+        publishStatus: function () {
+          
+          chilipeppr.publish("/" + this.id + "/sio/connectionStatus", this.isSioConnected);
+        
+        },
+        publishFeedback: function (key,msg) {
+          
+          chilipeppr.publish("/" + this.id + "/" + key, msg);
+        },
+        //statusWatcher: function () { // CHECK IF NEEDED
+          // This method subscribes to "/sio/sys" and updates the UI with
+          // the latest msg
+        //  chilipeppr.subscribe("/" + this.id + "/sys", this, function (msg) {
+        //    $('.net-delarre-widget-gpio-status .well.well-sm').text(msg); //???
+        //  });
+        //},
+        
+        // Logging functions
+        setupLog: function() { // Init log tab
+          if (this.options.myhomecncLogEnabled) {
+            $('#' + this.id + ' .cnc-debug-log').removeClass('hidden');
+            $('#' + this.id + '-modal-settings .btn-cnc-log-enable').addClass('active');
+            $('#' + this.id + '-modal-settings .btn-cnc-log-enable').addClass('btn-primary');
+          } else if (!this.options.myhomecncLogEnabled) {
+            $('#' + this.id + ' .cnc-debug-log').addClass('hidden');
+            $('#' + this.id + '-modal-settings .btn-cnc-log-enable').removeClass('active');
+            $('#' + this.id + '-modal-settings .btn-cnc-log-enable').removeClass('btn-primary');
+          }
+        },
+        toggleLog: function() { // Debug log btn
+          if (!this.options.myhomecncLogEnabled) {
+            $('#' + this.id + ' .cnc-debug-log').removeClass('hidden');
+            $('#' + this.id + '-modal-settings .btn-cnc-log-enable').addClass('active');
+            $('#' + this.id + '-modal-settings .btn-cnc-log-enable').addClass('btn-primary');
+            this.options.myhomecncLogEnabled = true;
+            this.saveOptionsLocalStorage();
+          } else if (this.options.myhomecncLogEnabled) {
+            $('#' + this.id + ' .cnc-debug-log').addClass('hidden');
+            $('#' + this.id + '-modal-settings .btn-cnc-log-enable').removeClass('active');
+            $('#' + this.id + '-modal-settings .btn-cnc-log-enable').removeClass('btn-primary');
+            this.options.myhomecncLogEnabled = false;
+            this.saveOptionsLocalStorage();
+          }
+        },
+        pubLog: function(origin, dir, key, msg) {
           var that = this;
           
-          if ($('#' + this.id + '-connect-panel').hasClass('hidden')) {
-            $('#' + this.id + '-main-panel').addClass('hidden');
-            $('#' + this.id + '-connect-panel').removeClass('hidden');
-          } else {
-            $('#' + this.id + '-connect-panel').addClass('hidden');
-            $('#' + this.id + '-main-panel').removeClass('hidden');
-            $('#' + this.id + ' .btn-cnc-estop').addClass('btn-danger');
+          if (this.options.myhomecncLogEnabled) {
+            var now = new Date();
+            var mom = now.toLocaleDateString() + "-" + now.getHours() +":" + now.getMinutes() + ":" + now.getSeconds() + "-";
+            if (origin == 'spjs' && dir == 'in') {
+              $('#' + that.id + ' .cnc-log-container').append("<span class='cnc-log-msg cnc-red'>" + mom + "spjs<= {key: " + key + "}, data:{" + msg + "}</span>");
+              console.log("<p class='cnc-red'>" + mom + "spjs< {key: " + key + " , msg: " + msg + "}</p>");
+            } else if (origin == 'spjs' && dir == 'out') {
+              $('#' + that.id + ' .cnc-log-container').append("<span class='cnc-log-msg cnc-purple'>" + mom + "spjs=> {key: " + key + "}, data:{" + msg + "}</span>");
+            } else if (origin == 'sio' && dir == 'in') {
+              $('#' + that.id + ' .cnc-log-container').append("<span class='cnc-log-msg cnc-blue'>" + mom + "socket.io<= {key: " + key + "}, data:{" + msg + "}</span>");
+            } else if (origin == 'sio' && dir == 'out') {
+              $('#' + that.id + ' .cnc-log-container').append("<span class='cnc-log-msg cnc-black'>" + mom + "socket.io=> {key: " + key + "}, data:{" + msg + "}</span>");
+            }
           }
-          if ($('#' + this.id + ' .btn-cnc-estop').hasClass('btn-danger')) { // Activate e-Stop
-            $('#' + this.id + ' .btn-cnc-estop').removeClass('btn-danger');
-            $('#' + this.id + ' .btn-cnc-estop').addClass('btn-success');
-            $('#' + this.id + ' .btn-cnc-estop').text("Reset");
-            // Actions for e-Stop activation
+        },
+        copyLog: function() {
+          
+          var $temp = $("<textarea>");
+              
+          $("body").append($temp);
+          $('#' + this.id + ' .cnc-log-container span').each(function(){
+            $temp.text($temp.text() + $(this).text() + '\r\n');
+          });
+              
+          $temp.select();
+          document.execCommand('copy');
+          $temp.remove();
+        },
+        clearLog: function() {
+          
+          $('#' + this.id + ' .cnc-log-container').empty();
+        },
+        
+        // Useful functions
+        formatNumber : function (num, total_lenght, decimals) {
+          
+          // total_lenght includes '.' for decimals
+          if (!isNaN(Number(num))) {
+            var myNum = Number(num).toFixed(decimals)
+            var zero = total_lenght - myNum.toString().length + 1;
+            return Array(+(zero > 0 && zero)).join("0") + num;
           } else {
-            $('#' + this.id + ' .btn-cnc-estop').removeClass('btn-success');
-            $('#' + this.id + ' .btn-cnc-estop').addClass('btn-danger');
-            $('#' + this.id + ' .btn-cnc-estop').text("e-Stop");
-            // Actions for Reset e-Stop
+            return num;
+          }
+        },
+        arrayFill : function (c, len) {
+        
+          // Create an array of len items filled with c char
+          var arr = [];
+          while (len--) {
+            arr[len] = c;
+          }
+          return arr;
+        },
+        toggleClass : function(elclass, cla, clb) {
+          
+          // Toggle a class of an element given class
+          if ($('#' + this.id + ' .' + elclass).hasClass(cla)) {
+            $('#' + this.id + ' .' + elclass).removeClass(cla);
+            $('#' + this.id + ' .' + elclass).addClass(clb);
+          } else {
+            $('#' + this.id + ' .' + elclass).removeClass(clb);
+            $('#' + this.id + ' .' + elclass).addClass(cla);
           }    
         },
+      
         setupBody: function() {
         	
         	var that = this;
-        	
-        	/* ------------------XBOX Widget for Slider
-        	
-          $("#com-chilipeppr-widget-xbox-settings-container > .cnc-slider").each(function(){
-            if ( this.id == 'com-chilipeppr-widget-xbox-incjog' ) {
-        	    $(this).prev('span').text( this.value / 10 )
-        	  } else {
-              $(this).prev('span').text(this.value)
-        	  }
-          });
-        	
-        	$('#com-chilipeppr-widget-xbox-settings-container > .cnc-slider').on("input", function(e) {
-        	  if ( e.target.id == 'com-chilipeppr-widget-xbox-incjog' ) {
-        	    $(e.target).prev('span').text( $(e.target).val() / 10 )
-        	  } else {
-              $(e.target).prev('span').text( $(e.target).val() )
-        	  }
-          });
-            
-          $('#com-chilipeppr-widget-xbox-settings-container > .cnc-slider').on("change", function(e) {
-            that.options.Deadzone = $('#com-chilipeppr-widget-xbox-deadzone').val();
-            that.options.RateXY = $('#com-chilipeppr-widget-xbox-ratexy').val();
-            that.options.RateZ = $('#com-chilipeppr-widget-xbox-ratez').val();
-            that.options.IncJog = $('#com-chilipeppr-widget-xbox-incjog').val();
-            that.options.RPM = $('#com-chilipeppr-widget-xbox-rpm').val();
-            that.saveOptionsLocalStorage();
-          });
-          
-          -----------------------END of XBOX*/
         },
         /**
          * User options are available in this property for reference by your
@@ -600,47 +654,37 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
          */
         setupUiFromLocalStorage: function() {
 
-            // Read vals from localStorage. Make sure to use a unique
-            // key specific to this widget so as not to overwrite other
-            // widgets' options. By using this.id as the prefix of the
-            // key we're safe that this will be unique.
+          // Read vals from localStorage. Make sure to use a unique
+          // key specific to this widget so as not to overwrite other
+          // widgets' options. By using this.id as the prefix of the
+          // key we're safe that this will be unique.
 
-            // Feel free to add your own keys inside the options
-            // object for your own items
+          // Feel free to add your own keys inside the options
+          // object for your own items
 
-            var options = localStorage.getItem(this.id + '-options');
+          var options = localStorage.getItem(this.id + '-options');
 
-            if (options) {
-                options = $.parseJSON(options);
-                console.log("myHomeCNC : just evaled options: ", options);
-            }
-            else {
-                options = {
-                    showBody: true,
-                    tabShowing: 1,
-                    customParam1: null,
-                    customParam2: 1.0
-                };
-            }
+          if (options) {
+            options = $.parseJSON(options);
+            console.log("myHomeCNC : just evaled options: ", options);
+          } else {
+            options = {
+                showBody: true,
+                tabShowing: 1,
+                customParam1: null,
+                customParam2: 1.0
+            };
+          }
 
-            this.options = options;
-            console.log("myHomeCNC : options:", options);
+          this.options = options;
+          console.log("myHomeCNC : options:", options);
 
-            // show/hide body
-            if (options.showBody) {
-                this.showBody();
-            }
-            else {
-                this.hideBody();
-            }
-            
-            /* ------------------------XBOX
-            $('#com-chilipeppr-widget-xbox-deadzone').val(options.Deadzone);
-            $('#com-chilipeppr-widget-xbox-ratexy').val(options.RateXY);
-            $('#com-chilipeppr-widget-xbox-ratez').val(options.RateZ);
-            $('#com-chilipeppr-widget-xbox-incjog').val(options.IncJog);
-            $('#com-chilipeppr-widget-xbox-rpm').val(options.RPM);
-            ---------------------------END OF XBOX */
+          // show/hide body
+          if (options.showBody) {
+            this.showBody();
+          } else {
+            this.hideBody();
+          }
         },
         /**
          * When a user changes a value that is stored as an option setting, you
@@ -648,14 +692,14 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
          * is correctly set.
          */
         saveOptionsLocalStorage: function() {
-            // You can add your own values to this.options to store them
-            // along with some of the normal stuff like showBody
-            var options = this.options;
+          // You can add your own values to this.options to store them
+          // along with some of the normal stuff like showBody
+          var options = this.options;
 
-            var optionsStr = JSON.stringify(options);
-            console.log("myHomeCNC : saving options:", options, "json.stringify:", optionsStr);
-            // store settings to localStorage
-            localStorage.setItem(this.id + '-options', optionsStr);
+          var optionsStr = JSON.stringify(options);
+          console.log("myHomeCNC : saving options:", options, "json.stringify:", optionsStr);
+          // store settings to localStorage
+          localStorage.setItem(this.id + '-options', optionsStr);
         },
         /**
          * Show the body of the panel.
@@ -666,21 +710,24 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
          * that sent in the param.
          */
         showBody: function(evt) {
-            if (this.isSioConnected) {
-              $('#' + this.id + ' .panel-body').removeClass('hidden');
-            } else {
-              $('#' + this.id + ' .connect-panel-body').removeClass('hidden');
-            }
-            $('#' + this.id + ' .panel-footer').removeClass('hidden');
-            $('#' + this.id + ' .hidebody span').addClass('glyphicon-chevron-up');
-            $('#' + this.id + ' .hidebody span').removeClass('glyphicon-chevron-down');
-            if (!(evt == null)) {
-                this.options.showBody = true;
-                this.saveOptionsLocalStorage();
-            }
-            // this will send an artificial event letting other widgets know to resize
-            // themselves since this widget is now taking up more room since it's showing
-            $(window).trigger("resize");
+          
+          if (this.isSioConnected) {
+            $('#' + this.id + ' .panel-body').removeClass('hidden');
+          } else {
+            $('#' + this.id + ' .connect-panel-body').removeClass('hidden');
+          }
+          
+          $('#' + this.id + ' .panel-footer').removeClass('hidden');
+          $('#' + this.id + ' .hidebody span').addClass('glyphicon-chevron-up');
+          $('#' + this.id + ' .hidebody span').removeClass('glyphicon-chevron-down');
+          
+          if (!(evt == null)) {
+            this.options.showBody = true;
+            this.saveOptionsLocalStorage();
+          }
+          // this will send an artificial event letting other widgets know to resize
+          // themselves since this widget is now taking up more room since it's showing
+          $(window).trigger("resize");
         },
         /**
          * Hide the body of the panel.
@@ -691,18 +738,18 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
          * that sent in the param.
          */
         hideBody: function(evt) {
-            $('#' + this.id + ' .panel-body').addClass('hidden');
-            $('#' + this.id + ' .connect-panel-body').addClass('hidden');
-            $('#' + this.id + ' .panel-footer').addClass('hidden');
-            $('#' + this.id + ' .hidebody span').removeClass('glyphicon-chevron-up');
-            $('#' + this.id + ' .hidebody span').addClass('glyphicon-chevron-down');
-            if (!(evt == null)) {
-                this.options.showBody = false;
-                this.saveOptionsLocalStorage();
-            }
-            // this will send an artificial event letting other widgets know to resize
-            // themselves since this widget is now taking up less room since it's hiding
-            $(window).trigger("resize");
+          $('#' + this.id + ' .panel-body').addClass('hidden');
+          $('#' + this.id + ' .connect-panel-body').addClass('hidden');
+          $('#' + this.id + ' .panel-footer').addClass('hidden');
+          $('#' + this.id + ' .hidebody span').removeClass('glyphicon-chevron-up');
+          $('#' + this.id + ' .hidebody span').addClass('glyphicon-chevron-down');
+          if (!(evt == null)) {
+            this.options.showBody = false;
+            this.saveOptionsLocalStorage();
+          }
+          // this will send an artificial event letting other widgets know to resize
+          // themselves since this widget is now taking up less room since it's hiding
+          $(window).trigger("resize");
         },
         /**
          * This method loads the pubsubviewer widget which attaches to our
@@ -718,26 +765,24 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
          * events.
          */
         forkSetup: function() {
-            var topCssSelector = '#' + this.id;
+          var topCssSelector = '#' + this.id;
 
-            $(topCssSelector + ' .panel-title').popover({
-                title: this.name,
-                content: this.desc,
-                html: true,
-                delay: 1000,
-                animation: true,
-                trigger: 'hover',
-                placement: 'auto'
+          $(topCssSelector + ' .panel-title').popover({
+            title: this.name,
+            content: this.desc,
+            html: true,
+            delay: 1000,
+            animation: true,
+            trigger: 'hover',
+            placement: 'auto'
+          });
+
+          var that = this;
+          chilipeppr.load("http://raw.githubusercontent.com/chilipeppr/widget-pubsubviewer/master/auto-generated-widget.html", function() {
+            require(['inline:com-chilipeppr-elem-pubsubviewer'], function(pubsubviewer) {
+              pubsubviewer.attachTo($(topCssSelector + ' .panel-heading .dropdown-pubsub'), that);
             });
-
-            var that = this;
-            chilipeppr.load("http://raw.githubusercontent.com/chilipeppr/widget-pubsubviewer/master/auto-generated-widget.html", function() {
-                require(['inline:com-chilipeppr-elem-pubsubviewer'], function(pubsubviewer) {
-                    pubsubviewer.attachTo($(topCssSelector + ' .panel-heading .dropdown-pubsub'), that);
-                });
-            });
-
+          });
         },
-
     }
 });
