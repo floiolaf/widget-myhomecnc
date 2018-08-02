@@ -849,7 +849,7 @@
     
     <!-- INIT Modal -->
     <div id="com-chilipeppr-widget-myhomecnc-modal-settings" class="modal fade">
-        <div class="modal-dialog" style="width: 600px">
+        <div class="modal-dialog" style="width: 700px">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -872,9 +872,217 @@
                         <!-- Tab 1 -->
                         <div class="tab-pane active" id="com-chilipeppr-widget-myhomecnc-settings-tab1">
                             <div class="container cnc-settings-container" id="com-chilipeppr-widget-myhomecnc-settings-lasers-container">
-                                <div class="row cnc-row-xs-mix">
-                                    <div class="col-xs-6 cnc-col-xs-mix">
-                                        <div class="cnc-div-s-mix ">
+                                <div class="row cnc-m-row">
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span-dr">UV Laser W1 threshold</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input cnc-mlx-lt1-w1" style="width: 80px" placeholder="000.0" placeholder="000.0" value="" min="30" max="80" step="0.1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">degC</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-xs-1">
+                                        <div class="cnc-m-div pull-right">
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span-dr">HP Laser W1 Threshold</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input cnc-mlx-lt5-w1" style="width: 80px" placeholder="000.0" placeholder="000.0" value="" min="30" max="80" step="0.1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">degC</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row cnc-m-row">
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span-dr">UV Laser W2 Threshold</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input cnc-mlx-lt1-w2" style="width: 80px" placeholder="000.0" placeholder="000.0" value="" min="30" max="80" step="0.1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">degC</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <div class="cnc-m-div pull-right">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span-dr">HP Laser W2Threshold</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input cnc-mlx-lt5-w2" style="width: 80px" placeholder="000.0" placeholder="180" value="" min="30" max="80" step="0.1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">degC</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row cnc-m-row">
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span-dr">UV Laser Z Offset vs D.Abs</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input cnc-ls1-oZ" style="width: 80px" placeholder="000" placeholder="000" value="" min="0" max="250" step="1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">mm</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <div class="cnc-m-div pull-right">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span-dr">HP Laser Z Offset vs D.Abs</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input cnc-ls5-oZ" style="width: 80px" placeholder="000" placeholder="000" value="" min="0" max="250" step="1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">mm</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row cnc-m-row">
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span-dr">UV Laser Focus Threshold</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input cnc-lsf1" style="width: 80px" placeholder="000" placeholder="000" value="" min="0" max="250" step="1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">mm</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <div class="cnc-m-div pull-right">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span-dr">HP Lase Focus Threshold</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input cnc-lsf5" style="width: 80px" placeholder="000" placeholder="000" value="" min="0" max="250" step="1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">mm</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row cnc-m-row">
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span-dr">ToF calibration factor</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input cnc-tof-x" style="width: 80px" placeholder="00.00" placeholder="00.00" value="" min="0" max="99.99" step="0.01">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">mm</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <div class="cnc-m-div pull-right">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span-r">Test Power</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input" style="width: 80px" placeholder="000" placeholder="180" value="" min="0" max="100" step="1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">%</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Tab 2 -->
+                        <div class="tab-pane" id="com-chilipeppr-widget-myhomecnc-settings-tab2">
+                            <div class="container cnc-settings-container" id="com-chilipeppr-widget-myhomecnc-settings-pwm-container">
+                                <div class="row cnc-m-row">
+                                    <div class="col-xs-1">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span"> Hello</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
                                             <div class="input-group">
                                                 <input type="number" class="form-control cnc-m-input" style="width: 80px" placeholder="0.000" placeholder="180" value="" min="0" max="10" step="0.1">
                                                 <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">mm</span>
@@ -883,14 +1091,226 @@
                                                 </span>
                                             </div>
                                         </div>
-                                    </div>    
+                                    </div>
+                                    
+                                    <div class="col-xs-4">
+                                        <div class="cnc-m-div pull-right">
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-xs-1">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span"> Hello</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input" style="width: 80px" placeholder="0.000" placeholder="180" value="" min="0" max="10" step="0.1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">mm</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <!-- Tab 2 -->
-                        <div class="tab-pane" id="com-chilipeppr-widget-myhomecnc-settings-tab2">
-                            <div class="container cnc-settings-container" id="com-chilipeppr-widget-myhomecnc-settings-pwm-container">
-                    
+                                <div class="row cnc-m-row">
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span"> Hello</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input" style="width: 80px" placeholder="0.000" placeholder="180" value="" min="0" max="10" step="0.1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">mm</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <div class="cnc-m-div pull-right">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span"> Hello</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input" style="width: 80px" placeholder="0.000" placeholder="180" value="" min="0" max="10" step="0.1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">mm</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row cnc-m-row">
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span"> Hello</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input" style="width: 80px" placeholder="0.000" placeholder="180" value="" min="0" max="10" step="0.1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">mm</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <div class="cnc-m-div pull-right">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span"> Hello</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input" style="width: 80px" placeholder="0.000" placeholder="180" value="" min="0" max="10" step="0.1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">mm</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row cnc-m-row">
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span"> Hello</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input" style="width: 80px" placeholder="0.000" placeholder="180" value="" min="0" max="10" step="0.1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">mm</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <div class="cnc-m-div pull-right">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span"> Hello</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input" style="width: 80px" placeholder="0.000" placeholder="180" value="" min="0" max="10" step="0.1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">mm</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row cnc-m-row">
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span"> Hello</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input" style="width: 80px" placeholder="0.000" placeholder="180" value="" min="0" max="10" step="0.1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">mm</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <div class="cnc-m-div pull-right">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span"> Hello</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input" style="width: 80px" placeholder="0.000" placeholder="180" value="" min="0" max="10" step="0.1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">mm</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row cnc-m-row">
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span"> Hello</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input" style="width: 80px" placeholder="0.000" placeholder="180" value="" min="0" max="10" step="0.1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">mm</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <div class="cnc-m-div pull-right">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <div class="cnc-m-div pull-right">
+                                            <span class="cnc-m-span"> Hello</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 cnc-m-col">
+                                        <div class="pull-right cnc-m-div">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control cnc-m-input" style="width: 80px" placeholder="0.000" placeholder="180" value="" min="0" max="10" step="0.1">
+                                                <span class="input-group-addon cnc-m-input-label-addon" style="width: 40px">mm</span>
+                                                <span class="input-group-btn cnc-m-input-group-btn-addon">
+                                                    <button class="btn btn-primary cnc-m-input-btn-addon" style="width: 45px" type="button">Send</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                          <!-- Tab 3 -->
