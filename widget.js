@@ -364,6 +364,36 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
         onSioMessage: function () {
         var that = this;
           // to receive anything up : this.sio.on('key', function (event, data) {...}),
+          // ==>MAIN Tab Elements
+          this.sio.on('go_rpm', function(event, data) {
+            $('#' + that.id + ' .cnc-spindle-speed').text(that.formatNumber(data, 5, 0));
+          });
+          this.sio.on('go_tof', function(event, data) {
+            $('#' + that.id + ' .cnc-absolute-distance').text(that.formatNumber(data, 3, 0));
+          });
+          this.sio.on('go_tof_w', function(event, data) {
+            that.setLabelStatus('cnc-absolute-distance', data);
+          });
+          this.sio.on('go_mlx_st_a', function(event, data) {
+            $('#' + that.id + ' .cnc-object-ambient-temperature').text(that.formatNumber(data, 5, 1));
+          });
+          this.sio.on('go_mlx_st', function(event, data) {
+            $('#' + that.id + ' .cnc-object-temperature').text(that.formatNumber(data, 5, 1));
+          });
+          this.sio.on('go_mlx_st_w', function(event, data) {
+            that.setLabelStatus('cnc-object-temperature', data);
+          });
+          this.sio.on('go_mlx_lt_a', function(event, data) {
+            $('#' + that.id + ' .cnc-laser-ambient-temperature').text(that.formatNumber(data, 5, 1));
+          });
+          this.sio.on('go_mlx_lt', function(event, data) {
+            $('#' + that.id + ' .cnc-laser-temperature').text(that.formatNumber(data, 5, 1));
+          });
+          this.sio.on('go_mlx_lt_w', function(event, data) {
+            that.setLabelStatus('cnc-laser-temperature', data);
+          });
+          
+          
           
         },
         setupPermissions: function() {
@@ -624,6 +654,21 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             arr[len] = c;
           }
           return arr;
+        },
+        setLabelStatus : function (elclass, data) {
+          $('#' + this.id + ' .' + elclass).removeClass('label-primary');
+          $('#' + this.id + ' .' + elclass).removeClass('label-warning');
+          $('#' + this.id + ' .' + elclass).removeClass('label-danger');
+          $('#' + this.id + ' .' + elclass).removeClass('label-default');
+          if (data == 0) {
+            $('#' + this.id + ' .' + elclass).addClass('label-primary');
+          } else if (data == 1) {
+            $('#' + this.id + ' .' + elclass).addClass('label-warning');
+          } else if (data == 2) {
+            $('#' + this.id + ' .' + elclass).addClass('label-danger');
+          } else {
+            $('#' + this.id + ' .' + elclass).addClass('label-default');
+          }
         },
         toggleClass : function(elclass, cla, clb) {
           
