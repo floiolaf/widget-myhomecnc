@@ -1045,6 +1045,27 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           this.sio.on('go_mlx_lt_w', function(event, data) {
             that.setLabelStatus('cnc-laser-temperature', data);
           });
+          this.sio.on('go_lsf', function(event, data) {
+            if (data == 0) {
+              $('#' + that.id + ' .cnc-laser-onfocus').removeClass('label-success');
+              $('#' + that.id + ' .cnc-laser-onfocus').removeClass('label-default');
+              $('#' + that.id + ' .cnc-laser-onfocus').addClass('label-primary');
+            } else if (data == 1) {
+              $('#' + that.id + ' .cnc-laser-onfocus').removeClass('label-primary');
+              $('#' + that.id + ' .cnc-laser-onfocus').removeClass('label-default');
+              $('#' + that.id + ' .cnc-laser-onfocus').addClass('label-success');
+            } else {
+              $('#' + that.id + ' .cnc-laser-onfocus').removeClass('label-success');
+              $('#' + that.id + ' .cnc-laser-onfocus').removeClass('label-primary');
+              $('#' + that.id + ' .cnc-laser-onfocus').addClass('label-default');
+            }  
+          });
+          this.sio.on('go_cls1', function(event, data) {
+            $('#' + that.id + ' .cnc-uvlaser_current').text(that.formatNumber(data, 5, 3));
+          });
+          this.sio.on('go_cls1_w', function(event, data) {
+            that.setLabelStatus('cnc-uvlaser_current', data);
+          });
           
           
           
