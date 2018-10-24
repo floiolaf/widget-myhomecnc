@@ -120,6 +120,7 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           this.isSerialConnected = true;
           this.iseStopActive = false;
           this.isPWMAvailable = true;
+          this.cncMode = 5;
           
           // Setup UI
           this.forkSetup();
@@ -364,58 +365,382 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
         onSioMessage: function () {
         var that = this;
           // to receive anything up : this.sio.on('key', function (event, data) {...}),
+          // ==>HEADER
+          this.sio.on('go_mode', function(event, msg) {
+            $('#' + that.id + ' .cnc-mode-toolbar button').each(function() {
+              $(this).removeClass('btn-primary');
+            });
+            $('#opt-cnc-mode' + msg.data).addClass('btn-primary');
+            that.cncMode = msg.data;
+          });
+          
           // ==>MAIN Tab Elements
-          this.sio.on('go_rpm', function(event, data) {
-            $('#' + that.id + ' .cnc-spindle-speed').text(that.formatNumber(data, 5, 0));
+          this.sio.on('go_rpm', function(event, msg) {
+            $('#' + that.id + ' .cnc-spindle-speed').text(that.formatNumber(msg.data, 5, 0));
           });
-          this.sio.on('go_tof', function(event, data) {
-            $('#' + that.id + ' .cnc-absolute-distance').text(that.formatNumber(data, 3, 0));
+          this.sio.on('go_tof', function(event, msg) {
+            $('#' + that.id + ' .cnc-absolute-distance').text(that.formatNumber(msg.data, 3, 0));
           });
-          this.sio.on('go_tof_w', function(event, data) {
-            that.setLabelStatus('cnc-absolute-distance', data);
+          this.sio.on('go_tof_w', function(event, msg) {
+            that.setLabelStatus('cnc-absolute-distance', msg.data);
           });
-          this.sio.on('go_mlx_st_a', function(event, data) {
-            $('#' + that.id + ' .cnc-object-ambient-temperature').text(that.formatNumber(data, 5, 1));
+          this.sio.on('go_mlx_st_a', function(event, msg) {
+            $('#' + that.id + ' .cnc-object-ambient-temperature').text(that.formatNumber(msg.data, 5, 1));
           });
-          this.sio.on('go_mlx_st', function(event, data) {
-            $('#' + that.id + ' .cnc-object-temperature').text(that.formatNumber(data, 5, 1));
+          this.sio.on('go_mlx_st', function(event, msg) {
+            $('#' + that.id + ' .cnc-object-temperature').text(that.formatNumber(msg.data, 5, 1));
           });
-          this.sio.on('go_mlx_st_w', function(event, data) {
-            that.setLabelStatus('cnc-object-temperature', data);
+          this.sio.on('go_mlx_st_w', function(event, msg) {
+            that.setLabelStatus('cnc-object-temperature', msg.data);
           });
-          this.sio.on('go_mlx_lt_a', function(event, data) {
-            $('#' + that.id + ' .cnc-laser-ambient-temperature').text(that.formatNumber(data, 5, 1));
+          this.sio.on('go_mlx_lt_a', function(event, msg) {
+            $('#' + that.id + ' .cnc-laser-ambient-temperature').text(that.formatNumber(msg.data, 5, 1));
           });
-          this.sio.on('go_mlx_lt', function(event, data) {
-            $('#' + that.id + ' .cnc-laser-temperature').text(that.formatNumber(data, 5, 1));
+          this.sio.on('go_mlx_lt', function(event, msg) {
+            $('#' + that.id + ' .cnc-laser-temperature').text(that.formatNumber(msg.data, 5, 1));
           });
-          this.sio.on('go_mlx_lt_w', function(event, data) {
-            that.setLabelStatus('cnc-laser-temperature', data);
+          this.sio.on('go_mlx_lt_w', function(event, msg) {
+            that.setLabelStatus('cnc-laser-temperature', msg.data);
           });
-          this.sio.on('go_lsf', function(event, data) {
-            if (data == 0) {
+          this.sio.on('go_lsf', function(event, msg) {
+            if (msg.data == 0) {
               $('#' + that.id + ' .cnc-laser-onfocus').removeClass('label-success');
-              $('#' + that.id + ' .cnc-laser-onfocus').removeClass('label-default');
-              $('#' + that.id + ' .cnc-laser-onfocus').addClass('label-primary');
-            } else if (data == 1) {
-              $('#' + that.id + ' .cnc-laser-onfocus').removeClass('label-primary');
+              $('#' + that.id + ' .cnc-laser-onfocus').removeClass('label-warning');
+              $('#' + that.id + ' .cnc-laser-onfocus').addClass('label-default');
+            } else if (msg.data == 1) {
+              $('#' + that.id + ' .cnc-laser-onfocus').removeClass('label-warning');
               $('#' + that.id + ' .cnc-laser-onfocus').removeClass('label-default');
               $('#' + that.id + ' .cnc-laser-onfocus').addClass('label-success');
             } else {
               $('#' + that.id + ' .cnc-laser-onfocus').removeClass('label-success');
-              $('#' + that.id + ' .cnc-laser-onfocus').removeClass('label-primary');
-              $('#' + that.id + ' .cnc-laser-onfocus').addClass('label-default');
+              $('#' + that.id + ' .cnc-laser-onfocus').removeClass('label-default');
+              $('#' + that.id + ' .cnc-laser-onfocus').addClass('label-warning');
             }  
           });
-          this.sio.on('go_cls1', function(event, data) {
-            $('#' + that.id + ' .cnc-uvlaser_current').text(that.formatNumber(data, 5, 3));
+          this.sio.on('go_cls1', function(event, msg) {
+            $('#' + that.id + ' .cnc-uvlaser-current').text(that.formatNumber(msg.data, 5, 3));
           });
-          this.sio.on('go_cls1_w', function(event, data) {
-            that.setLabelStatus('cnc-uvlaser_current', data);
+          this.sio.on('go_cls1_w', function(event, msg) {
+            that.setLabelStatus('cnc-uvlaser-current', msg.data);
+          });
+          this.sio.on('go_cls5', function(event, msg) {
+            $('#' + that.id + ' .cnc-hplaser-current').text(that.formatNumber(msg.data, 5, 3));
+          });
+          this.sio.on('go_cls5_w', function(event, msg) {
+            that.setLabelStatus('cnc-hplaser-current', msg.data);
+          });
+          this.sio.on('go_plas_onoff', function(event, msg) {
+            that.setButtonStatus('btn-cnc-plaser', msg.data);
+          });
+          this.sio.on('go_test_laser', function(event, msg) {
+            that.setButtonStatus('btn-cnc-laser-test', msg.data);
+          });
+          // ==>LIGHT Tab Elements
+          this.sio.on('go_rled', function (event, msg) {
+            var r = msg.red;
+            var g = msg.green;
+            var b = msg.blue;
+            $('#' + that.id + ' .cnc-neopixels-rgba').css('background-color', 'rgba(' + r + ',' +  g + ',' + b + ', 1)');
+            $('#' + that.id + ' .btn-cnc-neopixels-newcolor').removeClass('active');
+          });
+          this.sio.on('go_rled_onoff', function(event, msg) {
+            that.setButtonStatus('btn-cnc-neopixels', msg.data);
+          });
+          // ==>UV BOX Tab Elements
+          this.sio.on('go_uv_onoff', function(event, msg) {
+            that.setButtonStatus('btn-cnc-uvlight', msg.data);
+          });
+          this.sio.on('go_uv_buzz', function(event, msg) {
+            that.setButtonStatus('btn-cnc-uvlight-buzzer', msg.data);
+          });
+          this.sio.on('go_uv_time', function(event, msg) {
+            $('#' + that.id + ' .btn-cnc-uvlight-timeset').removeClass('active');
+          });
+          this.sio.on('go_uv_etime', function(event, msg) {
+            $('#' + that.id + ' .cnc-uvlight-etime').text = that.formatNumber(msg.data, 3, 0);
+          });
+          this.sio.on('go_uv_run', function(event, msg) {
+            if (msg.data == 1) {
+              $('#' + that.id + ' .cnc-uvlight-timelabel').text = 'Remaining Time';
+            } else {
+              $('#' + that.id + ' .cnc-uvlight-timelabel').text = 'Time Set';
+            }
+          });
+          this.sio.on('go_uv_int', function(event, msg) {
+            $('#' + that.id + ' .btn-cnc-uvlight-setintensity').removeClass('active');
+            //$('#' + that.id + ' .sld-cnc-uvlight-intensity').data('data-old', msg.data);
+            $('#' + that.id + ' .sld-cnc-uvlight-intensity').val(msg.data).trigger('input');
           });
           
+          // ==>TOOLS Tab Elements
+          this.sio.on('go_vac_onoff', function(event, msg) {
+            that.setButtonStatus('btn-cnc-vac', msg.data);
+          });
+          this.sio.on('go_vac_am', function(event, msg) {
+            if (msg.data == 0) {
+              $('#' + that.id + ' .cnc-vacmode-toolbar button').each(function() {
+                $(this).removeClass('btn-primary');
+              });
+              $('#opt-cnc-vac1').addClass('btn-primary');
+            } else if (msg.data == 1) {
+              $('#' + that.id + ' .cnc-vacmode-toolbar button').each(function() {
+                $(this).removeClass('btn-primary');
+              });
+              $('#opt-cnc-vac2').addClass('btn-primary');
+            } else if (msg.data == 2) {
+              $('#' + that.id + ' .cnc-vacmode-toolbar button').each(function() {
+                $(this).removeClass('btn-primary');
+              });
+              $('#opt-cnc-vac3').addClass('btn-primary');
+            }
+          });
+          this.sio.on('go_actool_onoff', function(event, msg) {
+            that.setButtonStatus('btn-cnc-actool', msg.data);
+          });
+          this.sio.on('go_actool_am', function(event, msg) {
+            if (msg.data == 0) {
+              $('#' + that.id + ' .cnc-actoolmode-toolbar button').each(function() {
+                $(this).removeClass('btn-primary');
+              });
+              $('#opt-cnc-actool1').addClass('btn-primary');
+            } else if (msg.data == 1) {
+              $('#' + that.id + ' .cnc-actoolmode-toolbar button').each(function() {
+                $(this).removeClass('btn-primary');
+              });
+              $('#opt-cnc-actool2').addClass('btn-primary');
+            } else if (msg.data == 2) {
+              $('#' + that.id + ' .cnc-actoolmode-toolbar button').each(function() {
+                $(this).removeClass('btn-primary');
+              });
+              $('#opt-cnc-actool3').addClass('btn-primary');
+            }
+          });
+          this.sio.on('go_adctool_onoff', function(event, msg) {
+            that.setButtonStatus('btn-cnc-dctool', msg.data);
+          });
+          this.sio.on('go_dctool_am', function(event, msg) {
+            if (msg.data == 0) {
+              $('#' + that.id + ' .cnc-dctoolmode-toolbar button').each(function() {
+                $(this).removeClass('btn-primary');
+              });
+              $('#opt-cnc-dctool1').addClass('btn-primary');
+            } else if (msg.data == 1) {
+              $('#' + that.id + ' .cnc-dctoolmode-toolbar button').each(function() {
+                $(this).removeClass('btn-primary');
+              });
+              $('#opt-cnc-dctool2').addClass('btn-primary');
+            } else if (msg.data == 2) {
+              $('#' + that.id + ' .cnc-dctoolmode-toolbar button').each(function() {
+                $(this).removeClass('btn-primary');
+              });
+              $('#opt-cnc-dctool3').addClass('btn-primary');
+            }
+          });
+          this.sio.on('go_dctool_int', function(event, msg) {
+            $('#' + that.id + ' .btn-cnc-dctool-setintensity').removeClass('active');
+            //$('#' + that.id + ' .sld-cnc-dctool-intensity').data('data-old', msg.data);
+            $('#' + that.id + ' .sld-cnc-dctool-intensity').val(msg.data).trigger('input');
+          });
           
+          this.sio.on('go_cinp', function(event, msg) {
+            $('#' + that.id + ' .cnc-acin').text(that.formatNumber(msg.data, 5, 2));
+          });
+          this.sio.on('go_cinp_w', function(event, msg) {
+            that.setLabelStatus('cnc-acin', msg.data);
+          });
+          this.sio.on('go_ldsh_sch', function(event, msg) {
+            $('#ddl-cnc-ls-scheme li').each(function() {
+              $(this).removeClass('active');
+            });
+            $('#' + that.id + ' .li-cnc-ls-scheme' + msg.data).addClass('active');
+            var texto = $('#' + that.id + ' .li-cnc-ls-scheme' + msg.data + ' a').text();
+            var a = texto.indexOf('>');
+            var b = texto.lastIndexOf('>');
+            $('#' + that.id + ' .cnc-ls-s1').text(texto.slice(0, 3));
+            $('#' + that.id + ' .cnc-ls-s2').text(texto.slice(a+2, a+5));
+            $('#' + that.id + ' .cnc-ls-s3').text(texto.slice(b+2, b+5));
+          });
+          this.sio.on('go_ldsh_onoff', function(event, msg) {
+            that.setButtonStatus('btn-cnc-ls-loadshedding', msg.data);
+          });
+          this.sio.on('go_ldsh_t1', function(event, msg) {
+            if (msg.data == 1) {
+              $('#' + that.id + ' .cnc-ls-s1').removeClass('btn-primary');
+              $('#' + that.id + ' .cnc-ls-s1').addClass('btn-danger');
+            } else if (msg.data == 0) {
+              $('#' + that.id + ' .cnc-ls-s1').removeClass('btn-danger');
+              $('#' + that.id + ' .cnc-ls-s1').addClass('btn-primary');
+              $('#' + that.id + ' .btn-cnc-ls-reset').removeClass('active');
+            } 
+          });
+          this.sio.on('go_ldsh_t2', function(event, msg) {
+            if (msg.data == 1) {
+              $('#' + that.id + ' .cnc-ls-s1a').removeClass('btn-primary');
+              $('#' + that.id + ' .cnc-ls-s1a').addClass('btn-danger');
+              $('#' + that.id + ' .cnc-ls-s2').removeClass('btn-primary');
+              $('#' + that.id + ' .cnc-ls-s2').addClass('btn-danger');
+            } else if (msg.data == 0) {
+              $('#' + that.id + ' .cnc-ls-s1a').removeClass('btn-danger');
+              $('#' + that.id + ' .cnc-ls-s1a').addClass('btn-primary');
+              $('#' + that.id + ' .cnc-ls-s2').removeClass('btn-danger');
+              $('#' + that.id + ' .cnc-ls-s2').addClass('btn-primary');
+            } 
+          });
+          this.sio.on('go_ldsh_t3', function(event, msg) {
+            if (msg.data == 1) {
+              $('#' + that.id + ' .cnc-ls-s2a').removeClass('btn-primary');
+              $('#' + that.id + ' .cnc-ls-s2a').addClass('btn-danger');
+              $('#' + that.id + ' .cnc-ls-s3').removeClass('btn-primary');
+              $('#' + that.id + ' .cnc-ls-s3').addClass('btn-danger');
+            } else if (msg.data == 0) {
+              $('#' + that.id + ' .cnc-ls-s2a').removeClass('btn-danger');
+              $('#' + that.id + ' .cnc-ls-s2a').addClass('btn-primary');
+              $('#' + that.id + ' .cnc-ls-s3').removeClass('btn-danger');
+              $('#' + that.id + ' .cnc-ls-s3').addClass('btn-primary');
+            } 
+          });
           
+          // ==>OFFSETS Tab Elements
+          this.sio.on('go_rel', function(event, msg) {
+            if (msg.data == 0) {
+              that.toggleOffsetButtonGroup('btn-cnc-offset-uvlaser');
+            } else if (msg.data == 1) {
+              that.toggleOffsetButtonGroup('btn-cnc-offset-hplaser');
+            } else if (msg.data == 2) {
+              that.toggleOffsetButtonGroup('btn-cnc-offset-pen');
+            } else if (msg.data == 3) {
+              that.toggleOffsetButtonGroup('btn-cnc-offset-dispenser');
+            } else if (msg.data == 4) {
+              that.toggleOffsetButtonGroup('btn-cnc-offset-spindle');
+            }
+          });
+          this.sio.on('go_allowz', function(event, msg) {
+            that.setButtonStatus('btn-cnc-offset-allowzero', msg.data);
+          });
+          this.sio.on('go_pos', function(event, msg) {
+            // HERE GO OFFSET POS ORDER to SPJS - First : msg.spn_x, msg.spn_y -> Second : msg.x, msg.y
+          });
+          
+          // ==>AIR Tab Elements
+          this.sio.on('go_air_onoff', function(event, msg) {
+            that.setButtonStatus('btn-cnc-airsystem', msg.data);
+          });
+          this.sio.on('go_air_am', function(event, msg) {
+            if (msg.data == 0) {
+              $('#' + that.id + ' .cnc-airmode-toolbar button').each(function() {
+                $(this).removeClass('btn-primary');
+              });
+              $('#opt-cnc-airsystem1').addClass('btn-primary');
+            } else if (msg.data == 1) {
+              $('#' + that.id + ' .cnc-airmode-toolbar button').each(function() {
+                $(this).removeClass('btn-primary');
+              });
+              $('#opt-cnc-airsystem2').addClass('btn-primary');
+            }
+          });
+          this.sio.on('go_pinlet', function(event, msg) {
+            $('#' + that.id + ' .cnc-air-inletpressure').text(that.formatNumber(msg.data, 5, 3));
+          });
+          this.sio.on('go_pinlet_w', function(event, msg) {
+            that.setLabelStatus('cnc-air-inletpressure', msg.data);
+          });
+          this.sio.on('go_pvv_onoff', function(event, msg) {
+            that.setButtonStatus('btn-cnc-air-purgevalve', msg.data);
+          });
+          this.sio.on('go_cp_onoff', function(event, msg) {
+            that.setButtonStatus('btn-cnc-air', msg.data);
+          });
+          this.sio.on('go_cp_av', function(event, msg) {
+            if (msg.data == 0) {
+              $('#' + that.id + ' .cnc-air-available').removeClass('label-success');
+              $('#' + that.id + ' .cnc-air-available').addClass('label-default');
+            } else if (msg.data == 1) {
+              $('#' + that.id + ' .cnc-air-available').removeClass('label-default');
+              $('#' + that.id + ' .cnc-air-available').addClass('label-success');
+            } 
+          });
+          this.sio.on('go_cvv_onoff', function(event, msg) {
+            that.setButtonStatus('btn-cnc-air-coolingvalve', msg.data);
+          });
+          this.sio.on('go_dvv_onoff', function(event, msg) {
+            that.setButtonStatus('btn-cnc-air-dispenservalve', msg.data);
+          });
+          this.sio.on('go_pcool', function(event, msg) {
+            $('#' + that.id + ' .cnc-air-coolingpressure').text(that.formatNumber(msg.data, 5, 3));
+          });
+          this.sio.on('go_pcool_w', function(event, msg) {
+            that.setLabelStatus('cnc-air-coolingpressure', msg.data);
+          });
+          this.sio.on('go_pdis', function(event, msg) {
+            $('#' + that.id + ' .cnc-air-dispenserpressure').text(that.formatNumber(msg.data, 5, 3));
+          });
+          this.sio.on('go_pdis_w', function(event, msg) {
+            that.setLabelStatus('cnc-air-dispenserpressure', msg.data);
+          });
+          this.sio.on('go_test_air', function(event, msg) {
+            that.setButtonStatus('btn-cnc-test-air', msg.data);
+          });
+          
+          // ==>CHARTS Tab Elements
+          
+          // ==>CNC Tab Elements
+          this.sio.on('go_spjs', function(event, msg) {
+            that.setSysLabelStatus('cnc-sys-spjs', msg.data);
+          });
+          this.sio.on('go_serial', function(event, msg) {
+            that.setSysLabelStatus('cnc-sys-serial', msg.data);
+          });
+          this.sio.on('go_cam_s1', function(event, msg) {
+            that.setSysLabelStatus('cnc-sys-cam_s1', msg.data);
+          });
+          this.sio.on('go_cam_s2', function(event, msg) {
+            that.setSysLabelStatus('cnc-sys-cam_s2', msg.data);
+          });
+          this.sio.on('go_eth', function(event, msg) {
+            $('#' + that.id + ' .cnc-sys-ethernet').text(msg.data);
+          });
+          this.sio.on('go_wifi', function(event, msg) {
+            $('#' + that.id + ' .cnc-sys-wifi').text(msg.data);
+          });
+          this.sio.on('go_users', function(event, msg) {
+            $('#' + that.id + ' .cnc-sys-socketusers').text(that.formatNumber(msg.data, 2, 0));
+          });
+          this.sio.on('go_mem', function(event, msg) {
+            $('#' + that.id + ' .cnc-sys-memused').text(that.formatNumber(msg.data, 3, 0) + '%');
+          });
+          this.sio.on('go_cpu', function(event, msg) {
+            $('#' + that.id + ' .cnc-sys-cpuused').text(that.formatNumber(msg.data, 3, 0) + '%');
+          });
+          this.sio.on('go_atd', function(event, msg) {
+            $('#' + that.id + ' .cnc-driver-temperature').text(that.formatNumber(msg.data, 5, 1));
+          });
+          this.sio.on('go_atd_w', function(event, msg) {
+            that.setLabelStatus('cnc-driver-temperature', msg.data);
+          });
+          this.sio.on('go_atc', function(event, msg) {
+            $('#' + that.id + ' .cnc-stepper-temperature').text(that.formatNumber(msg.data, 5, 1));
+          });
+          this.sio.on('go_atc_w', function(event, msg) {
+            that.setLabelStatus('cnc-stepper-temperature', msg.data);
+          });
+          this.sio.on('go_atp', function(event, msg) {
+            $('#' + that.id + ' .cnc-power-temperature').text(that.formatNumber(msg.data, 5, 1));
+          });
+          this.sio.on('go_atp_w', function(event, msg) {
+            that.setLabelStatus('cnc-power-temperature', msg.data);
+          });
+          this.sio.on('go_fan_atd', function(event, msg) {
+            that.setSysLabelStatus('cnc-driver-fan', msg.data);
+          });
+          this.sio.on('go_fan_atc', function(event, msg) {
+            that.setSysLabelStatus('cnc-stepper-fan', msg.data);
+          });
+          this.sio.on('go_fan_atp', function(event, msg) {
+            that.setSysLabelStatus('cnc-power-fan', msg.data);
+          });
+          this.sio.on('go_fan_lck', function(event, msg) {
+            that.setSysLabelStatus('cnc-fan-lock', msg.data);
+          });
         },
         setupPermissions: function() {
           var that = this;
@@ -430,25 +755,27 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             if ($('#com-chilipeppr-widget-myhomecnc-modal-settings').hasClass('in')) {
               $('#com-chilipeppr-widget-myhomecnc-modal-settings').modal('hide');
             }
-          } else {
+          } else if (this.isSioConnected) {
             $('#' + this.id + '-connect-panel').addClass('hidden');
             $('#' + this.id + '-main-panel').removeClass('hidden');
             $('#' + this.id + ' .btn-cnc-estop').removeAttr('disabled');
             $('#' + this.id + ' .btn-cnc-settings').removeAttr('disabled');
             
             if (this.iseStopActive) {
-              $('#' + this.id + ' .cnc-btn-g1 button').attr('disabled', 'disabled');
-              $('#' + this.id + ' .cnc-btn-g2 button').attr('disabled', 'disabled');
+              $('#' + this.id + ' .cnc-btn-g1').attr('disabled', 'disabled');
+              $('#' + this.id + ' .cnc-btn-g2').attr('disabled', 'disabled');
               $('#' + this.id + ' .cnc-mode-toolbar button').attr('disabled', 'disabled');
             } else if (!this.iseStopActive){
-              $('#' + this.id + ' .cnc-btn-g1 button').removeAttr('disabled');
+              $('#' + this.id + ' .cnc-btn-g1').removeAttr('disabled');
+              
+              if (!this.isSPJSConnected || !this.isSerialConnected || !this.isPWMAvailable) {
+                $('#' + this.id + ' .cnc-btn-g2').attr('disabled', 'disabled');
+                $('#' + this.id + ' .cnc-mode-toolbar button').attr('disabled', 'disabled');
+              } else if (this.isSPJSConnected && this.isSerialConnected && this.isPWMAvailable) {
+                $('#' + this.id + ' .cnc-btn-g2').removeAttr('disabled');
+              }
             }
-            if (!this.isSPJSConnected || !this.isSerialConnected || !this.isPWMAvailable) {
-              $('#' + this.id + ' .cnc-btn-g2 button').attr('disabled', 'disabled');
-              $('#' + this.id + ' .cnc-mode-toolbar button').attr('disabled', 'disabled');
-            } else if (this.isSPJSConnected && this.isSerialConnected && this.isPWMAvailable) {
-              $('#' + this.id + ' .cnc-btn-g2 button').attr('disabled', 'disabled');
-            }
+            
             if (!this.iseStopActive && this.isSPJSConnected && this.isSerialConnected && this.isPWMAvailable) {
               $('#' + this.id + ' .cnc-mode-toolbar button').removeAttr('disabled');
             }
@@ -527,33 +854,374 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
             trigger: "hover",
             container: '#com-chilipeppr-widget-myhomecnc-modal-settings'
           });
-
+          // respect min/max of a text field
+          $('input[type="number"]').on('input', function() {
+            if ($(this).val() > $(this).attr('max')*1) {
+              $(this).val($(this).attr('max')); 
+            } else if ($(this).val() < $(this).attr('min')*1) {
+              $(this).val($(this).attr('min'));
+            }
+          });
           // Bind events to their functions
-          $('#' + this.id + ' .btn-cnc-log-copy').click(this.copyLog.bind(this));
-          $('#' + this.id + ' .btn-cnc-log-clear').click(this.clearLog.bind(this));
-          $('#' + this.id + '-modal-settings .btn-cnc-log-enable').click(this.toggleLog.bind(this));
-
           // Event Listeners
-          $('#' + this.id + ' .btn-cnc-estop').dblclick(function() { //e-Stop
           
-            that.toggleClass('btn-cnc-estop', 'btn-danger', 'btn-warning');
+          // ==> HEADER Events
+          $('#' + this.id + ' .btn-cnc-estop').on('dblclick', function() { //e-Stop
           
-            if ($('#' + that.id + ' .btn-cnc-estop').text() == ("e-Stop")) { 
-              $('#' + that.id + ' .btn-cnc-estop').text("Reset");
+            if (($(this).text() == "e-Stop") && !that.iseStopActive) { 
+              that.toggle2Class($(this), 'btn-danger', 'btn-warning');
+              $(this).text("Reset");
               that.iseStopActive = true;
-            } else {
-              $('#' + that.id + ' .btn-cnc-estop').text("e-Stop");
+            } else if (($(this).text() == "Reset") && that.iseStopActive) {
+              that.toggle2Class($(this), 'btn-danger', 'btn-warning');
+              $(this).text("e-Stop");
               that.iseStopActive = false;
             }
               
             that.setupPermissions();
           });
-            
-          $('#' + this.id + ' .sld-uvlight-intensity').on('input', function() { // UVLight slider
-            //$('#' + that.id + ' .cnc-uvlight-intensity').text(that.formatNumber($('#' + that.id + ' .sld-uvlight-intensity').val(), 3, 0) + '%');
-            $('#' + that.id + ' .cnc-uvlight-intensity').text($('#' + that.id + ' .sld-uvlight-intensity').val() + '%');
+          
+          // ==> MAIN Tab events
+          $('#' + this.id + ' .btn-cnc-plaser').on('click', function() { //toggle Position Lasers
+            that.toggleClass($(this), 'active');
+            that.sioSend('gi_plas_onoff', 1);
           });
-            
+          $('#' + this.id + ' .btn-cnc-test-laser').on('click', function() { //toggle Test Lasers
+            that.toggleClass($(this), 'active');
+            that.sioSend('gi_test_laser', 1);
+          });
+          
+          // ==> LIGHT Tab events
+          $('#' + this.id + ' .sld-cnc-neopixels-red').on('input', function() { // Red slider
+            $('#' + that.id + ' .cnc-neopixels-red').text($(this).val());
+            var r = $('#' + that.id + ' .sld-cnc-neopixels-red').val();
+            var g = $('#' + that.id + ' .sld-cnc-neopixels-green').val();
+            var b = $('#' + that.id + ' .sld-cnc-neopixels-blue').val();
+            $('#' + that.id + ' .cnc-neopixels-newrgba').css('background-color', 'rgba(' + r + ',' +  g + ',' + b + ', 1)');
+          });
+          $('#' + this.id + ' .sld-cnc-neopixels-green').on('input', function() { // Green slider
+            $('#' + that.id + ' .cnc-neopixels-green').text($(this).val());
+            var r = $('#' + that.id + ' .sld-cnc-neopixels-red').val();
+            var g = $('#' + that.id + ' .sld-cnc-neopixels-green').val();
+            var b = $('#' + that.id + ' .sld-cnc-neopixels-blue').val();
+            $('#' + that.id + ' .cnc-neopixels-newrgba').css('background-color', 'rgba(' + r + ',' +  g + ',' + b + ', 1)');
+          });
+          $('#' + this.id + ' .sld-cnc-neopixels-blue').on('input', function() { // Blue slider
+            $('#' + that.id + ' .cnc-neopixels-blue').text($(this).val());
+            var r = $('#' + that.id + ' .sld-cnc-neopixels-red').val();
+            var g = $('#' + that.id + ' .sld-cnc-neopixels-green').val();
+            var b = $('#' + that.id + ' .sld-cnc-neopixels-blue').val();
+            $('#' + that.id + ' .cnc-neopixels-newrgba').css('background-color', 'rgba(' + r + ',' +  g + ',' + b + ', 1)');
+          });
+          $('#' + this.id + ' .btg-cnc-neopixels-pswhite').on('click', function() { //White color
+            //$('#' + that.id + ' .sld-cnc-neopixels-red').val(255).trigger('input');
+            //$('#' + that.id + ' .sld-cnc-neopixels-green').val(255).trigger('input');
+            //$('#' + that.id + ' .sld-cnc-neopixels-blue').val(255).trigger('input');
+            that.sioSend('gi_rled', {red: 255, green: 255, blue: 255});
+          });
+          $('#' + this.id + ' .btg-cnc-neopixels-psred').on('click', function() { //Red color
+            that.sioSend('gi_rled', {red: 255, green: 0, blue: 0});
+          });
+          $('#' + this.id + ' .btg-cnc-neopixels-psgreen').on('click', function() { //Red color
+            that.sioSend('gi_rled', {red: 0, green: 255, blue: 0});
+          });
+          $('#' + this.id + ' .btg-cnc-neopixels-psblue').on('click', function() { //Blue color
+            that.sioSend('gi_rled', {red: 0, green: 0, blue: 255});
+          });
+          $('#' + this.id + ' .btg-cnc-neopixels-psyellow').on('click', function() { //Yellow color
+            that.sioSend('gi_rled', {red: 255, green: 255, blue: 0});
+          });
+          $('#' + this.id + ' .btg-cnc-neopixels-pspurple').on('click', function() { //Purple color
+            that.sioSend('gi_rled', {red: 127, green: 0, blue: 127});
+          });
+          $('#' + this.id + ' .btg-cnc-neopixels-psorange').on('click', function() { //Orange color
+            that.sioSend('gi_rled', {red: 255, green: 127, blue: 0});
+          });
+          $('#' + this.id + ' .btn-cnc-neopixels-newcolor').on('click', function() { //Set new color
+            if ($('#' + that.id + ' .cnc-neopixels-rgba').css('background-color') != $('#' + that.id + ' .cnc-neopixels-newrgba').css('background-color')) {
+              $(this).addClass('active');
+              var r = $('#' + that.id + ' .sld-cnc-neopixels-red').val();
+              var g = $('#' + that.id + ' .sld-cnc-neopixels-green').val();
+              var b = $('#' + that.id + ' .sld-cnc-neopixels-blue').val();
+              that.sioSend('gi_rled', {red: r, green: g, blue: b, bright: 1});
+            }
+          });
+          $('#' + this.id + ' .btn-cnc-neopixels').on('click', function() { //toggle Round Led
+            that.toggleClass($(this), 'active');
+            that.sioSend('gi_rled_onoff', 1);
+          });
+          
+          // ==> UV BOX Tab Events  
+          $('#' + this.id + ' .sld-uvlight-intensity').on('input', function() { // UVLight Intensity Slider
+            $('#' + that.id + ' .cnc-uvlight-intensity').text($(this).val() + '%');
+          });
+          $('#' + this.id + ' .btn-cnc-uvlight').on('click', function() { //Toggle UV Light
+            that.toggleClass($(this), 'active');
+            that.sioSend('gi_uv_onoff', 1);
+          });
+          $('#' + this.id + ' .btn-cnc-uvlight').on('click', function() { //Set UV Intensity
+            $(this).addClass('active');
+            that.sioSend('gi_uv_int', $('#' + this.id + ' .sld-uvlight-intensity').val());
+          });
+          $('#' + this.id + ' .btn-cnc-uvlight-buzzer').on('click', function() { //Toggle Buzz on Complete
+            that.toggleClass($(this), 'active');
+            that.sioSend('gi_uv_buzz', 1);
+          });
+          $('#' + this.id + ' .btn-cnc-uvlight-timeset').on('click', function() { //Time Set (from input)
+            if (!$('#' + this.id + ' .btn-cnc-uvlight').hasClass('active')) {
+              $(this).addClass('active');
+              that.sioSend('gi_uv_time', $('#' + this.id + ' .inb-cnc-uvlight-newtime').val());
+            }
+          });
+          $('#' + this.id + ' .btg-cnc-uvlight-time60').on('click', function() { //Time Set 60s
+            if (!$('#' + this.id + ' .btn-cnc-uvlight').hasClass('active')) {
+              that.sioSend('gi_uv_time', 60);
+            }
+          });
+          $('#' + this.id + ' .btg-cnc-uvlight-time120').on('click', function() { //Time Set 120s
+            if (!$('#' + this.id + ' .btn-cnc-uvlight').hasClass('active')) {
+              that.sioSend('gi_uv_time', 120);
+            }
+          });
+          $('#' + this.id + ' .btg-cnc-uvlight-time180').on('click', function() { //Time Set 180s
+            if (!$('#' + this.id + ' .btn-cnc-uvlight').hasClass('active')) {
+              that.sioSend('gi_uv_time', 180);
+            }
+          });
+          $('#' + this.id + ' .btg-cnc-uvlight-time300').on('click', function() { //Time Set 300s
+            if (!$('#' + this.id + ' .btn-cnc-uvlight').hasClass('active')) {
+              that.sioSend('gi_uv_time', 300);
+            }
+          });
+          $('#' + this.id + ' .btg-cnc-uvlight-time420').on('click', function() { //Time Set 420s
+            if (!$('#' + this.id + ' .btn-cnc-uvlight').hasClass('active')) {
+              that.sioSend('gi_uv_time', 420);
+            }
+          });
+          $('#' + this.id + ' .btg-cnc-uvlight-time600').on('click', function() { //Time Set 600s
+            if (!$('#' + this.id + ' .btn-cnc-uvlight').hasClass('active')) {
+              that.sioSend('gi_uv_time', 600);
+            }
+          });
+          $('#' + this.id + ' .btn-cnc-uvlight-reset').on('click', function() { //Reset Timer
+            if (!$('#' + this.id + ' .btn-cnc-uvlight').hasClass('active')) {
+              $(this).addClass('active');
+              that.sioSend('gi_uv_ack', 1);
+            }
+          });
+          
+          // ==> TOOLS Tab events
+          $('#opt-cnc-vac1').on('click', function() { //VAC Mode
+            $('#' + that.id + ' .cnc-vacmode-toolbar button').each(function() {
+              $(this).removeClass('active');
+              //$(this).removeClass('btn-primary');
+            });
+            $(this).addClass('active');
+            //$(this).addClass('btn-primary')
+            that.sioSend('gi_vac_am', 0);
+          });
+          $('#opt-cnc-vac2').on('click', function() { //VAC Mode
+            $('#' + that.id + ' .cnc-vacmode-toolbar button').each(function() {
+              $(this).removeClass('active');
+              //$(this).removeClass('btn-primary');
+            });
+            $(this).addClass('active');
+            //$(this).addClass('btn-primary')
+            that.sioSend('gi_vac_am', 1);
+          });
+          $('#opt-cnc-vac3').on('click', function() { //VAC Mode
+            $('#' + that.id + ' .cnc-vacmode-toolbar button').each(function() {
+              $(this).removeClass('active');
+              //$(this).removeClass('btn-primary');
+            });
+            $(this).addClass('active');
+            //$(this).addClass('btn-primary')
+            that.sioSend('gi_vac_am', 2);
+          });
+          $('#' + this.id + ' .btn-cnc-vac').on('click', function() { //toggle VAC
+            that.toggleClass($(this), 'active');
+            that.sioSend('gi_vac_onoff', 1);
+          });
+          $('#opt-cnc-actool1').on('click', function() { //ACTool Mode
+            $('#' + that.id + ' .cnc-actoolmode-toolbar button').each(function() {
+              $(this).removeClass('active');
+              //$(this).removeClass('btn-primary');
+            });
+            $(this).addClass('active');
+            //$(this).addClass('btn-primary')
+            that.sioSend('gi_actool_am', 0);
+          });
+          $('#opt-cnc-actool2').on('click', function() { //ACTool Mode
+            $('#' + that.id + ' .cnc-actoolmode-toolbar button').each(function() {
+              $(this).removeClass('active');
+              //$(this).removeClass('btn-primary');
+            });
+            $(this).addClass('active');
+            //$(this).addClass('btn-primary')
+            that.sioSend('gi_actool_am', 1);
+          });
+          $('#opt-cnc-actool3').on('click', function() { //ACTool Mode
+            $('#' + that.id + ' .cnc-actoolmode-toolbar button').each(function() {
+              $(this).removeClass('active');
+              //$(this).removeClass('btn-primary');
+            });
+            $(this).addClass('active');
+            //$(this).addClass('btn-primary')
+            that.sioSend('gi_actool_am', 2);
+          });
+          $('#' + this.id + ' .btn-cnc-actool').on('click', function() { //toggle ACTool
+            that.toggleClass($(this), 'active');
+            that.sioSend('gi_actool_onoff', 1);
+          });
+          $('#opt-cnc-dctool1').on('click', function() { //DCTool Mode
+            $('#' + that.id + ' .cnc-dctoolmode-toolbar button').each(function() {
+              $(this).removeClass('active');
+              //$(this).removeClass('btn-primary');
+            });
+            $(this).addClass('active');
+            //$(this).addClass('btn-primary')
+            that.sioSend('gi_dctool_am', 0);
+          });
+          $('#opt-cnc-dctool2').on('click', function() { //DCTool Mode
+            $('#' + that.id + ' .cnc-dctoolmode-toolbar button').each(function() {
+              $(this).removeClass('active');
+              //$(this).removeClass('btn-primary');
+            });
+            $(this).addClass('active');
+            //$(this).addClass('btn-primary')
+            that.sioSend('gi_dctool_am', 1);
+          });
+          $('#opt-cnc-dctool3').on('click', function() { //DCTool Mode
+            $('#' + that.id + ' .cnc-dctoolmode-toolbar button').each(function() {
+              $(this).removeClass('active');
+              //$(this).removeClass('btn-primary');
+            });
+            $(this).addClass('active');
+            //$(this).addClass('btn-primary')
+            that.sioSend('gi_dctool_am', 2);
+          });
+          $('#' + this.id + ' .btn-cnc-dctool').on('click', function() { //toggle DCTool
+            that.toggleClass($(this), 'active');
+            that.sioSend('gi_dctool_onoff', 1);
+          });
+          
+          $('#' + this.id + ' .sld-dctool-intensity').on('input', function() { //DCTool Intensity slider
+            $('#' + that.id + ' .cnc-dctool-intensity').text($(this).val() + '%');
+          });
+          $('#' + this.id + ' .btn-cnc-dctool-setintensity').on('click', function() { //Set UV Intensity
+            $(this).addClass('active');
+            that.sioSend('gi_dctool_int', $('#' + this.id + ' .sld-dctool-intensity').val());
+          });
+          $('#' + this.id + ' .btn-cnc-ls-loadshedding').on('click', function() { //toggle Load Shedding
+            that.toggleClass($(this), 'active');
+            that.sioSend('gi_ldsh_onoff', 1);
+          });
+          $('#ddl-cnc-ls-scheme li a').on('click', function() { //DDL Shutdown Sequence
+            //$('#ddl-cnc-ls-scheme li').each(function() {
+            //  $(this).removeClass('active');
+            //});
+            //$(this).closest('li').addClass('active');
+            var idx = $(this).closest('li').index();
+            //var texto = $(this).text();
+            //var a = texto.indexOf('>');
+            //var b = texto.lastIndexOf('>');
+            //$('#' + that.id + ' .cnc-ls-s1').text(texto.slice(0, 3));
+            //$('#' + that.id + ' .cnc-ls-s2').text(texto.slice(a+2, a+5));
+            //$('#' + that.id + ' .cnc-ls-s3').text(texto.slice(b+2, b+5));
+            that.sioSend('gi_ldsh_sch', idx);
+          });
+          $('#' + this.id + ' .btn-cnc-ls-reset').on('click', function() { //LDSH Reset
+            $(this).addClass('active');
+            that.sioSend('gi_ldsh_reset', 1);
+          });
+          
+          // ==> OFFSETS Tab events
+          $('#' + this.id + ' .btn-cnc-offset-uvlaser').on('click', function() { //UV Laser Offset
+            $(this).addClass('active');
+            that.sioSend('gi_ls1_pos', 1);
+          });
+          $('#' + this.id + ' .btn-cnc-offset-hplaser').on('click', function() { //HPLaser Offset
+            $(this).addClass('active');
+            that.sioSend('gi_ls5_pos', 1);
+          });
+          $('#' + this.id + ' .btn-cnc-offset-pen').on('click', function() { //Pen Offset
+            $(this).addClass('active');
+            that.sioSend('gi_pen_pos', 1);
+          });
+          $('#' + this.id + ' .btn-cnc-offset-dispenser').on('click', function() { //Dispenser Offset
+            $(this).addClass('active');
+            that.sioSend('gi_dis_pos', 1);
+          });
+          $('#' + this.id + ' .btn-cnc-offset-spindle').on('click', function() { //Spindle Offset
+            $(this).addClass('active');
+            that.sioSend('gi_spn_pos', 1);
+          });
+          $('#' + this.id + ' .btn-cnc-offset-allowzero').on('click', function() { //Allow Zeroing
+            that.toggleClass($(this), 'active');
+            that.sioSend('gi_allowz', 1);
+          });
+          
+          // ==> AIR Tab events
+          $('#' + this.id + ' .btn-cnc-airsystem').on('click', function() { //Toggle Air System
+            that.toggleClass($(this), 'active');
+            that.sioSend('gi_air_onoff', 1);
+          });
+          $('#opt-cnc-airsystem1').on('click', function() { //Air System Manual Mode
+            $('#' + that.id + ' .cnc-airmode-toolbar button').each(function() {
+              $(this).removeClass('active');
+              //$(this).removeClass('btn-primary');
+            });
+            $(this).addClass('active');
+            //$(this).addClass('btn-primary')
+            that.sioSend('gi_air_am', 0);
+          });
+          $('#opt-cnc-airsystem2').on('click', function() { //Air System Auto Mode
+            $('#' + that.id + ' .cnc-airmode-toolbar button').each(function() {
+              $(this).removeClass('active');
+              //$(this).removeClass('btn-primary');
+            });
+            $(this).addClass('active');
+            //$(this).addClass('btn-primary')
+            that.sioSend('gi_air_am', 1);
+          });
+          $('#' + this.id + ' .btn-cnc-air-purgevalve').on('click', function() { //Purge Valve Open/Close
+            that.toggleClass($(this), 'active');
+            that.sioSend('gi_pvv_onoff', 1);
+          });
+          $('#' + this.id + ' .btn-cnc-air').on('click', function() { //Toggle Air Compressor
+            that.toggleClass($(this), 'active');
+            that.sioSend('gi_cp_onoff', 1);
+          });
+          $('#' + this.id + ' .btn-cnc-air-coolingvalve').on('click', function() { //Cooling Valve Open/Close
+            that.toggleClass($(this), 'active');
+            that.sioSend('gi_cvv_onoff', 1);
+          });
+          $('#' + this.id + ' .btn-cnc-air-dispenservalve').on('click', function() { //Dispenser Valve Open/Close
+            that.toggleClass($(this), 'active');
+            that.sioSend('gi_dvv_onoff', 1);
+          });
+          $('#' + this.id + ' .btn-cnc-test-air').on('click', function() { //Toggle Test Air System
+            that.toggleClass($(this), 'active');
+            that.sioSend('gi_test-air', 1);
+          });
+          
+          // ==> CHARTS Tab events
+          
+          // ==> CNC Tab events
+          $('#' + this.id + ' .btn-cnc-sys-spjs').on('dblclick', function() { //Restart SPJS
+            that.sioSend('gi_spjs', 1);
+          });
+           $('#' + this.id + ' .btn-cnc-sys-cam-s1').on('dblclick', function() { //Restart Cam A Server (Spindle)
+            that.sioSend('gi_cam_s1', 1);
+          });
+           $('#' + this.id + ' .btn-cnc-sys-cam-s2').on('dblclick', function() { //Restart Cam B Server (Laser)
+            that.sioSend('gi_cam_s2', 1);
+          });
+
+          // ==> LOG Tab Events
+          $('#' + this.id + ' .btn-cnc-log-copy').click(this.copyLog.bind(this));
+          $('#' + this.id + ' .btn-cnc-log-clear').click(this.clearLog.bind(this));
+          $('#' + this.id + '-modal-settings .btn-cnc-log-enable').click(this.toggleLog.bind(this));
         },
 
         // Publishing 
@@ -677,30 +1345,72 @@ cpdefine("inline:com-chilipeppr-widget-myhomecnc", ["chilipeppr_ready", "Chart",
           return arr;
         },
         setLabelStatus : function (elclass, data) {
-          $('#' + this.id + ' .' + elclass).removeClass('label-primary');
-          $('#' + this.id + ' .' + elclass).removeClass('label-warning');
-          $('#' + this.id + ' .' + elclass).removeClass('label-danger');
-          $('#' + this.id + ' .' + elclass).removeClass('label-default');
+          $('#' + this.id + ' .'+ elclass).removeClass('label-primary');
+          $('#' + this.id + ' .'+ elclass).removeClass('label-warning');
+          $('#' + this.id + ' .'+ elclass).removeClass('label-danger');
+          $('#' + this.id + ' .'+ elclass).removeClass('label-default');
           if (data == 0) {
-            $('#' + this.id + ' .' + elclass).addClass('label-primary');
+            $('#' + this.id + ' .'+ elclass).addClass('label-primary');
           } else if (data == 1) {
-            $('#' + this.id + ' .' + elclass).addClass('label-warning');
+            $('#' + this.id + ' .'+ elclass).addClass('label-warning');
           } else if (data == 2) {
-            $('#' + this.id + ' .' + elclass).addClass('label-danger');
+            $('#' + this.id + ' .'+ elclass).addClass('label-danger');
           } else {
-            $('#' + this.id + ' .' + elclass).addClass('label-default');
+            $('#' + this.id + ' .'+ elclass).addClass('label-default');
           }
         },
-        toggleClass : function(elclass, cla, clb) {
+        setButtonStatus : function (elclass, data) {
+          if (data == 1) {
+            $('#' + this.id + ' .'+ elclass).addClass('active');
+            $('#' + this.id + ' .'+ elclass).removeClass('btn-default');
+            $('#' + this.id + ' .'+ elclass).addClass('btn-primary');
+          } else {
+            $('#' + this.id + ' .'+ elclass).removeClass('active');
+            $('#' + this.id + ' .'+ elclass).removeClass('btn-primary');
+            $('#' + this.id + ' .'+ elclass).addClass('btn-default');
+          }
+        },
+        toggle2Class : function(elclass, cla, clb) {
           
           // Toggle a class of an element given class
-          if ($('#' + this.id + ' .' + elclass).hasClass(cla)) {
-            $('#' + this.id + ' .' + elclass).removeClass(cla);
-            $('#' + this.id + ' .' + elclass).addClass(clb);
+          if (elclass.hasClass(cla)) {
+            elclass.removeClass(cla);
+            elclass.addClass(clb);
           } else {
-            $('#' + this.id + ' .' + elclass).removeClass(clb);
-            $('#' + this.id + ' .' + elclass).addClass(cla);
+            elclass.removeClass(clb);
+            elclass.addClass(cla);
           }    
+        },
+        toggleClass : function(elclass, cla) {
+          
+          // Toggle a class of an element given class
+          if (elclass.hasClass(cla)) {
+            elclass.removeClass(cla);
+          } else {
+            elclass.addClass(cla);
+          }    
+        },
+        toggleOffsetButtonGroup : function(elclass) {
+          
+          $('#' + this.id + ' .btn-offset-group').removeClass('active');
+          $('#' + this.id + ' .btn-offset-group').removeClass('btn-primary');
+          $('#' + this.id + ' .' + elclass).addClass('active');
+          $('#' + this.id + ' .' + elclass).addClass('btn-primary');
+        },
+        setSysLabelStatus: function(elclass, data) {
+          if (data == 0) {
+            $('#' + this.id + ' .'+ elclass).removeClass('label-success');
+            $('#' + this.id + ' .'+ elclass).removeClass('label-danger');
+            $('#' + this.id + ' .'+ elclass).addClass('label-default');
+          } else if (data == 1) {
+            $('#' + this.id + ' .'+ elclass).removeClass('label-default');
+            $('#' + this.id + ' .'+ elclass).removeClass('label-danger');
+            $('#' + this.id + ' .'+ elclass).addClass('label-success');
+          } else if (data == 3) {
+            $('#' + this.id + ' .'+ elclass).removeClass('label-default');
+            $('#' + this.id + ' .'+ elclass).removeClass('label-success');
+            $('#' + this.id + ' .'+ elclass).addClass('label-danger');
+          }
         },
       
         setupBody: function() {

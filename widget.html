@@ -56,11 +56,11 @@
             </div><span class="panel-title" data-toggle="popover">myHomeCNC </span> <span style="font-size:9px;" class="fb-build">v1</span>
             <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group cnc-mode-toolbar" style="height:30px; padding-top: 2px" role="group">   
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-mill" id="opt-cnc-mode1" disabled='disabled' data-title="" data-content="Set mode Mill">Mill</button>
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-uvlaser" id="opt-cnc-mode2" disabled='disabled' data-title="" data-content="Set mode UV Laser">UV Laser</button>
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-hplaser" id="opt-cnc-mode3" disabled='disabled' data-title="" data-content="Set mode High-Power Laser">HP Laser</button>
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-pen" id="opt-cnc-mode4" disabled='disabled' data-title="" data-content="Set mode Pen">Pen</button>
-                    <button type="button" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-dispenser" id="opt-cnc-mode5" disabled='disabled' data-title="" data-content="Set mode Dispenser">Dispenser</button>
+                    <button type="button" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-mill" id="opt-cnc-mode0" disabled='disabled' data-title="" data-content="Set mode Mill">Mill</button>
+                    <button type="button" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-uvlaser" id="opt-cnc-mode1" disabled='disabled' data-title="" data-content="Set mode UV Laser">UV Laser</button>
+                    <button type="button" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-hplaser" id="opt-cnc-mode2" disabled='disabled' data-title="" data-content="Set mode High-Power Laser">HP Laser</button>
+                    <button type="button" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-pen" id="opt-cnc-mode3" disabled='disabled' data-title="" data-content="Set mode Pen">Pen</button>
+                    <button type="button" class="btn btn-xs btn-default btn-cncmode btg-cnc-mode-dispenser" id="opt-cnc-mode4" disabled='disabled' data-title="" data-content="Set mode Dispenser">Dispenser</button>
                 </div>
                 <!--<div class="cnc-loader pull-right"></div>-->
             </div>
@@ -136,7 +136,7 @@
                         <div class="row cnc-row-s-mix">
                             <div class="col-xs-6 cnc-col-s-mix">
                                 <div class="cnc-div-s-mix pull-left">
-                                    <button type="button" class="btn btn-s cnc-button-s-xxxl btn-success cnc-btn-g1 btn-cnc-plaser" style="" data-title="" data-content="Toggle Position Lasers">Position Lasers</button>     
+                                    <button type="button" class="btn btn-s cnc-button-s-xxxl btn-default cnc-btn-g1 btn-cnc-plaser" style="" data-title="" data-content="Toggle Position Lasers">Position Lasers</button>     
                                 </div>
                             </div>
                             <div class="col-xs-6 cnc-col-s-mix">
@@ -254,17 +254,17 @@
                         <div class="row cnc-row-s-label">
                             <div class="col-xs-3 cnc-col-s-label">
                                 <div class="cnc-div-s-label pull-left">
-                                    <span class="cnc-span-s cnc-space-right cnc-blue">Blue</span><span class="label cnc-label-s label-primary cnc-neopixels-blue" style="min-width: 50px">100%</span>
+                                    <span class="cnc-span-s cnc-space-right cnc-red">Red</span><span class="label cnc-label-s label-primary cnc-neopixels-red" style="min-width: 50px">127</span>
                                 </div>
                             </div>
                             <div class="col-xs-3 cnc-col-s-label">
                                 <div class="cnc-div-s-label pull-left">
-                                    <span class="cnc-span-s cnc-space-right cnc-red">Red</span><span class="label cnc-label-s label-primary cnc-neopixels-red" style="min-width: 50px">100%</span>
+                                    <span class="cnc-span-s cnc-space-right cnc-green">Green</span><span class="label cnc-label-s label-primary cnc-neopixels-green" style="min-width: 50px">127</span>
                                 </div>
                             </div>
                             <div class="col-xs-3 cnc-col-s-label">
                                 <div class="cnc-div-s-label pull-left">
-                                    <span class="cnc-span-s cnc-space-right cnc-green">Green</span><span class="label cnc-label-s label-primary cnc-neopixels-green" style="min-width: 50px">100%</span>
+                                    <span class="cnc-span-s cnc-space-right cnc-blue">Blue</span><span class="label cnc-label-s label-primary cnc-neopixels-blue" style="min-width: 50px">127</span>
                                 </div>
                             </div>
                             <div class="col-xs-3 cnc-col-s-label">
@@ -276,22 +276,22 @@
                         <div class="row cnc-row-s-mix cnc-row-bottomline">
                            <div class="col-xs-3 cnc-col-s-mix">
                                 <div class="cnc-div-s-mix pull-left cnc-space-right">
-                                    <input type="range" min="0" max="100" value="0" class="cnc-slider-s-mix sld-cnc-neopixels-red"/>
+                                    <input type="range" min="0" max="255" value="127" class="cnc-slider-s-mix sld-cnc-neopixels-red"/>
                                 </div>
                             </div>
                             <div class="col-xs-3 cnc-col-s-mix cnc-space-both">
                                 <div class="cnc-div-s-mix">
-                                    <input type="range" min="0" max="100" value="0" class="cnc-slider-s-mix sld-cnc-neopixels-green"/>
+                                    <input type="range" min="0" max="255" value="127" class="cnc-slider-s-mix sld-cnc-neopixels-green"/>
                                 </div>
                             </div>
                            <div class="col-xs-3 cnc-col-s-mix">
                                 <div class="cnc-div-s-mix cnc-space-both">
-                                    <input type="range" min="0" max="100" value="0" class="cnc-slider-s-mix sld-cnc-neopixels-blue"/>
+                                    <input type="range" min="0" max="255" value="127" class="cnc-slider-s-mix sld-cnc-neopixels-blue"/>
                                 </div>
                             </div>
                             <div class="col-xs-3 cnc-col-s-mix">
                                 <div class="cnc-div-s-mix pull-right">
-                                    <a class="btn btn-s cnc-button-s-l btn-default cnc-cursor active cnc-neopixels-rgba" style="background-color: rgba(0,255,0,1)"></a>
+                                    <a class="btn btn-s cnc-button-s-l btn-default cnc-cursor active cnc-neopixels-newrgba" style="background-color: rgba(127,127,127,1)"></a>
                                 </div>
                             </div>
                         </div>
@@ -361,7 +361,7 @@
                                 </div>
                                 <div class="cnc-div-s-mix pull-right">
                                     <div class="input-group" style="margin-top: 2px">
-                                        <input type="number" class="form-control cnc-input-s-mix inb-cnc-uvlight-newtime" style="width: 70px" id="inb-cnc-uvlight-newtime" placeholder="180" value="" min="10" max="990" step="10"></input>
+                                        <input type="number" class="form-control cnc-input-s-mix inb-cnc-uvlight-newtime" style="width: 70px" id="inb-cnc-uvlight-newtime" placeholder="180" value="" min="10" max="999" step="10"></input>
                                         <span class="input-group-addon cnc-button-s-xxs" style="min-height: 30px; border: solid 1px lightgray">sec</span>
                                     </div>
                                 </div>
@@ -375,12 +375,12 @@
                             </div>
                             <div class="col-xs-2 cnc-col-s-mix">
                                 <div class="cnc-div-s-mix pull-right cnc-space-right">
-                                     <span class="cnc-span-s-mix cnc-space-right cnc-uvlight-timelabel">Intensity</span>
+                                     <span class="cnc-span-s-mix cnc-space-right">Intensity</span>
                                 </div>
                             </div>
                             <div class="col-xs-3 cnc-col-s-mix">
                                 <div class="cnc-div-s-mix cnc-space-left">
-                                    <input type="range" min="50" max="100" step="5" value="50" class="cnc-slider-s-mix sld-uvlight-intensity" autocomplete="off" style="width: 100px">
+                                    <input type="range" min="50" max="100" step="5" value="100" class="cnc-slider-s-mix sld-uvlight-intensity" autocomplete="off" style="width: 100px">
                                 </div>
                             </div>
                             <div class="col-xs-3 cnc-col-s-mix">
@@ -462,14 +462,14 @@
                                     <span class="cnc-span-s-mix">DCTool Intensity</span>
                                 </div>
                             </div>
-                            <div class="col-xs-4 cnc-col-s-mix cnc-space-left">
+                            <div class="col-xs-5 cnc-col-s-mix cnc-space-left">
                                 <div class="cnc-div-s-mix pull-left" style="width: 100%">
-                                    <input type="range" min="50" max="100" value="50" step="5" class="cnc-slider-s-mix sld-dctool-intensity"/>
+                                    <input type="range" min="40" max="100" value="100" step="1" class="cnc-slider-s-mix sld-dctool-intensity"/>
                                 </div>
                             </div>
-                            <div class="col-xs-3 cnc-col-s-mix cnc-space-left">
+                            <div class="col-xs-2 cnc-col-s-mix cnc-space-left">
                                 <div class="cnc-div-s-mix pull-right">
-                                    <span class="label cnc-label-s-mix label-primary ppull-right cnc-dctool-intensity" style="min-width: 95px">100% - 24.0V</span>
+                                    <span class="label cnc-label-s-mix label-primary ppull-right cnc-dctool-intensity" style="min-width: 55px">100%</span>
                                 </div>
                             </div>
                             <div class="col-xs-2 cnc-col-s-mix cnc-space-left">
@@ -486,16 +486,16 @@
                             </div>
                             <div class="cnc-col col-xs-9 cnc-col-s-mix right">
                                 <div class="cnc-div-s-mix dropup cnc-ls-dropdown pull-right">
-                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xxxxl ddl-cnc-ls-scheme cnc-btn-g1" data-toggle="dropdown">Shutdown Sequence
+                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xxxxl btn-cnc-ls-scheme cnc-btn-g1" data-toggle="dropdown">Shutdown Sequence
                                         <span class="caret"></span>
                                     </button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li class="li-cnc-ls-scheme0"><a href="#">VAC > Air Compressor > AC Tool</a></li>
-                                        <li class="li-cnc-ls-scheme1"><a href="#">VAC > AC Tool > Air Compressor</a></li>
-                                        <li class="li-cnc-ls-scheme2"><a href="#">Air Compressor > VAC > AC Tool</a></li>
-                                        <li class="li-cnc-ls-scheme3"><a href="#">Air Compressor > AC Tool > VAC</a></li>
-                                        <li class="li-cnc-ls-scheme4"><a href="#">AC Tool > VAC > Air Compressor</a></li>
-                                        <li class="li-cnc-ls-scheme5"><a href="#">AC Tool > Air Compressor > VAC</a></li>
+                                    <ul id="ddl-cnc-ls-scheme" class="dropdown-menu" role="menu">
+                                        <li class="li-cnc-ls-scheme0"><a href="#">VAC > Air Compressor > ACTool</a></li>
+                                        <li class="li-cnc-ls-scheme1"><a href="#">VAC > ACTool > Air Compressor</a></li>
+                                        <li class="li-cnc-ls-scheme2"><a href="#">Air Compressor > VAC > ACTool</a></li>
+                                        <li class="li-cnc-ls-scheme3"><a href="#">Air Compressor > ACTool > VAC</a></li>
+                                        <li class="li-cnc-ls-scheme4"><a href="#">ACTool > VAC > Air Compressor</a></li>
+                                        <li class="li-cnc-ls-scheme5"><a href="#">ACTool > Air Compressor > VAC</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -513,10 +513,10 @@
                                     <button type="button" class="btn btn-s btn-default cnc-button-s-l btn-cnc-ls-reset cnc-btn-g1" data-title="" data-content="Reset Capture">Reset</button>
                                     <span class="cnc-space-both"></span>
                                     <div class="btn-group cnc-frame pull-right" style="" role="group">    
-                                        <button type="button" class="btn btn-s cnc-button-s-xxs active btn-to-lbl btn-danger cnc-ls-s1" style="border: 0px; width: 40px">VAC</button>
-                                        <button type="button" class="btn btn-s cnc-button-s-xxs active btn-to-lbl btn-primary " style="border: 0px; width: 21px">></button>
+                                        <button type="button" class="btn btn-s cnc-button-s-xxs active btn-to-lbl btn-primary cnc-ls-s1" style="border: 0px; width: 40px">VAC</button>
+                                        <button type="button" class="btn btn-s cnc-button-s-xxs active btn-to-lbl btn-primary cnc-ls-s1a" style="border: 0px; width: 21px">></button>
                                         <button type="button" class="btn btn-s cnc-button-s-xxs active btn-to-lbl btn-primary cnc-ls-s2" style="border: 0px; width: 40px">ACT</button>
-                                        <button type="button" class="btn btn-s cnc-button-s-xxs active btn-to-lbl btn-primary " style="border: 0px; width: 21px">></button>
+                                        <button type="button" class="btn btn-s cnc-button-s-xxs active btn-to-lbl btn-primary cnc-ls-s2a" style="border: 0px; width: 21px">></button>
                                         <button type="button" class="btn btn-s cnc-button-s-xxs active btn-to-lbl btn-primary cnc-ls-s3" style="border: 0px; width: 40px">Air</button>
                                     </div>
                                 </div>
@@ -539,29 +539,29 @@
                         <div class="row cnc-row-s-mix">
                             <div class="col-xs-3 cnc-col-s-mix">
                                 <div class="cnc-div-s-mix pull-left">
-                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xxl btn-cnc-offset-uvlaser cnc-btn-g2" data-title="" data-content="Move UV Laser offset">UV Laser</button>
+                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xxl btn-offset-group btn-cnc-offset-uvlaser cnc-btn-g2" data-title="" data-content="Move UV Laser offset">UV Laser</button>
                                 </div>
                             </div>
                             <div class="col-xs-3 cnc-col-s-mix">
                                 <div class="cnc-div-s-mix pull-left cnc-space-left">
-                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xxl btn-cnc-offset-hplaser cnc-btn-g2" data-title="" data-content="Move HP Laser offset">HP Laser</button>
+                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xxl btn-offset-group btn-cnc-offset-hplaser cnc-btn-g2" data-title="" data-content="Move HP Laser offset">HP Laser</button>
                                 </div>
                             </div>
                             <div class="col-xs-3 cnc-col-s-mix">
                                 <div class="cnc-div-s-mix pull-right cnc-space-right">
-                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xxl btn-cnc-offset-pen cnc-btn-g2" data-title="" data-content="Move Pen offset">Pen</button>
+                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xxl btn-offset-group btn-cnc-offset-pen cnc-btn-g2" data-title="" data-content="Move Pen offset">Pen</button>
                                 </div>
                             </div>
                             <div class="col-xs-3 cnc-col-s-mix">
                                 <div class="cnc-div-s-mix pull-right">
-                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xxl btn-cnc-offset-dispenser cnc-btn-g2" data-title="" data-content="Move Dispenser offset">Dispenser</button>
+                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xxl btn-offset-group btn-cnc-offset-dispenser cnc-btn-g2" data-title="" data-content="Move Dispenser offset">Dispenser</button>
                                 </div>
                             </div>
                         </div>
                         <div class="row cnc-row-s-mix">
                             <div class="col-xs-3 cnc-col-s-mix">
                                 <div class="cnc-div-s-mix pull-left">
-                                    <button type="button" class="btn btn-s btn-primary cnc-button-s-xxl btn-cnc-offset-spindle cnc-btn-g2" data-title="" data-content="Move UV Laser offset">Spindle</button>
+                                    <button type="button" class="btn btn-s btn-primary cnc-button-s-xxl btn-offset-group btn-cnc-offset-spindle cnc-btn-g2" data-title="" data-content="Move UV Spindle offset">Spindle</button>
                                 </div>
                             </div>
                             <div class="col-xs-4 cnc-col-s-mix">
@@ -570,8 +570,8 @@
                             </div>
                             <div class="col-xs-5 cnc-col-s-mix">
                                 <div class="cnc-div-s-mix pull-right">
-                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xl btn-cnc-offset-allowzero cnc-btn-g2" data-title="" data-content="Allow zeroing on new position">Allow Zero</button>
-                                    <button type="button" class="btn btn-s btn-default cnc-button-s-l btn-cnc-offset-reset cnc-btn-g2" data-title="" data-content="Reset reference back to Spindle">Reset</button>
+                                    <button type="button" class="btn btn-s btn-default cnc-button-s-xxl btn-cnc-offset-allowzero cnc-btn-g2" data-title="" data-content="Allow zeroing on new position">Allow Zeroing</button>
+                                    <!-- <button type="button" class="btn btn-s btn-default cnc-button-s-l btn-cnc-offset-reset cnc-btn-g2" data-title="" data-content="Reset reference back to Spindle">Reset</button> -->
                                 </div>
                             </div>
                         </div>
@@ -591,8 +591,8 @@
                                 <div class="cnc-div-s-mix pull-right" role="toolbar">
                                     <span class="cnc-span-s-mix cnc-space-right">Air System Mode</span>
                                     <div class="btn-group btn-group-toggle cnc-airmode-toolbar" style="height:34px; padding-top: 0px" data-toggle="buttons"> <!--role="group"-->   
-                                        <button type="radio" class="btn btn-s cnc-button-s-l btn-default btg-cnc-air-manu cnc-btn-g1" name="opt-cnc-vac" id="opt-cnc-vac1" data-title="" data-content="Manual mode">Manual</button>
-                                        <button type="radio" class="btn btn-s cnc-button-s-l btn-default btg-cnc-air-cool cnc-btn-g1" name="opt-cnc-vac" id="opt-cnc-vac2" data-title="" data-content="Automatic mode">Auto</button>
+                                        <button type="radio" class="btn btn-s cnc-button-s-l btn-default btg-cnc-air-manu cnc-btn-g1" name="opt-cnc-airsystem1" id="opt-cnc-airsystem1" data-title="" data-content="Manual mode">Manual</button>
+                                        <button type="radio" class="btn btn-s cnc-button-s-l btn-default btg-cnc-air-cool cnc-btn-g1" name="opt-cnc-airsystem2" id="opt-cnc-airsystem2" data-title="" data-content="Automatic mode">Auto</button>
                                     </div>
                                 </div>
                             </div>
@@ -716,8 +716,8 @@
                         <div class="row cnc-row-s-mix">
                             <div class="col-xs-12 cnc-col-s-mix pull-left">
                                 <div class="cnc-div-s-mix">
-                                    <span class="label cnc-label-s-mix label-default cnc-space-right cnc-sys-camA" style="min-width: 136px">Spindle Cam Server</span>
-                                    <button type="button" class="btn btn-s btn-default cnc-button-s-l btn-sys-camA cnc-btn-g1" data-title="" data-content="Restart Spindle Camera Server">Restart</button>
+                                    <span class="label cnc-label-s-mix label-default cnc-space-right cnc-sys-cam-s1" style="min-width: 136px">Spindle Cam Server</span>
+                                    <button type="button" class="btn btn-s btn-default cnc-button-s-l btn-sys-cam-s1 cnc-btn-g1" data-title="" data-content="Restart Spindle Camera Server">Restart</button>
                                 </div>
                                 <div class="cnc-div-s-mix pull-right">
                                     <span class="cnc-span-s-mix">RaspberryPi - Eth IP</span>
@@ -728,8 +728,8 @@
                         <div class="row cnc-row-s-mix cnc-row-bottomline">
                             <div class="col-xs-12 cnc-col-s-mix">
                                 <div class="cnc-div-s-mix pull-left">
-                                    <span class="label cnc-label-s-mix label-default cnc-space-right cnc-sys-camB" style="min-width: 136px">Laser Cam Server</span>
-                                    <button type="button" class="btn btn-s btn-default cnc-button-s-l btn-sys-camB cnc-btn-g1" data-title="" data-content="Restart Laser Camera Server">Restart</button>
+                                    <span class="label cnc-label-s-mix label-default cnc-space-right cnc-sys-cam-s2" style="min-width: 136px">Laser Cam Server</span>
+                                    <button type="button" class="btn btn-s btn-default cnc-button-s-l btn-sys-cam-s2 cnc-btn-g1" data-title="" data-content="Restart Laser Camera Server">Restart</button>
                                 </div>
                                 <div class="cnc-div-s-mix pull-right">
                                     <span class="cnc-span-s-mix">RaspberryPi - WiFi IP</span>
